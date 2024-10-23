@@ -31,6 +31,12 @@
     ],
     "experiments": {
       "typedRoutes": true
-    }
+    },
+    "extra": {
+      "eas": {
+        "projectId": "08dbbf6d-d9f6-43dc-8891-e4c762370303"
+      }
+    },
+    "owner": "dmitrykovalev"
   }
 }
