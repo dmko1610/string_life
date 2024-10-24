@@ -1,5 +1,5 @@
-import { View } from "react-native";
-import Guitar from "./guitar";
+import { View } from "react-native"
+import Guitar from "./guitar"
 
 export default function Index() {
   return (
@@ -12,5 +12,5 @@ export default function Index() {
     >
       <Guitar />
     </View>
-  );
+  )
 }

@@ -1,0 +1,13 @@
+{
+  "editor.formatOnSave": true,
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": "explicit"
+  },
+  "terminal.explorerKind": "external",
+  "editor.codeLensFontFamily": "",
+  "editor.fontFamily": "Fira code",
+  "editor.bracketPairColorization.enabled": true,
+  "girlens.currentLine.enabled": true,
+  "girlens.hovers.currentLine.over": "line",
+  "git.inputValidation": true,
+}
