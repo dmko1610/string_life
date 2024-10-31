@@ -7,7 +7,5 @@
   "editor.codeLensFontFamily": "",
   "editor.fontFamily": "Fira code",
   "editor.bracketPairColorization.enabled": true,
-  "girlens.currentLine.enabled": true,
-  "girlens.hovers.currentLine.over": "line",
   "git.inputValidation": true,
 }

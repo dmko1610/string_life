@@ -8,10 +8,13 @@
   },
   "include": [
     "**/*.ts",
+    "**/*.js",
     "**/*.tsx",
+    "**/*.jsx",
+    "**/*.spec.js",
     ".expo/types/**/*.ts",
     "expo-env.d.ts",
-    "app/guitar/index.jsx",
+    "app/instrument/instrument.jsx",
     "app/index.jsx",
     "app/_layout.jsx"
   ]
