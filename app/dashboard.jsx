@@ -1,51 +1,67 @@
 import React from "react"
-import { Dimensions, StyleSheet, Text, View } from "react-native"
-import { Image } from "expo-image"
+import {
+  Dimensions,
+  ImageBackground,
+  Image,
+  StyleSheet,
+  Text,
+  View,
+} from "react-native"
 import images from "@/helpers/images"
-import { BlurView } from "expo-blur"
+import IconAddButton from "@/assets/icons/addButton.svg"
+import { SafeAreaView } from "react-native-safe-area-context"
+
+const emptyStateWidth = Dimensions.get("window").width
 
 export default function Dashboard() {
-  const emptyStateWidth = Dimensions.get("screen").width
-  const emptyStateHeight = Dimensions.get("screen").height / 2
-
   return (
-    <View style={styles.dashboard}>
+    <SafeAreaView
+      edges={["left", "right", "bottom", "top"]}
+      style={styles.dashboard}
+    >
       <Text style={styles.title}>MY GUITARS</Text>
-      <View
-        style={{
-          // flex: 1,
-          flexDirection: "column",
-          justifyContent: "center",
-          alignItems: "center",
-        }}
-      >
-        <BlurView intensity={100} tint="dark" />
-        <Image
-          source={images.emptyState}
-          width={emptyStateWidth}
-          height={emptyStateHeight}
-          contentFit="contain"
-          contentPosition={"center"}
-          style={{ alignSelf: "center" }}
-        />
+      <View style={styles.imageBackgroundCentered}>
+        <ImageBackground
+          source={images.emptyStateBackground}
+          resizeMode="stretch"
+        >
+          <Image
+            source={images.emptyState}
+            style={styles.image}
+            resizeMode="contain"
+          />
+        </ImageBackground>
       </View>
-    </View>
+      <IconAddButton style={styles.addButton} testID="addButton" />
+    </SafeAreaView>
   )
 }
 
 const styles = StyleSheet.create({
   dashboard: {
-    // backgroundColor: "#151515",
+    backgroundColor: "#151515",
     flex: 1,
-    flexDirection: "column",
-    justifyContent: "flex-start",
-    alignItems: "flex-start",
+    justifyContent: "space-around",
+    alignItems: "center",
     paddingHorizontal: 16,
-    paddingTop: 70,
+  },
+  image: {
+    width: emptyStateWidth,
+    height: emptyStateWidth,
+  },
+  imageBackgroundCentered: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    width: "100%",
   },
   title: {
     fontSize: 20,
     fontWeight: "400",
     color: "#E5DBD0",
+    alignSelf: "flex-start",
+    marginTop: 16,
+    marginLeft: 16,
   },
+  addButton: { marginBottom: 60 },
 })
