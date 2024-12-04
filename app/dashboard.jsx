@@ -6,14 +6,18 @@ import {
   StyleSheet,
   Text,
   View,
+  Pressable,
 } from "react-native"
 import images from "@/helpers/images"
 import IconAddButton from "@/assets/icons/addButton.svg"
 import { SafeAreaView } from "react-native-safe-area-context"
+import { useRouter } from "expo-router"
 
 const emptyStateWidth = Dimensions.get("window").width
 
 export default function Dashboard() {
+  const router = useRouter()
+
   return (
     <SafeAreaView
       edges={["left", "right", "bottom", "top"]}
@@ -32,7 +36,9 @@ export default function Dashboard() {
           />
         </ImageBackground>
       </View>
-      <IconAddButton style={styles.addButton} testID="addButton" />
+      <Pressable onPress={() => router.push("/add-instrument")}>
+        <IconAddButton style={styles.addButton} testID="addButton" />
+      </Pressable>
     </SafeAreaView>
   )
 }
