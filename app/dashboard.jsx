@@ -15,6 +15,8 @@ import { useRouter } from "expo-router"
 
 const emptyStateWidth = Dimensions.get("window").width
 
+const TITLE_TEXT = "MY GUITARS"
+
 export default function Dashboard() {
   const router = useRouter()
 
@@ -23,7 +25,7 @@ export default function Dashboard() {
       edges={["left", "right", "bottom", "top"]}
       style={styles.dashboard}
     >
-      <Text style={styles.title}>MY GUITARS</Text>
+      <Text style={styles.title}>{TITLE_TEXT}</Text>
       <View style={styles.imageBackgroundCentered}>
         <ImageBackground
           source={images.emptyStateBackground}
