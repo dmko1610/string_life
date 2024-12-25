@@ -8,18 +8,16 @@ import {
   View,
   Pressable,
 } from "react-native"
+import { Link } from "expo-router"
 import images from "@/helpers/images"
 import IconAddButton from "@/assets/icons/addButton.svg"
 import { SafeAreaView } from "react-native-safe-area-context"
-import { useRouter } from "expo-router"
 
 const emptyStateWidth = Dimensions.get("window").width
 
 const TITLE_TEXT = "MY GUITARS"
 
 export default function Index() {
-  const router = useRouter()
-
   return (
     <SafeAreaView
       edges={["left", "right", "bottom", "top"]}
@@ -38,9 +36,11 @@ export default function Index() {
           />
         </ImageBackground>
       </View>
-      <Pressable onPress={() => router.push("/add-instrument")}>
-        <IconAddButton style={styles.addButton} testID="addButton" />
-      </Pressable>
+      <Link href="/add-instrument" asChild>
+        <Pressable>
+          <IconAddButton style={styles.addButton} testID="addButton" />
+        </Pressable>
+      </Link>
     </SafeAreaView>
   )
 }
