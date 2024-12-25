@@ -21,7 +21,6 @@ export default function RootLayout() {
         <Stack.Screen
           name="add-instrument"
           options={{
-            headerBackVisible: true,
             headerTransparent: true,
           }}
         />
