@@ -14,7 +14,7 @@
     "**/*.spec.js",
     ".expo/types/**/*.ts",
     "expo-env.d.ts",
-    "app/index.jsx",
-    "app/_layout.jsx"
+    "app/index.tsx",
+    "app/_layout.tsx"
   ]
 }

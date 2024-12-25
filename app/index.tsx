@@ -17,7 +17,7 @@ const emptyStateWidth = Dimensions.get("window").width
 
 const TITLE_TEXT = "MY GUITARS"
 
-export default function Dashboard() {
+export default function Index() {
   const router = useRouter()
 
   return (
