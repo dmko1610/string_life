@@ -68,7 +68,7 @@ const styles = StyleSheet.create({
     fontWeight: "400",
     color: "#E5DBD0",
     alignSelf: "flex-start",
-    marginTop: 16,
+    marginTop: 60,
     marginLeft: 16,
   },
   addButton: { marginBottom: 60 },

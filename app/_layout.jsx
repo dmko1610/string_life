@@ -22,6 +22,8 @@ export default function RootLayout() {
           name="add-instrument"
           options={{
             headerTransparent: true,
+            headerBackButtonDisplayMode: "minimal",
+            headerTitle: "",
           }}
         />
       </Stack>
