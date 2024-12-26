@@ -4,7 +4,7 @@ import { SafeAreaView } from "react-native-safe-area-context"
 import DropDownPicker from "react-native-dropdown-picker"
 import { Colors } from "@/constants/Colors"
 import { LinearGradient } from "expo-linear-gradient"
-import { useRouter } from "expo-router"
+import { useSQLiteContext } from "expo-sqlite"
 
 const TITLE_TEXT = "MY GUITARS"
 const SAVE_BUTTON_TEXT = "Save"
@@ -20,12 +20,33 @@ const data = Object.freeze([
 ])
 
 export default function AddInstrument() {
-  const router = useRouter()
-
-  const [open, setOpen] = useState(false)
-  const [value, setValue] = useState(null)
+  const db = useSQLiteContext()
 
   DropDownPicker.setTheme("DARK")
+
+  const [open, setOpen] = useState(false)
+  const [type, setType] = useState(null)
+  const [name, setName] = useState(null)
+
+  const saveInstrument = async () => {
+    try {
+      console.log("AAAAAA")
+
+      console.log("name - ", name)
+      console.log("type - ", type)
+
+      const result = await db.runAsync(
+        "INSERT INTO stringLife (name, type, replacement_date, progress) VALUES (?, ?, ?, ?)",
+        name,
+        type,
+        1,
+        1,
+      )
+      console.log(result)
+    } catch (error) {
+      console.error(error)
+    }
+  }
 
   return (
     <SafeAreaView
@@ -37,14 +58,16 @@ export default function AddInstrument() {
         <TextInput
           placeholderTextColor={Colors.dark.placeholder}
           placeholder={NAME_PLACEHOLDER}
+          value={name}
+          onChangeText={setName}
           style={styles.input}
-        ></TextInput>
+        />
         <DropDownPicker
           items={data}
           open={open}
-          value={value}
+          value={type}
           setOpen={setOpen}
-          setValue={setValue}
+          setValue={setType}
           placeholder={TYPE_PLACEHOLDER}
           placeholderStyle={styles.placeholder}
           disableBorderRadius={false}
@@ -54,7 +77,10 @@ export default function AddInstrument() {
         />
       </View>
 
-      <Pressable style={styles.buttonContainer} onPress={() => router.back()}>
+      <Pressable
+        style={styles.buttonContainer}
+        onPress={() => saveInstrument()}
+      >
         <LinearGradient
           colors={["#D68424", "#6E3619"]}
           style={styles.gradient}

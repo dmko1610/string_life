@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useEffect } from "react"
 import {
   Dimensions,
   ImageBackground,
@@ -12,12 +12,34 @@ import { Link } from "expo-router"
 import images from "@/helpers/images"
 import IconAddButton from "@/assets/icons/addButton.svg"
 import { SafeAreaView } from "react-native-safe-area-context"
+import * as SQLite from "expo-sqlite"
+import { useDrizzleStudio } from "expo-drizzle-studio-plugin"
 
 const emptyStateWidth = Dimensions.get("window").width
 
 const TITLE_TEXT = "MY GUITARS"
 
+const db = SQLite.openDatabaseSync("stringLife")
+
+const createTable = async () => {
+  await db.execAsync(`
+    PRAGMA journal_mode = WAL;
+    CREATE TABLE IF NOT EXISTS stringLife (
+      id INTEGER PRIMARY KEY NOT NULL, 
+      name TEXT NOT NULL, 
+      type TEXT NOT NULL, 
+      replacement_date INTEGER, 
+      progress INTEGER);
+  `)
+}
+
 export default function Index() {
+  useDrizzleStudio(db)
+
+  useEffect(() => {
+    createTable()
+  }, [])
+
   return (
     <SafeAreaView
       edges={["left", "right", "bottom", "top"]}
