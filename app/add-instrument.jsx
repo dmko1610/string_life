@@ -5,6 +5,7 @@ import DropDownPicker from "react-native-dropdown-picker"
 import { Colors } from "@/constants/Colors"
 import { LinearGradient } from "expo-linear-gradient"
 import { useSQLiteContext } from "expo-sqlite"
+import { router } from "expo-router"
 
 const TITLE_TEXT = "MY GUITARS"
 const SAVE_BUTTON_TEXT = "Save"
@@ -16,7 +17,6 @@ const data = Object.freeze([
   { label: "Bass", value: "bass" },
   { label: "Acoustic", value: "acoustic" },
   { label: "Ukulele", value: "ukulele" },
-  { label: "Classic", value: "classic" },
 ])
 
 export default function AddInstrument() {
@@ -43,6 +43,8 @@ export default function AddInstrument() {
         1,
       )
       console.log(result)
+
+      router.back()
     } catch (error) {
       console.error(error)
     }
