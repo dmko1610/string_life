@@ -143,7 +143,7 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.dark.text,
   },
   instrumentImage: {
-    backgroundColor: Colors.dark.background,
+    backgroundColor: "#24221F",
     borderRadius: 15,
     marginBottom: 15,
     paddingVertical: 10,

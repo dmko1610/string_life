@@ -28,21 +28,17 @@ export default function AddInstrument() {
   const [type, setType] = useState(null)
   const [name, setName] = useState(null)
 
+  const isAddButtonDisabled = !name || !type
+
   const saveInstrument = async () => {
     try {
-      console.log("AAAAAA")
-
-      console.log("name - ", name)
-      console.log("type - ", type)
-
-      const result = await db.runAsync(
+      await db.runAsync(
         "INSERT INTO stringLife (name, type, replacement_date, progress) VALUES (?, ?, ?, ?)",
         name,
         type,
         1,
         1,
       )
-      console.log(result)
 
       router.back()
     } catch (error) {
@@ -79,10 +75,20 @@ export default function AddInstrument() {
         />
       </View>
 
-      <Pressable style={styles.buttonContainer} onPress={() => { }}>
+      <Pressable
+        style={styles.buttonContainer}
+        onPress={saveInstrument}
+        disabled={!name || !type}
+      >
         {({ pressed }) => (
           <LinearGradient
-            colors={pressed ? ["#AC712B", "#56340C"] : ["#D68424", "#6E3619"]}
+            colors={
+              isAddButtonDisabled
+                ? ["#827A72"]
+                : pressed
+                  ? ["#AC712B", "#56340C"]
+                  : ["#D68424", "#6E3619"]
+            }
             style={styles.gradient}
             end={{ x: 0.6, y: 1.5 }}
             locations={[0.1, 1]}
