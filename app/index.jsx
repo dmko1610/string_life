@@ -15,8 +15,9 @@ import { SafeAreaView } from "react-native-safe-area-context"
 import { useDrizzleStudio } from "expo-drizzle-studio-plugin"
 
 import images from "@/helpers/images"
-import IconAddButton from "@/assets/icons/addButton.svg"
+import IconPlus from "@/assets/icons/plus.svg"
 import { Colors } from "@/constants/Colors"
+import { LinearGradient } from "expo-linear-gradient"
 
 const emptyStateWidth = Dimensions.get("window").width
 
@@ -85,7 +86,7 @@ export default function Index() {
         <ScrollView contentContainerStyle={styles.instrumentList}>
           <View style={styles.instrumentListWrapper}>
             {rows.map((row) => (
-              <View style={styles.instrument}>
+              <View style={styles.instrument} key={row.id}>
                 <View style={styles.instrumentImage}>
                   <Image
                     source={typeToIcon(row.type)}
@@ -115,8 +116,19 @@ export default function Index() {
       )}
 
       <Link href="/add-instrument" asChild>
-        <Pressable style={{ alignSelf: "center" }}>
-          <IconAddButton style={styles.addButton} testID="addButton" />
+        <Pressable style={styles.addButton}>
+          {({ pressed }) => (
+            <LinearGradient
+              colors={pressed ? ["#AC712B", "#56340C"] : ["#D68424", "#6E3619"]}
+              style={styles.gradient}
+              end={{ x: 0.6, y: 1.5 }}
+              locations={[0.1, 1]}
+            >
+              <View>
+                <IconPlus />
+              </View>
+            </LinearGradient>
+          )}
         </Pressable>
       </Link>
     </SafeAreaView>
@@ -135,6 +147,13 @@ const styles = StyleSheet.create({
     borderRadius: 15,
     marginBottom: 15,
     paddingVertical: 10,
+  },
+  gradient: {
+    width: 60,
+    height: 60,
+    justifyContent: "center",
+    alignItems: "center",
+    borderRadius: 30,
   },
   instrumentTitle: {
     color: "#161616",
@@ -177,5 +196,5 @@ const styles = StyleSheet.create({
     marginTop: 60,
     marginLeft: 16,
   },
-  addButton: { marginBottom: 60 },
+  addButton: { alignSelf: "center", marginBottom: 60 },
 })

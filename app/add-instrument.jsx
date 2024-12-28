@@ -79,18 +79,17 @@ export default function AddInstrument() {
         />
       </View>
 
-      <Pressable
-        style={styles.buttonContainer}
-        onPress={() => saveInstrument()}
-      >
-        <LinearGradient
-          colors={["#D68424", "#6E3619"]}
-          style={styles.gradient}
-          end={{ x: 0.6, y: 1.5 }}
-          locations={[0.1, 1]}
-        >
-          <Text style={styles.buttonText}>{SAVE_BUTTON_TEXT}</Text>
-        </LinearGradient>
+      <Pressable style={styles.buttonContainer} onPress={() => { }}>
+        {({ pressed }) => (
+          <LinearGradient
+            colors={pressed ? ["#AC712B", "#56340C"] : ["#D68424", "#6E3619"]}
+            style={styles.gradient}
+            end={{ x: 0.6, y: 1.5 }}
+            locations={[0.1, 1]}
+          >
+            <Text style={styles.buttonText}>{SAVE_BUTTON_TEXT}</Text>
+          </LinearGradient>
+        )}
       </Pressable>
     </SafeAreaView>
   )

@@ -1,5 +1,5 @@
-const IconAddButton = require("@/assets/icons/addButton.svg")
+const IconPlus = require("@/assets/icons/plus.svg")
 
 export default {
-  IconAddButton,
+  IconPlus,
 }
