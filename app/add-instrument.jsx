@@ -1,56 +1,54 @@
-import React, { useState } from "react"
-import { Pressable, StyleSheet, Text, TextInput, View } from "react-native"
-import { SafeAreaView } from "react-native-safe-area-context"
-import DropDownPicker from "react-native-dropdown-picker"
-import { Colors } from "@/constants/Colors"
-import { LinearGradient } from "expo-linear-gradient"
-import { useSQLiteContext } from "expo-sqlite"
-import { router } from "expo-router"
+import { LinearGradient } from 'expo-linear-gradient';
+import { router } from 'expo-router';
+import { useSQLiteContext } from 'expo-sqlite';
+import React, { useState } from 'react';
+import { Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
+import DropDownPicker from 'react-native-dropdown-picker';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
-const TITLE_TEXT = "MY GUITARS"
-const SAVE_BUTTON_TEXT = "Save"
-const TYPE_PLACEHOLDER = "Guitar type"
-const NAME_PLACEHOLDER = "Guitar name"
+import { Colors } from '@/constants/Colors';
+
+const TITLE_TEXT = 'MY GUITARS';
+const SAVE_BUTTON_TEXT = 'Save';
+const TYPE_PLACEHOLDER = 'Guitar type';
+const NAME_PLACEHOLDER = 'Guitar name';
 
 const data = Object.freeze([
-  { label: "Electro", value: "electro" },
-  { label: "Bass", value: "bass" },
-  { label: "Acoustic", value: "acoustic" },
-  { label: "Ukulele", value: "ukulele" },
-])
+  { label: 'Electro', value: 'electro' },
+  { label: 'Bass', value: 'bass' },
+  { label: 'Acoustic', value: 'acoustic' },
+  { label: 'Ukulele', value: 'ukulele' },
+]);
 
 export default function AddInstrument() {
-  const db = useSQLiteContext()
+  const db = useSQLiteContext();
 
-  DropDownPicker.setTheme("DARK")
+  DropDownPicker.setTheme('DARK');
 
-  const [open, setOpen] = useState(false)
-  const [type, setType] = useState(null)
-  const [name, setName] = useState(null)
+  const [open, setOpen] = useState(false);
+  const [type, setType] = useState(null);
+  const [name, setName] = useState(null);
 
-  const isAddButtonDisabled = !name || !type
+  const isAddButtonDisabled = !name || !type;
 
   const saveInstrument = async () => {
     try {
       await db.runAsync(
-        "INSERT INTO stringLife (name, type, replacement_date, progress) VALUES (?, ?, ?, ?)",
+        'INSERT INTO stringLife (name, type, replacement_date, progress) VALUES (?, ?, ?, ?)',
         name,
         type,
         1,
-        1,
-      )
+        1
+      );
 
-      router.back()
+      router.back();
     } catch (error) {
-      console.error(error)
+      console.error(error);
     }
-  }
+  };
 
   return (
-    <SafeAreaView
-      edges={["left", "right", "bottom", "top"]}
-      style={styles.instrument}
-    >
+    <SafeAreaView edges={['left', 'right', 'bottom', 'top']} style={styles.instrument}>
       <Text style={styles.title}>{TITLE_TEXT}</Text>
       <View style={styles.inputs}>
         <TextInput
@@ -75,19 +73,15 @@ export default function AddInstrument() {
         />
       </View>
 
-      <Pressable
-        style={styles.buttonContainer}
-        onPress={saveInstrument}
-        disabled={!name || !type}
-      >
+      <Pressable style={styles.buttonContainer} onPress={saveInstrument} disabled={!name || !type}>
         {({ pressed }) => (
           <LinearGradient
             colors={
               isAddButtonDisabled
-                ? ["#827A72", "#5c554f"]
+                ? ['#827A72', '#5c554f']
                 : pressed
-                  ? ["#AC712B", "#56340C"]
-                  : ["#D68424", "#6E3619"]
+                  ? ['#AC712B', '#56340C']
+                  : ['#D68424', '#6E3619']
             }
             style={styles.gradient}
             end={{ x: 0.6, y: 1.5 }}
@@ -98,7 +92,7 @@ export default function AddInstrument() {
         )}
       </Pressable>
     </SafeAreaView>
-  )
+  );
 }
 
 const styles = StyleSheet.create({
@@ -106,7 +100,7 @@ const styles = StyleSheet.create({
   buttonText: {
     color: Colors.dark.text,
     fontSize: 20,
-    textAlign: "center",
+    textAlign: 'center',
   },
   dropdownStyle: {
     backgroundColor: Colors.dark.background,
@@ -116,9 +110,9 @@ const styles = StyleSheet.create({
   gradient: {
     padding: 20,
     borderRadius: 10,
-    flexDirection: "row",
-    justifyContent: "center",
-    alignItems: "center",
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   inputs: {
     marginTop: 75,
@@ -127,7 +121,7 @@ const styles = StyleSheet.create({
   },
   instrument: {
     flex: 1,
-    justifyContent: "flex-start",
+    justifyContent: 'flex-start',
     backgroundColor: Colors.dark.background,
     paddingHorizontal: 16,
   },
@@ -144,10 +138,10 @@ const styles = StyleSheet.create({
   placeholder: { color: Colors.dark.placeholder },
   title: {
     fontSize: 20,
-    fontWeight: "400",
+    fontWeight: '400',
     color: Colors.dark.text,
-    alignSelf: "flex-start",
+    alignSelf: 'flex-start',
     marginTop: 60,
     marginLeft: 16,
   },
-})
+});

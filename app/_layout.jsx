@@ -1,9 +1,10 @@
-import React from "react"
-import { Stack } from "expo-router"
-import { StatusBar } from "expo-status-bar"
-import { Colors } from "@/constants/Colors"
-import { StyleSheet, View } from "react-native"
-import { SQLiteProvider } from "expo-sqlite"
+import { Stack } from 'expo-router';
+import { SQLiteProvider } from 'expo-sqlite';
+import { StatusBar } from 'expo-status-bar';
+import React from 'react';
+import { StyleSheet, View } from 'react-native';
+
+import { Colors } from '@/constants/Colors';
 
 export default function RootLayout() {
   return (
@@ -26,11 +27,11 @@ export default function RootLayout() {
             name="add-instrument"
             options={{
               headerTransparent: true,
-              headerBackButtonDisplayMode: "minimal",
-              headerTitle: "",
+              headerBackButtonDisplayMode: 'minimal',
+              headerTitle: '',
             }}
           />
-           <Stack.Screen
+          <Stack.Screen
             name="instrument"
             options={{
               headerShown: false,
@@ -39,9 +40,9 @@ export default function RootLayout() {
         </Stack>
       </View>
     </SQLiteProvider>
-  )
+  );
 }
 
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: Colors.dark.background },
-})
+});

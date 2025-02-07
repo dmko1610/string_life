@@ -1,33 +1,33 @@
-import * as SQLite from "expo-sqlite"
-import React, { useEffect, useState } from "react"
+import { useDrizzleStudio } from 'expo-drizzle-studio-plugin';
+import { Image, ImageBackground } from 'expo-image';
+import { LinearGradient } from 'expo-linear-gradient';
+import { Link, router, useFocusEffect } from 'expo-router';
+import * as SQLite from 'expo-sqlite';
+import React, { useEffect, useState } from 'react';
 import {
   Dimensions,
+  Pressable,
+  ScrollView,
   StyleSheet,
   Text,
   View,
-  Pressable,
-  ScrollView,
   useWindowDimensions,
-} from "react-native"
-import { Image, ImageBackground } from "expo-image"
-import { Link, router, useFocusEffect } from "expo-router"
-import { SafeAreaView } from "react-native-safe-area-context"
-import { useDrizzleStudio } from "expo-drizzle-studio-plugin"
+} from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
-import images from "@/helpers/images"
-import IconPlus from "@/assets/icons/plus.svg"
-import { Colors } from "@/constants/Colors"
-import { LinearGradient } from "expo-linear-gradient"
+import IconPlus from '@/assets/icons/plus.svg';
+import { Colors } from '@/constants/Colors';
+import images from '@/helpers/images';
 
-const emptyStateWidth = Dimensions.get("window").width
+const emptyStateWidth = Dimensions.get('window').width;
 
-const TITLE_TEXT = "MY GUITARS"
+const TITLE_TEXT = 'MY GUITARS';
 
-const HORIZONTAL_MARGIN = 32
-const HALF_SIZE = 2
-const PADDING = 4
+const HORIZONTAL_MARGIN = 32;
+const HALF_SIZE = 2;
+const PADDING = 4;
 
-const db = SQLite.openDatabaseSync("stringLife")
+const db = SQLite.openDatabaseSync('stringLife');
 
 const createTable = async () => {
   await db.execAsync(`
@@ -38,48 +38,45 @@ const createTable = async () => {
       type TEXT NOT NULL, 
       replacement_date INTEGER, 
       progress INTEGER);
-  `)
-}
+  `);
+};
 
 const typesToIcons = {
   electro: images.electroGuitar,
   acoustic: images.acousticGuitar,
   bass: images.bassGuitar,
   ukulele: images.ukulele,
-}
+};
 
 function typeToIcon(type) {
-  return typesToIcons[type]
+  return typesToIcons[type];
 }
 
 export default function Index() {
-  useDrizzleStudio(db)
+  useDrizzleStudio(db);
 
-  const [rows, setRows] = useState([])
+  const [rows, setRows] = useState([]);
 
   async function fetchData() {
-    const allRows = await db.getAllAsync("SELECT * FROM stringLife")
+    const allRows = await db.getAllAsync('SELECT * FROM stringLife');
 
-    setRows(allRows)
+    setRows(allRows);
   }
 
   useEffect(() => {
-    createTable()
-  }, [])
+    createTable();
+  }, []);
 
   useFocusEffect(() => {
-    fetchData()
-  })
+    fetchData();
+  });
 
-  const width = useWindowDimensions().width
+  const width = useWindowDimensions().width;
 
-  const calculatedElementWidth = width / HALF_SIZE - HORIZONTAL_MARGIN - PADDING
+  const calculatedElementWidth = width / HALF_SIZE - HORIZONTAL_MARGIN - PADDING;
 
   return (
-    <SafeAreaView
-      edges={["left", "right", "bottom", "top"]}
-      style={styles.dashboard}
-    >
+    <SafeAreaView edges={['left', 'right', 'bottom', 'top']} style={styles.dashboard}>
       <Text style={styles.title}>{TITLE_TEXT}</Text>
 
       {rows.length ? (
@@ -89,7 +86,7 @@ export default function Index() {
               <Pressable
                 style={styles.instrument}
                 key={row.id}
-                onPress={() => router.push("/instrument")}
+                onPress={() => router.push('/instrument')}
               >
                 <View style={styles.instrumentImage}>
                   <Image
@@ -106,15 +103,8 @@ export default function Index() {
         </ScrollView>
       ) : (
         <View style={styles.imageBackgroundCentered}>
-          <ImageBackground
-            source={images.emptyStateBackground}
-            contentFit="contain"
-          >
-            <Image
-              source={images.emptyState}
-              style={styles.image}
-              contentFit="contain"
-            />
+          <ImageBackground source={images.emptyStateBackground} contentFit="contain">
+            <Image source={images.emptyState} style={styles.image} contentFit="contain" />
           </ImageBackground>
         </View>
       )}
@@ -123,7 +113,7 @@ export default function Index() {
         <Pressable style={styles.addButton}>
           {({ pressed }) => (
             <LinearGradient
-              colors={pressed ? ["#AC712B", "#56340C"] : ["#D68424", "#6E3619"]}
+              colors={pressed ? ['#AC712B', '#56340C'] : ['#D68424', '#6E3619']}
               style={styles.gradient}
               end={{ x: 0.6, y: 1.5 }}
               locations={[0.1, 1]}
@@ -134,7 +124,7 @@ export default function Index() {
         </Pressable>
       </Link>
     </SafeAreaView>
-  )
+  );
 }
 
 const styles = StyleSheet.create({
@@ -145,7 +135,7 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.dark.text,
   },
   instrumentImage: {
-    backgroundColor: "#24221F",
+    backgroundColor: '#24221F',
     borderRadius: 15,
     marginBottom: 15,
     paddingVertical: 10,
@@ -153,31 +143,31 @@ const styles = StyleSheet.create({
   gradient: {
     width: 60,
     height: 60,
-    justifyContent: "center",
-    alignItems: "center",
+    justifyContent: 'center',
+    alignItems: 'center',
     borderRadius: 30,
   },
   instrumentTitle: {
-    color: "#161616",
+    color: '#161616',
     fontSize: 12,
-    alignSelf: "center",
+    alignSelf: 'center',
     marginBottom: 15,
   },
   instrumentList: {
     marginTop: 60,
   },
   instrumentListWrapper: {
-    flexWrap: "wrap",
+    flexWrap: 'wrap',
     rowGap: 24,
     flex: 1,
-    flexDirection: "row",
-    justifyContent: "space-between",
-    width: "100%",
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    width: '100%',
   },
   dashboard: {
-    backgroundColor: "#151515",
+    backgroundColor: '#151515',
     flex: 1,
-    alignItems: "flex-start",
+    alignItems: 'flex-start',
     paddingHorizontal: 16,
   },
   image: {
@@ -186,17 +176,17 @@ const styles = StyleSheet.create({
   },
   imageBackgroundCentered: {
     flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    width: "100%",
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: '100%',
   },
   title: {
     fontSize: 20,
-    fontWeight: "400",
-    color: "#E5DBD0",
-    alignSelf: "flex-start",
+    fontWeight: '400',
+    color: '#E5DBD0',
+    alignSelf: 'flex-start',
     marginTop: 60,
     marginLeft: 16,
   },
-  addButton: { alignSelf: "center", marginBottom: 60 },
-})
+  addButton: { alignSelf: 'center', marginBottom: 60 },
+});

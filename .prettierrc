@@ -1,11 +1,11 @@
 {
-  "eslintConfig": {
-    "extends": "universe/native"
-  },
-  "arrowParens": "always",
-  "printWidth": 80,
+  "plugins": ["@trivago/prettier-plugin-sort-imports"],
+  "printWidth": 100,
+  "tabWidth": 2,
+  "singleQuote": true,
+  "trailingComma": "es5",
   "proseWrap": "preserve",
-  "semi": false,
-  "singleQuote": false,
-  "tabWidth": 2
+  "importOrder": ["^@/(.*)$", "^[./]"],
+  "importOrderSeparation": true,
+  "importOrderSortSpecifiers": true
 }
