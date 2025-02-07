@@ -84,7 +84,7 @@ export default function AddInstrument() {
           <LinearGradient
             colors={
               isAddButtonDisabled
-                ? ["#827A72"]
+                ? ["#827A72", "#5c554f"]
                 : pressed
                   ? ["#AC712B", "#56340C"]
                   : ["#D68424", "#6E3619"]

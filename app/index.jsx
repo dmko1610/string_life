@@ -10,7 +10,7 @@ import {
   useWindowDimensions,
 } from "react-native"
 import { Image, ImageBackground } from "expo-image"
-import { Link, useFocusEffect } from "expo-router"
+import { Link, router, useFocusEffect } from "expo-router"
 import { SafeAreaView } from "react-native-safe-area-context"
 import { useDrizzleStudio } from "expo-drizzle-studio-plugin"
 
@@ -86,7 +86,11 @@ export default function Index() {
         <ScrollView contentContainerStyle={styles.instrumentList}>
           <View style={styles.instrumentListWrapper}>
             {rows.map((row) => (
-              <View style={styles.instrument} key={row.id}>
+              <Pressable
+                style={styles.instrument}
+                key={row.id}
+                onPress={() => router.push("/instrument")}
+              >
                 <View style={styles.instrumentImage}>
                   <Image
                     source={typeToIcon(row.type)}
@@ -96,7 +100,7 @@ export default function Index() {
                   />
                 </View>
                 <Text style={styles.instrumentTitle}>{row.name}</Text>
-              </View>
+              </Pressable>
             ))}
           </View>
         </ScrollView>
@@ -124,9 +128,7 @@ export default function Index() {
               end={{ x: 0.6, y: 1.5 }}
               locations={[0.1, 1]}
             >
-              <View>
-                <IconPlus />
-              </View>
+              <IconPlus />
             </LinearGradient>
           )}
         </Pressable>

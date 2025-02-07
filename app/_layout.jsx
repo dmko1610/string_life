@@ -30,6 +30,12 @@ export default function RootLayout() {
               headerTitle: "",
             }}
           />
+           <Stack.Screen
+            name="instrument"
+            options={{
+              headerShown: false,
+            }}
+          />
         </Stack>
       </View>
     </SQLiteProvider>
