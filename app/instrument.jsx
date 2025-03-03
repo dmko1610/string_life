@@ -7,6 +7,7 @@ import { Dimensions, Pressable, StyleSheet, Text, View } from 'react-native';
 
 import IconCalendar from '@/assets/icons/calendar.svg';
 import IconGuitar from '@/assets/icons/guitar.svg';
+import IconPlay from '@/assets/icons/play.svg';
 import { Colors } from '@/constants/Colors';
 import images from '@/helpers/images';
 
@@ -44,6 +45,21 @@ export default function Instrument() {
           <DateTimePicker value={new Date(1598051730000)} mode="date" style={{}} />
         </View>
       </View>
+      <Pressable
+        style={{
+          width: 144,
+          height: 144,
+          color: '#DE7E00',
+          borderWidth: 1,
+          justifyContent: 'center',
+          alignItems: 'center',
+          alignContent: 'center',
+          backgroundColor: '#DE7E00',
+          borderRadius: 144 / 2,
+        }}
+      >
+        <IconPlay style={{ left: 5 }} />
+      </Pressable>
     </View>
   );
 }

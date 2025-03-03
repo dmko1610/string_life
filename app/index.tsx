@@ -1,6 +1,5 @@
 import { useDrizzleStudio } from 'expo-drizzle-studio-plugin';
 import { Image, ImageBackground } from 'expo-image';
-import { LinearGradient } from 'expo-linear-gradient';
 import { Link, router, useFocusEffect } from 'expo-router';
 import * as SQLite from 'expo-sqlite';
 import React, { useEffect, useState } from 'react';
@@ -15,9 +14,9 @@ import {
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-import IconPlus from '@/assets/icons/plus.svg';
 import { Colors } from '@/constants/Colors';
 import images from '@/helpers/images';
+import AddButton from '@/components/AddButton/AddButton';
 
 const emptyStateWidth = Dimensions.get('window').width;
 
@@ -108,20 +107,8 @@ export default function Index() {
           </ImageBackground>
         </View>
       )}
-
       <Link href="/add-instrument" asChild>
-        <Pressable style={styles.addButton}>
-          {({ pressed }) => (
-            <LinearGradient
-              colors={pressed ? ['#AC712B', '#56340C'] : ['#D68424', '#6E3619']}
-              style={styles.gradient}
-              end={{ x: 0.6, y: 1.5 }}
-              locations={[0.1, 1]}
-            >
-              <IconPlus />
-            </LinearGradient>
-          )}
-        </Pressable>
+        <AddButton />
       </Link>
     </SafeAreaView>
   );
