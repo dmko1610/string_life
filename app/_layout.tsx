@@ -3,23 +3,26 @@ import { SQLiteProvider } from 'expo-sqlite';
 import { StatusBar } from 'expo-status-bar';
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
-import { PaperProvider } from 'react-native-paper';
+import { PaperProvider, useTheme } from 'react-native-paper';
 import { enGB, registerTranslation } from 'react-native-paper-dates';
-
-import { customTheme } from './theme';
 
 registerTranslation('en-GB', enGB);
 
 export default function RootLayout() {
+  const { colors } = useTheme();
+
   return (
     <SQLiteProvider databaseName="stringLife">
       <PaperProvider>
         <View style={styles.container}>
-          <StatusBar style="auto" />
+          <StatusBar
+            style="auto"
+            // backgroundColor={colors.background}
+          />
           <Stack
             screenOptions={{
-              headerStyle: { backgroundColor: customTheme.colors.background },
-              headerTintColor: customTheme.colors.scrim,
+              headerStyle: { backgroundColor: colors.background },
+              // headerTintColor: colors.onBackground,
             }}
           >
             <Stack.Screen
@@ -31,9 +34,7 @@ export default function RootLayout() {
             <Stack.Screen
               name="add-instrument"
               options={{
-                headerTransparent: true,
-                headerBackButtonDisplayMode: 'minimal',
-                headerTitle: '',
+                headerShown: false,
               }}
             />
             <Stack.Screen
