@@ -5,8 +5,6 @@ import * as SQLite from 'expo-sqlite';
 import React, { useCallback, useEffect, useState } from 'react';
 import {
   Dimensions,
-  ImageSourcePropType,
-  Pressable,
   ScrollView,
   StyleSheet,
   Text,
@@ -49,10 +47,10 @@ const createTable = async () => {
 };
 
 const typesToIcons: Record<string, ImageSource> = {
-  electro: images.electroGuitar,
-  acoustic: images.acousticGuitar,
-  bass: images.bassGuitar,
-  ukulele: images.ukulele,
+  electro: images.electroGuitarLarge,
+  acoustic: images.acousticGuitarLarge,
+  bass: images.bassGuitarLarge,
+  ukulele: images.ukuleleLarge,
 };
 
 function typeToIcon(type: keyof typeof typesToIcons): ImageSource {
@@ -94,10 +92,10 @@ export default function Index() {
       edges={['left', 'right', 'bottom', 'top']}
       style={[styles.dashboard, { backgroundColor: colors.background }]}
     >
-      <Text style={[styles.title, { color: colors.scrim }]}>{TITLE_TEXT}</Text>
+      <Text style={[styles.title, { color: colors.onBackground }]}>{TITLE_TEXT}</Text>
 
       {rows.length ? (
-        <ScrollView contentContainerStyle={styles.instrumentList}>
+        <ScrollView style={{flex: 1}} contentContainerStyle={styles.instrumentList}>
           <View style={styles.instrumentListWrapper}>
             {rows.map((row) => (
               <Card
@@ -112,10 +110,12 @@ export default function Index() {
               >
                 <Card.Cover
                   resizeMode="contain"
+                  resizeMethod="resize"
                   source={typeToIcon(row.type)}
                   style={{
                     borderRadius: 10,
                     width: calculatedElementWidth,
+                    padding: 8,
                     backgroundColor: colors.background,
                   }}
                 />
