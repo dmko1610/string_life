@@ -12,11 +12,10 @@ import {
   View,
   useWindowDimensions,
 } from 'react-native';
+import { IconButton, useTheme } from 'react-native-paper';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-import { Colors } from '@/constants/Colors';
 import images from '@/helpers/images';
-import AddButton from '@/components/AddButton/AddButton';
 
 const emptyStateWidth = Dimensions.get('window').width;
 
@@ -54,6 +53,8 @@ function typeToIcon(type) {
 export default function Index() {
   useDrizzleStudio(db);
 
+  const { colors } = useTheme();
+
   const [rows, setRows] = useState([]);
 
   async function fetchData() {
@@ -72,11 +73,15 @@ export default function Index() {
 
   const width = useWindowDimensions().width;
 
-  const calculatedElementWidth = width / HALF_SIZE - HORIZONTAL_MARGIN - PADDING;
+  const calculatedElementWidth =
+    width / HALF_SIZE - HORIZONTAL_MARGIN - PADDING;
 
   return (
-    <SafeAreaView edges={['left', 'right', 'bottom', 'top']} style={styles.dashboard}>
-      <Text style={styles.title}>{TITLE_TEXT}</Text>
+    <SafeAreaView
+      edges={['left', 'right', 'bottom', 'top']}
+      style={[styles.dashboard, { backgroundColor: colors.background }]}
+    >
+      <Text style={[styles.title, { color: colors.scrim }]}>{TITLE_TEXT}</Text>
 
       {rows.length ? (
         <ScrollView contentContainerStyle={styles.instrumentList}>
@@ -102,24 +107,44 @@ export default function Index() {
         </ScrollView>
       ) : (
         <View style={styles.imageBackgroundCentered}>
-          <ImageBackground source={images.emptyStateBackground} contentFit="contain">
-            <Image source={images.emptyState} style={styles.image} contentFit="contain" />
+          <ImageBackground
+            source={images.emptyStateBackground}
+            contentFit="contain"
+          >
+            <Image
+              source={images.emptyState}
+              style={styles.image}
+              contentFit="contain"
+            />
           </ImageBackground>
         </View>
       )}
       <Link href="/add-instrument" asChild>
-        <AddButton />
+        <IconButton
+          containerColor={colors.primary}
+          iconColor={colors.scrim}
+          mode="contained"
+          icon={'plus'}
+          size={40}
+          style={styles.addButton}
+        />
       </Link>
     </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
+  addButton: {
+    width: 60,
+    height: 60,
+    borderRadius: 30,
+    marginBottom: 60,
+    alignSelf: 'center',
+  },
   instrument: {
     borderRadius: 16,
     paddingHorizontal: 6,
     paddingTop: 8,
-    backgroundColor: Colors.dark.text,
   },
   instrumentImage: {
     backgroundColor: '#24221F',
@@ -152,7 +177,6 @@ const styles = StyleSheet.create({
     width: '100%',
   },
   dashboard: {
-    backgroundColor: '#151515',
     flex: 1,
     alignItems: 'flex-start',
     paddingHorizontal: 16,
@@ -170,10 +194,8 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 20,
     fontWeight: '400',
-    color: '#E5DBD0',
     alignSelf: 'flex-start',
     marginTop: 60,
     marginLeft: 16,
   },
-  addButton: { alignSelf: 'center', marginBottom: 60 },
 });
