@@ -1,10 +1,11 @@
 import { useDrizzleStudio } from 'expo-drizzle-studio-plugin';
-import { Image, ImageBackground } from 'expo-image';
-import { Link, router, useFocusEffect } from 'expo-router';
+import { Image, ImageBackground, ImageSource } from 'expo-image';
+import { Link, RelativePathString, router, useFocusEffect } from 'expo-router';
 import * as SQLite from 'expo-sqlite';
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import {
   Dimensions,
+  ImageSourcePropType,
   Pressable,
   ScrollView,
   StyleSheet,
@@ -12,10 +13,18 @@ import {
   View,
   useWindowDimensions,
 } from 'react-native';
-import { IconButton, useTheme } from 'react-native-paper';
+import { Card, IconButton, useTheme } from 'react-native-paper';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import images from '@/helpers/images';
+
+type Instrument = {
+  id: number;
+  name: string;
+  type: string;
+  replacement_date?: number | null;
+  progress?: number | null;
+};
 
 const emptyStateWidth = Dimensions.get('window').width;
 
@@ -39,14 +48,14 @@ const createTable = async () => {
   `);
 };
 
-const typesToIcons = {
+const typesToIcons: Record<string, ImageSource> = {
   electro: images.electroGuitar,
   acoustic: images.acousticGuitar,
   bass: images.bassGuitar,
   ukulele: images.ukulele,
 };
 
-function typeToIcon(type) {
+function typeToIcon(type: keyof typeof typesToIcons): ImageSource {
   return typesToIcons[type];
 }
 
@@ -55,25 +64,29 @@ export default function Index() {
 
   const { colors } = useTheme();
 
-  const [rows, setRows] = useState([]);
+  const [rows, setRows] = useState<Instrument[]>([]);
 
-  async function fetchData() {
-    const allRows = await db.getAllAsync('SELECT * FROM stringLife');
+  const fetchData = useCallback(async () => {
+    const allRows: Instrument[] = await db.getAllAsync(
+      'SELECT * FROM stringLife'
+    );
 
     setRows(allRows);
-  }
+  }, []);
 
   useEffect(() => {
     createTable();
   }, []);
 
-  useFocusEffect(() => {
-    fetchData();
-  });
+  useFocusEffect(
+    useCallback(() => {
+      fetchData();
+    }, [fetchData])
+  );
 
   const width = useWindowDimensions().width;
 
-  const calculatedElementWidth =
+  const calculatedElementWidth: number =
     width / HALF_SIZE - HORIZONTAL_MARGIN - PADDING;
 
   return (
@@ -87,21 +100,33 @@ export default function Index() {
         <ScrollView contentContainerStyle={styles.instrumentList}>
           <View style={styles.instrumentListWrapper}>
             {rows.map((row) => (
-              <Pressable
-                style={styles.instrument}
-                key={row.id}
+              <Card
+                mode="contained"
+                contentStyle={{
+                  paddingHorizontal: 6,
+                  paddingTop: 8,
+                  backgroundColor: colors.primary,
+                  borderRadius: 16,
+                }}
                 onPress={() => router.push('/instrument')}
               >
-                <View style={styles.instrumentImage}>
-                  <Image
-                    source={typeToIcon(row.type)}
-                    width={calculatedElementWidth}
-                    height="140"
-                    contentFit="contain"
-                  />
-                </View>
-                <Text style={styles.instrumentTitle}>{row.name}</Text>
-              </Pressable>
+                <Card.Cover
+                  resizeMode="contain"
+                  source={typeToIcon(row.type)}
+                  style={{
+                    borderRadius: 10,
+                    width: calculatedElementWidth,
+                    backgroundColor: colors.background,
+                  }}
+                />
+                <Card.Title
+                  title={row.name}
+                  titleStyle={{
+                    alignSelf: 'center',
+                    color: colors.onPrimary,
+                  }}
+                />
+              </Card>
             ))}
           </View>
         </ScrollView>
@@ -119,10 +144,10 @@ export default function Index() {
           </ImageBackground>
         </View>
       )}
-      <Link href="/add-instrument" asChild>
+      <Link href={'/add-instrument' as RelativePathString} asChild>
         <IconButton
           containerColor={colors.primary}
-          iconColor={colors.scrim}
+          iconColor={colors.onPrimary}
           mode="contained"
           icon={'plus'}
           size={40}
@@ -147,7 +172,6 @@ const styles = StyleSheet.create({
     paddingTop: 8,
   },
   instrumentImage: {
-    backgroundColor: '#24221F',
     borderRadius: 15,
     marginBottom: 15,
     paddingVertical: 10,
@@ -160,7 +184,6 @@ const styles = StyleSheet.create({
     borderRadius: 30,
   },
   instrumentTitle: {
-    color: '#161616',
     fontSize: 12,
     alignSelf: 'center',
     marginBottom: 15,
