@@ -4,19 +4,22 @@ import { StatusBar } from 'expo-status-bar';
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
 import { PaperProvider } from 'react-native-paper';
+import { enGB, registerTranslation } from 'react-native-paper-dates';
 
 import { customTheme } from './theme';
+
+registerTranslation('en-GB', enGB);
 
 export default function RootLayout() {
   return (
     <SQLiteProvider databaseName="stringLife">
-      <PaperProvider theme={customTheme}>
+      <PaperProvider>
         <View style={styles.container}>
           <StatusBar style="auto" />
           <Stack
             screenOptions={{
               headerStyle: { backgroundColor: customTheme.colors.background },
-              headerTintColor: customTheme.colors.text,
+              headerTintColor: customTheme.colors.scrim,
             }}
           >
             <Stack.Screen
