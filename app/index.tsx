@@ -1,6 +1,12 @@
 import { useDrizzleStudio } from 'expo-drizzle-studio-plugin';
 import { Image, ImageBackground, ImageSource } from 'expo-image';
-import { Link, RelativePathString, router, useFocusEffect } from 'expo-router';
+import {
+  Link,
+  RelativePathString,
+  router,
+  useFocusEffect,
+  useRouter,
+} from 'expo-router';
 import * as SQLite from 'expo-sqlite';
 import React, { useCallback, useEffect, useState } from 'react';
 import {
@@ -61,6 +67,7 @@ export default function Index() {
   useDrizzleStudio(db);
 
   const { colors } = useTheme();
+  const router = useRouter();
 
   const [rows, setRows] = useState<Instrument[]>([]);
 
@@ -108,7 +115,12 @@ export default function Index() {
                   backgroundColor: colors.primary,
                   borderRadius: 16,
                 }}
-                onPress={() => router.push('/instrument')}
+                onPress={() =>
+                  router.push({
+                    pathname: '/instrument',
+                    params: { id: row.id },
+                  })
+                }
               >
                 <Card.Cover
                   resizeMode="contain"
@@ -205,6 +217,7 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'flex-start',
     paddingHorizontal: 16,
+    // paddingTop: 10
   },
   image: {
     width: emptyStateWidth,

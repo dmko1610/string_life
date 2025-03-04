@@ -1,10 +1,11 @@
 import { Image, ImageSource } from 'expo-image';
-import { useFocusEffect, useRouter } from 'expo-router';
+import { useFocusEffect, useLocalSearchParams, useRouter } from 'expo-router';
 import { useSQLiteContext } from 'expo-sqlite';
 import { useState } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
-import { IconButton, useTheme } from 'react-native-paper';
+import { IconButton, ProgressBar, useTheme } from 'react-native-paper';
 import { DatePickerInput } from 'react-native-paper-dates';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 import images from '@/helpers/images';
 
@@ -21,12 +22,15 @@ function typeToIcon(type: keyof typeof typesToIcons): ImageSource {
   return typesToIcons[type];
 }
 
-export default function InstrumentDetails({}) {
+export default function InstrumentDetails() {
   const db = useSQLiteContext();
   const { colors } = useTheme();
   const router = useRouter();
 
+  const { id } = useLocalSearchParams();
+
   const [type, setType] = useState<string>('');
+  const [progress, setProgress] = useState<number>(0);
   const [replacementDate, setReplacementDate] = useState<Date | undefined>(
     undefined
   );
@@ -35,11 +39,12 @@ export default function InstrumentDetails({}) {
   async function fetchData() {
     const data: Instrument | null = await db.getFirstAsync(
       'SELECT * FROM stringLife WHERE id=?',
-      [1]
+      [String(id)]
     );
 
     if (data) {
       setType(data.type);
+      setProgress(data.progress || 0);
     }
   }
 
@@ -50,7 +55,10 @@ export default function InstrumentDetails({}) {
   console.log(typeToIcon(type));
 
   return (
-    <View style={[styles.instrument, { backgroundColor: colors.background }]}>
+    <SafeAreaView
+      edges={['left', 'right', 'top', 'bottom']}
+      style={[styles.instrument, { backgroundColor: colors.background }]}
+    >
       <View
         style={{
           flexDirection: 'row',
@@ -91,19 +99,26 @@ export default function InstrumentDetails({}) {
         </View>
       </View>
 
-      <View style={{ marginBottom: 100 }}>
+      <View style={{ marginBottom: 50 }}>
         <IconButton
           icon={pressed ? 'stop' : 'play'}
           mode="contained-tonal"
           size={140}
           containerColor={pressed ? colors.tertiary : colors.primary}
           iconColor={pressed ? colors.onTertiary : colors.onPrimary}
-          style={{ alignSelf: 'center', zIndex: 10 }}
+          style={{ alignSelf: 'center' }}
           animated={true}
           onPress={() => setPressed(() => (pressed ? false : true))}
         />
       </View>
-    </View>
+      <View style={{ marginBottom: 70 }}>
+        <ProgressBar
+          animatedValue={progress}
+          progress={progress}
+          color={colors.primary}
+        />
+      </View>
+    </SafeAreaView>
   );
 }
 
@@ -119,7 +134,6 @@ const styles = StyleSheet.create({
   instrument: {
     flex: 1,
     paddingHorizontal: 16,
-    paddingTop: 70,
   },
   button: {
     borderRadius: 6,
