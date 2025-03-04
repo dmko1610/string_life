@@ -37,12 +37,14 @@ export default function AddInstrument() {
 
   const saveInstrument = async () => {
     try {
+      const timestamp = replacementDate ? replacementDate.getTime() : null;
+
       await db.runAsync(
         'INSERT INTO stringLife (name, type, replacement_date, progress) VALUES (?, ?, ?, ?)',
         name,
         type,
-        1,
-        1
+        timestamp,
+        0
       );
 
       router.back();
