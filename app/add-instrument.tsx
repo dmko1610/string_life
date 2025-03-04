@@ -4,7 +4,6 @@ import React, { useState } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import {
   Button,
-  Icon,
   IconButton,
   SegmentedButtons,
   TextInput,
@@ -26,7 +25,6 @@ const data: { value: string; label: string }[] = [
 
 export default function AddInstrument() {
   const db = useSQLiteContext();
-
   const { colors } = useTheme();
 
   const [type, setType] = useState<string | null>(null);
@@ -58,23 +56,14 @@ export default function AddInstrument() {
       edges={['left', 'right', 'bottom', 'top']}
       style={[styles.instrument, { backgroundColor: colors.background }]}
     >
-      <View
-        style={{
-          flexDirection: 'row',
-          alignItems: 'center',
-          justifyContent: 'center',
-          marginTop: 16,
-        }}
-      >
-        <IconButton
-          icon={'arrow-left'}
-          style={{ position: 'absolute', left: -16 }}
-          onPress={() => router.back()}
-        />
-        <Text style={[styles.title, { color: colors.onBackground }]}>
-          {TITLE_TEXT}
-        </Text>
-      </View>
+      <IconButton
+        icon={'arrow-left'}
+        style={{ left: -16 }}
+        onPress={() => router.back()}
+      />
+      <Text style={[styles.title, { color: colors.onBackground }]}>
+        {TITLE_TEXT}
+      </Text>
       <View style={styles.inputs}>
         <SegmentedButtons
           value={type ?? ''}
@@ -142,5 +131,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 20,
     fontWeight: '400',
+    marginTop: 10,
+    marginLeft: 16,
   },
 });

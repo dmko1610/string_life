@@ -16,7 +16,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 
 import images from '@/helpers/images';
 
-type Instrument = {
+export type Instrument = {
   id: number;
   name: string;
   type: string;
@@ -92,10 +92,12 @@ export default function Index() {
       edges={['left', 'right', 'bottom', 'top']}
       style={[styles.dashboard, { backgroundColor: colors.background }]}
     >
-      <Text style={[styles.title, { color: colors.onBackground }]}>{TITLE_TEXT}</Text>
+      <Text style={[styles.title, { color: colors.onBackground }]}>
+        {TITLE_TEXT}
+      </Text>
 
       {rows.length ? (
-        <ScrollView style={{flex: 1}} contentContainerStyle={styles.instrumentList}>
+        <ScrollView contentContainerStyle={styles.instrumentList}>
           <View style={styles.instrumentListWrapper}>
             {rows.map((row) => (
               <Card
