@@ -1,14 +1,11 @@
-import DateTimePicker from '@react-native-community/datetimepicker';
 import { Image, ImageSource } from 'expo-image';
 import { useFocusEffect, useRouter } from 'expo-router';
 import { useSQLiteContext } from 'expo-sqlite';
 import { useState } from 'react';
-import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
 import { IconButton, useTheme } from 'react-native-paper';
 import { DatePickerInput } from 'react-native-paper-dates';
 
-import IconCalendar from '@/assets/icons/calendar.svg';
-import IconPlay from '@/assets/icons/play.svg';
 import images from '@/helpers/images';
 
 import { Instrument } from '.';
@@ -33,6 +30,7 @@ export default function InstrumentDetails({}) {
   const [replacementDate, setReplacementDate] = useState<Date | undefined>(
     undefined
   );
+  const [pressed, setPressed] = useState(false);
 
   async function fetchData() {
     const data: Instrument | null = await db.getFirstAsync(
@@ -93,16 +91,18 @@ export default function InstrumentDetails({}) {
         </View>
       </View>
 
-      <IconButton
-        icon="play"
-        mode="contained-tonal"
-        size={140}
-        containerColor={colors.primary}
-        iconColor={colors.onPrimary}
-        style={{ alignSelf: 'center', marginBottom: 100 }}
-        animated={true}
-        onPress={() => {}}
-      />
+      <View style={{ marginBottom: 100 }}>
+        <IconButton
+          icon={pressed ? 'stop' : 'play'}
+          mode="contained-tonal"
+          size={140}
+          containerColor={pressed ? colors.tertiary : colors.primary}
+          iconColor={pressed ? colors.onTertiary : colors.onPrimary}
+          style={{ alignSelf: 'center', zIndex: 10 }}
+          animated={true}
+          onPress={() => setPressed(() => (pressed ? false : true))}
+        />
+      </View>
     </View>
   );
 }
