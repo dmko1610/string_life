@@ -1,7 +1,7 @@
 import { Image, ImageSource } from 'expo-image';
 import { useFocusEffect, useLocalSearchParams, useRouter } from 'expo-router';
 import { useSQLiteContext } from 'expo-sqlite';
-import { useState } from 'react';
+import { useCallback, useRef, useState } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { IconButton, ProgressBar, useTheme } from 'react-native-paper';
 import { DatePickerInput } from 'react-native-paper-dates';
@@ -22,6 +22,8 @@ function typeToIcon(type: keyof typeof typesToIcons): ImageSource {
   return typesToIcons[type];
 }
 
+const targetTime = 360_000; // 100 hours
+
 export default function InstrumentDetails() {
   const db = useSQLiteContext();
   const { colors } = useTheme();
@@ -35,8 +37,11 @@ export default function InstrumentDetails() {
     undefined
   );
   const [pressed, setPressed] = useState(false);
+  const [sessionTime, setSessionTime] = useState(0);
 
-  async function fetchData() {
+  const playingRef = useRef(false);
+
+  const fetchData = useCallback(async () => {
     const data: Instrument | null = await db.getFirstAsync(
       'SELECT * FROM stringLife WHERE id=?',
       [String(id)]
@@ -45,14 +50,56 @@ export default function InstrumentDetails() {
     if (data) {
       setType(data.type);
       setProgress(data.progress || 0);
+      setReplacementDate(new Date(data.replacement_date as number));
     }
-  }
+  }, []);
 
-  useFocusEffect(() => {
-    fetchData();
-  });
+  useFocusEffect(
+    useCallback(() => {
+      fetchData();
+    }, [fetchData])
+  );
 
-  console.log(typeToIcon(type));
+  const differenceInMs = new Date().getTime() - replacementDate?.getTime();
+  const daysSince = Math.floor(differenceInMs / (1000 * 60 * 60 * 24));
+
+  const startPlay = () => {
+    console.log('startPlay');
+
+    playingRef.current = true;
+    const startTime = Date.now();
+
+    const interval = setInterval(() => {
+      if (playingRef.current) {
+        setSessionTime(Math.floor((Date.now() - startTime) / 1000));
+      } else {
+        clearInterval(interval);
+      }
+    }, 1000);
+  };
+
+  const stopPlay = async () => {
+    console.log('stopPlay');
+
+    playingRef.current = false;
+
+    const totalProgress = progress ? progress : 0;
+
+    const updatedProgress = totalProgress + sessionTime;
+    const newProgress = Math.min(updatedProgress / targetTime, 1);
+
+    console.log(newProgress);
+
+    await db.runAsync(
+      'UPDATE stringLife SET progress=? WHERE id=?',
+      newProgress,
+      String(id)
+    );
+
+    setSessionTime(0);
+  };
+
+  console.log('progress - ', progress);
 
   return (
     <SafeAreaView
@@ -108,13 +155,24 @@ export default function InstrumentDetails() {
           iconColor={pressed ? colors.onTertiary : colors.onPrimary}
           style={{ alignSelf: 'center' }}
           animated={true}
-          onPress={() => setPressed(() => (pressed ? false : true))}
+          onPress={() => {
+            setPressed(() => (pressed ? false : true));
+            if (pressed) {
+              console.log('11');
+
+              stopPlay();
+            } else {
+              console.log('22');
+
+              startPlay();
+            }
+          }}
         />
       </View>
+      <Text>{`Days from replacement: ${daysSince}`}</Text>
       <View style={{ marginBottom: 70 }}>
         <ProgressBar
-          animatedValue={progress}
-          progress={progress}
+          progress={parseFloat(progress.toFixed(2))}
           color={colors.primary}
         />
       </View>
