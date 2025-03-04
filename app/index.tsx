@@ -1,22 +1,28 @@
 import { useDrizzleStudio } from 'expo-drizzle-studio-plugin';
-import { Image, ImageBackground } from 'expo-image';
-import { Link, router, useFocusEffect } from 'expo-router';
+import { Image, ImageBackground, ImageSource } from 'expo-image';
+import { Link, RelativePathString, router, useFocusEffect } from 'expo-router';
 import * as SQLite from 'expo-sqlite';
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import {
   Dimensions,
-  Pressable,
   ScrollView,
   StyleSheet,
   Text,
   View,
   useWindowDimensions,
 } from 'react-native';
+import { Card, IconButton, useTheme } from 'react-native-paper';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-import { Colors } from '@/constants/Colors';
 import images from '@/helpers/images';
-import AddButton from '@/components/AddButton/AddButton';
+
+export type Instrument = {
+  id: number;
+  name: string;
+  type: string;
+  replacement_date?: number | null;
+  progress?: number | null;
+};
 
 const emptyStateWidth = Dimensions.get('window').width;
 
@@ -40,89 +46,134 @@ const createTable = async () => {
   `);
 };
 
-const typesToIcons = {
-  electro: images.electroGuitar,
-  acoustic: images.acousticGuitar,
-  bass: images.bassGuitar,
-  ukulele: images.ukulele,
+const typesToIcons: Record<string, ImageSource> = {
+  electro: images.electroGuitarLarge,
+  acoustic: images.acousticGuitarLarge,
+  bass: images.bassGuitarLarge,
+  ukulele: images.ukuleleLarge,
 };
 
-function typeToIcon(type) {
+function typeToIcon(type: keyof typeof typesToIcons): ImageSource {
   return typesToIcons[type];
 }
 
 export default function Index() {
   useDrizzleStudio(db);
 
-  const [rows, setRows] = useState([]);
+  const { colors } = useTheme();
 
-  async function fetchData() {
-    const allRows = await db.getAllAsync('SELECT * FROM stringLife');
+  const [rows, setRows] = useState<Instrument[]>([]);
+
+  const fetchData = useCallback(async () => {
+    const allRows: Instrument[] = await db.getAllAsync(
+      'SELECT * FROM stringLife'
+    );
 
     setRows(allRows);
-  }
+  }, []);
 
   useEffect(() => {
     createTable();
   }, []);
 
-  useFocusEffect(() => {
-    fetchData();
-  });
+  useFocusEffect(
+    useCallback(() => {
+      fetchData();
+    }, [fetchData])
+  );
 
   const width = useWindowDimensions().width;
 
-  const calculatedElementWidth = width / HALF_SIZE - HORIZONTAL_MARGIN - PADDING;
+  const calculatedElementWidth: number =
+    width / HALF_SIZE - HORIZONTAL_MARGIN - PADDING;
 
   return (
-    <SafeAreaView edges={['left', 'right', 'bottom', 'top']} style={styles.dashboard}>
-      <Text style={styles.title}>{TITLE_TEXT}</Text>
+    <SafeAreaView
+      edges={['left', 'right', 'bottom', 'top']}
+      style={[styles.dashboard, { backgroundColor: colors.background }]}
+    >
+      <Text style={[styles.title, { color: colors.onBackground }]}>
+        {TITLE_TEXT}
+      </Text>
 
       {rows.length ? (
         <ScrollView contentContainerStyle={styles.instrumentList}>
           <View style={styles.instrumentListWrapper}>
             {rows.map((row) => (
-              <Pressable
-                style={styles.instrument}
-                key={row.id}
+              <Card
+                mode="contained"
+                contentStyle={{
+                  paddingHorizontal: 6,
+                  paddingTop: 8,
+                  backgroundColor: colors.primary,
+                  borderRadius: 16,
+                }}
                 onPress={() => router.push('/instrument')}
               >
-                <View style={styles.instrumentImage}>
-                  <Image
-                    source={typeToIcon(row.type)}
-                    width={calculatedElementWidth}
-                    height="140"
-                    contentFit="contain"
-                  />
-                </View>
-                <Text style={styles.instrumentTitle}>{row.name}</Text>
-              </Pressable>
+                <Card.Cover
+                  resizeMode="contain"
+                  resizeMethod="resize"
+                  source={typeToIcon(row.type)}
+                  style={{
+                    borderRadius: 10,
+                    width: calculatedElementWidth,
+                    padding: 8,
+                    backgroundColor: colors.background,
+                  }}
+                />
+                <Card.Title
+                  title={row.name}
+                  titleStyle={{
+                    alignSelf: 'center',
+                    color: colors.onPrimary,
+                  }}
+                />
+              </Card>
             ))}
           </View>
         </ScrollView>
       ) : (
         <View style={styles.imageBackgroundCentered}>
-          <ImageBackground source={images.emptyStateBackground} contentFit="contain">
-            <Image source={images.emptyState} style={styles.image} contentFit="contain" />
+          <ImageBackground
+            source={images.emptyStateBackground}
+            contentFit="contain"
+          >
+            <Image
+              source={images.emptyState}
+              style={styles.image}
+              contentFit="contain"
+            />
           </ImageBackground>
         </View>
       )}
-      <Link href="/add-instrument" asChild>
-        <AddButton />
+      <Link href={'/add-instrument' as RelativePathString} asChild>
+        <IconButton
+          containerColor={colors.primary}
+          iconColor={colors.onPrimary}
+          mode="contained"
+          icon={'plus'}
+          size={40}
+          style={styles.addButton}
+        />
       </Link>
     </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
+  addButton: {
+    width: 60,
+    height: 60,
+    borderRadius: 30,
+    marginBottom: 60,
+    alignSelf: 'center',
+  },
   instrument: {
     borderRadius: 16,
     paddingHorizontal: 6,
     paddingTop: 8,
-    backgroundColor: Colors.dark.text,
   },
   instrumentImage: {
-    backgroundColor: '#24221F',
     borderRadius: 15,
     marginBottom: 15,
     paddingVertical: 10,
@@ -135,7 +186,6 @@ const styles = StyleSheet.create({
     borderRadius: 30,
   },
   instrumentTitle: {
-    color: '#161616',
     fontSize: 12,
     alignSelf: 'center',
     marginBottom: 15,
@@ -152,7 +202,6 @@ const styles = StyleSheet.create({
     width: '100%',
   },
   dashboard: {
-    backgroundColor: '#151515',
     flex: 1,
     alignItems: 'flex-start',
     paddingHorizontal: 16,
@@ -170,10 +219,8 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 20,
     fontWeight: '400',
-    color: '#E5DBD0',
     alignSelf: 'flex-start',
     marginTop: 60,
     marginLeft: 16,
   },
-  addButton: { alignSelf: 'center', marginBottom: 60 },
 });

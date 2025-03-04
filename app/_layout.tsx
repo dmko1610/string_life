@@ -3,46 +3,53 @@ import { SQLiteProvider } from 'expo-sqlite';
 import { StatusBar } from 'expo-status-bar';
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
+import { PaperProvider, useTheme } from 'react-native-paper';
+import { enGB, registerTranslation } from 'react-native-paper-dates';
 
-import { Colors } from '@/constants/Colors';
+registerTranslation('en-GB', enGB);
 
 export default function RootLayout() {
+  const { colors } = useTheme();
+
   return (
     <SQLiteProvider databaseName="stringLife">
-      <View style={styles.container}>
-        <StatusBar style="auto" />
-        <Stack
-          screenOptions={{
-            headerStyle: { backgroundColor: Colors.dark.background },
-            headerTintColor: Colors.dark.text,
-          }}
-        >
-          <Stack.Screen
-            name="index"
-            options={{
-              headerShown: false,
-            }}
+      <PaperProvider>
+        <View style={styles.container}>
+          <StatusBar
+            style="auto"
+            // backgroundColor={colors.background}
           />
-          <Stack.Screen
-            name="add-instrument"
-            options={{
-              headerTransparent: true,
-              headerBackButtonDisplayMode: 'minimal',
-              headerTitle: '',
+          <Stack
+            screenOptions={{
+              headerStyle: { backgroundColor: colors.background },
+              // headerTintColor: colors.onBackground,
             }}
-          />
-          <Stack.Screen
-            name="instrument"
-            options={{
-              headerShown: false,
-            }}
-          />
-        </Stack>
-      </View>
+          >
+            <Stack.Screen
+              name="index"
+              options={{
+                headerShown: false,
+              }}
+            />
+            <Stack.Screen
+              name="add-instrument"
+              options={{
+                headerShown: false,
+              }}
+            />
+            <Stack.Screen
+              name="instrument"
+              options={{
+                headerShown: false,
+              }}
+            />
+          </Stack>
+        </View>
+      </PaperProvider>
     </SQLiteProvider>
   );
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: Colors.dark.background },
+  container: { flex: 1 },
 });
