@@ -14,6 +14,9 @@ import { Instrument } from '.';
 
 const TARGET_TIME_SECONDS = 360_000_000;
 
+const GET_INSTRUMENT_QUERY = 'SELECT * FROM stringLife WHERE id=?';
+const UPDATE_INSTRUMENT_QUERY = 'UPDATE stringLife SET progress= ? WHERE id=?';
+
 export default function InstrumentDetails() {
   const db = useSQLiteContext();
   const { colors } = useTheme();
@@ -33,7 +36,7 @@ export default function InstrumentDetails() {
 
   const fetchData = useCallback(async () => {
     const data: Instrument | null = await db.getFirstAsync(
-      'SELECT * FROM stringLife WHERE id=?',
+      GET_INSTRUMENT_QUERY,
       [String(id)]
     );
 
@@ -78,11 +81,7 @@ export default function InstrumentDetails() {
 
       setProgress(newProgress);
 
-      await db.runAsync(
-        'UPDATE stringLife SET progress= ? WHERE id=?',
-        newProgress,
-        String(id)
-      );
+      await db.runAsync(UPDATE_INSTRUMENT_QUERY, newProgress, String(id));
     }
 
     playStartTimeRef.current = null;

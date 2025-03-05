@@ -23,6 +23,9 @@ const data: { value: string; label: string }[] = [
   { value: 'ukulele', label: 'Ukulele' },
 ];
 
+const ADD_INSTRUMENT_QUERY =
+  'INSERT INTO stringLife (name, type, replacement_date, progress) VALUES (?, ?, ?, ?)';
+
 export default function AddInstrument() {
   const db = useSQLiteContext();
   const { colors } = useTheme();
@@ -39,13 +42,7 @@ export default function AddInstrument() {
     try {
       const timestamp = replacementDate ? replacementDate.getTime() : null;
 
-      await db.runAsync(
-        'INSERT INTO stringLife (name, type, replacement_date, progress) VALUES (?, ?, ?, ?)',
-        name,
-        type,
-        timestamp,
-        0
-      );
+      await db.runAsync(ADD_INSTRUMENT_QUERY, name, type, timestamp, 0);
 
       router.back();
     } catch (error) {

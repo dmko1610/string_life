@@ -3,7 +3,6 @@ import { Image, ImageBackground, ImageSource } from 'expo-image';
 import {
   Link,
   RelativePathString,
-  router,
   useFocusEffect,
   useRouter,
 } from 'expo-router';
@@ -20,6 +19,7 @@ import {
 import { Card, IconButton, useTheme } from 'react-native-paper';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
+import { typeToIcon } from '@/helpers/iconizator';
 import images from '@/helpers/images';
 
 export type Instrument = {
@@ -38,10 +38,8 @@ const HORIZONTAL_MARGIN = 32;
 const HALF_SIZE = 2;
 const PADDING = 4;
 
-const db = SQLite.openDatabaseSync('stringLife');
-
-const createTable = async () => {
-  await db.execAsync(`
+const GET_DATA_QUERY = 'SELECT * FROM stringLife';
+const CREATE_TABLE_QUERY = `
     PRAGMA journal_mode = WAL;
     CREATE TABLE IF NOT EXISTS stringLife (
       id INTEGER PRIMARY KEY NOT NULL, 
@@ -49,19 +47,13 @@ const createTable = async () => {
       type TEXT NOT NULL, 
       replacement_date INTEGER, 
       progress INTEGER);
-  `);
-};
+  `;
 
-const typesToIcons: Record<string, ImageSource> = {
-  electro: images.electroGuitarLarge,
-  acoustic: images.acousticGuitarLarge,
-  bass: images.bassGuitarLarge,
-  ukulele: images.ukuleleLarge,
-};
+const db = SQLite.openDatabaseSync('stringLife');
 
-function typeToIcon(type: keyof typeof typesToIcons): ImageSource {
-  return typesToIcons[type];
-}
+const createTable = async () => {
+  await db.execAsync(CREATE_TABLE_QUERY);
+};
 
 export default function Index() {
   useDrizzleStudio(db);
@@ -71,10 +63,13 @@ export default function Index() {
 
   const [rows, setRows] = useState<Instrument[]>([]);
 
+  const width = useWindowDimensions().width;
+
+  const calculatedElementWidth: number =
+    width / HALF_SIZE - HORIZONTAL_MARGIN - PADDING;
+
   const fetchData = useCallback(async () => {
-    const allRows: Instrument[] = await db.getAllAsync(
-      'SELECT * FROM stringLife'
-    );
+    const allRows: Instrument[] = await db.getAllAsync(GET_DATA_QUERY);
 
     setRows(allRows);
   }, []);
@@ -88,11 +83,6 @@ export default function Index() {
       fetchData();
     }, [fetchData])
   );
-
-  const width = useWindowDimensions().width;
-
-  const calculatedElementWidth: number =
-    width / HALF_SIZE - HORIZONTAL_MARGIN - PADDING;
 
   return (
     <SafeAreaView
@@ -109,12 +99,10 @@ export default function Index() {
             {rows.map((row) => (
               <Card
                 mode="contained"
-                contentStyle={{
-                  paddingHorizontal: 6,
-                  paddingTop: 8,
-                  backgroundColor: colors.primary,
-                  borderRadius: 16,
-                }}
+                contentStyle={[
+                  styles.card,
+                  { backgroundColor: colors.primary },
+                ]}
                 onPress={() =>
                   router.push({
                     pathname: '/instrument',
@@ -126,19 +114,17 @@ export default function Index() {
                   resizeMode="contain"
                   resizeMethod="resize"
                   source={typeToIcon(row.type)}
-                  style={{
-                    borderRadius: 10,
-                    width: calculatedElementWidth,
-                    padding: 8,
-                    backgroundColor: colors.background,
-                  }}
+                  style={[
+                    styles.cardCover,
+                    {
+                      width: calculatedElementWidth,
+                      backgroundColor: colors.background,
+                    },
+                  ]}
                 />
                 <Card.Title
                   title={row.name}
-                  titleStyle={{
-                    alignSelf: 'center',
-                    color: colors.onPrimary,
-                  }}
+                  titleStyle={[styles.cardTitle, { color: colors.onPrimary }]}
                 />
               </Card>
             ))}
@@ -180,6 +166,18 @@ const styles = StyleSheet.create({
     marginBottom: 60,
     alignSelf: 'center',
   },
+  card: {
+    paddingHorizontal: 6,
+    paddingTop: 8,
+    borderRadius: 16,
+  },
+  cardCover: {
+    borderRadius: 10,
+    padding: 8,
+  },
+  cardTitle: {
+    alignSelf: 'center',
+  },
   instrument: {
     borderRadius: 16,
     paddingHorizontal: 6,
@@ -189,13 +187,6 @@ const styles = StyleSheet.create({
     borderRadius: 15,
     marginBottom: 15,
     paddingVertical: 10,
-  },
-  gradient: {
-    width: 60,
-    height: 60,
-    justifyContent: 'center',
-    alignItems: 'center',
-    borderRadius: 30,
   },
   instrumentTitle: {
     fontSize: 12,
@@ -217,7 +208,6 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'flex-start',
     paddingHorizontal: 16,
-    // paddingTop: 10
   },
   image: {
     width: emptyStateWidth,
