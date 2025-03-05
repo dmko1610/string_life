@@ -15,14 +15,10 @@ export default function RootLayout() {
     <SQLiteProvider databaseName="stringLife">
       <PaperProvider>
         <View style={styles.container}>
-          <StatusBar
-            style="auto"
-            // backgroundColor={colors.background}
-          />
+          <StatusBar style="auto" />
           <Stack
             screenOptions={{
               headerStyle: { backgroundColor: colors.background },
-              // headerTintColor: colors.onBackground,
             }}
           >
             <Stack.Screen
