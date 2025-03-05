@@ -1,9 +1,9 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { Image, ImageSource } from 'expo-image';
+import { Image } from 'expo-image';
 import { useFocusEffect, useLocalSearchParams, useRouter } from 'expo-router';
 import { useSQLiteContext } from 'expo-sqlite';
-import { useCallback, useEffect, useRef, useState } from 'react';
-import { AppState, StyleSheet, Text, View } from 'react-native';
+import { useCallback, useRef, useState } from 'react';
+import { StyleSheet, Text, View } from 'react-native';
 import { IconButton, ProgressBar, useTheme } from 'react-native-paper';
 import { DatePickerInput } from 'react-native-paper-dates';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -12,18 +12,7 @@ import images from '@/helpers/images';
 
 import { Instrument } from '.';
 
-const typesToIcons: Record<string, ImageSource> = {
-  electro: images.electroGuitarLarge,
-  acoustic: images.acousticGuitarLarge,
-  bass: images.bassGuitarLarge,
-  ukulele: images.ukuleleLarge,
-};
-
-function typeToIcon(type: keyof typeof typesToIcons): ImageSource {
-  return typesToIcons[type];
-}
-
-const TARGET_TIME_SECONDS = 360_000; // 100 hours
+const TARGET_TIME_SECONDS = 360_000_000; // 100 hours
 
 export default function InstrumentDetails() {
   const db = useSQLiteContext();
@@ -40,6 +29,7 @@ export default function InstrumentDetails() {
   const [pressed, setPressed] = useState(false);
 
   const playingRef = useRef(false);
+  const playStartTimeRef = useRef<number | null>(null);
 
   const fetchData = useCallback(async () => {
     const data: Instrument | null = await db.getFirstAsync(
@@ -87,25 +77,33 @@ export default function InstrumentDetails() {
   const startPlay = async () => {
     playingRef.current = true;
     const startTime = Date.now();
+    playStartTimeRef.current = startTime;
 
     await AsyncStorage.setItem('playStartTime', String(startTime));
   };
 
   const stopPlay = async () => {
+    if (!playingRef.current) return;
+
     playingRef.current = false;
-    const startTime = await AsyncStorage.getItem('playStartTime');
+
+    const startTime =
+      playStartTimeRef.current || (await AsyncStorage.getItem('playStartTime'));
 
     if (startTime) {
-      const elapsed = Math.floor((Date.now() - Number(startTime)) / 1000);
-      setProgress((prev) => (prev + elapsed) / TARGET_TIME_SECONDS);
+      const elapsed = Math.floor(Date.now() - Number(startTime));
+      const newProgress = progress + elapsed;
+
+      setProgress(newProgress);
 
       await db.runAsync(
-        'UPDATE stringLife SET progress= progress + ? WHERE id=?',
-        elapsed / TARGET_TIME_SECONDS,
+        'UPDATE stringLife SET progress= ? WHERE id=?',
+        newProgress,
         String(id)
       );
     }
 
+    playStartTimeRef.current = null;
     await AsyncStorage.removeItem('playStartTime');
   };
 
@@ -175,7 +173,7 @@ export default function InstrumentDetails() {
       <Text>{`Days from replacement: ${daysSince}`}</Text>
       <View style={{ marginBottom: 70 }}>
         <ProgressBar
-          progress={parseFloat(progress.toFixed(2))}
+          progress={parseFloat((progress / TARGET_TIME_SECONDS).toFixed(2))}
           color={colors.primary}
         />
       </View>
