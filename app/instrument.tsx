@@ -8,7 +8,7 @@ import { IconButton, ProgressBar, useTheme } from 'react-native-paper';
 import { DatePickerInput } from 'react-native-paper-dates';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-import images from '@/helpers/images';
+import { typeToIcon } from '@/helpers/iconizator';
 
 import { Instrument } from '.';
 
@@ -49,24 +49,6 @@ export default function InstrumentDetails() {
       fetchData();
     }, [fetchData])
   );
-
-  useEffect(() => {
-    const subscription = AppState.addEventListener(
-      'change',
-      async (nextAppState) => {
-        if (nextAppState === 'active' && playingRef.current === true) {
-          const startTime = await AsyncStorage.getItem('playStartTime');
-
-          if (startTime) {
-            const elapsed = Math.floor((Date.now() - Number(startTime)) / 1000);
-            setProgress((prev) => (prev + elapsed) / TARGET_TIME_SECONDS);
-          }
-        }
-      }
-    );
-
-    return () => subscription.remove();
-  }, [pressed]);
 
   const daysSince = replacementDate
     ? Math.floor(
