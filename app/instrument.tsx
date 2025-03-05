@@ -1,8 +1,9 @@
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Image, ImageSource } from 'expo-image';
 import { useFocusEffect, useLocalSearchParams, useRouter } from 'expo-router';
 import { useSQLiteContext } from 'expo-sqlite';
-import { useCallback, useRef, useState } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { useCallback, useEffect, useRef, useState } from 'react';
+import { AppState, StyleSheet, Text, View } from 'react-native';
 import { IconButton, ProgressBar, useTheme } from 'react-native-paper';
 import { DatePickerInput } from 'react-native-paper-dates';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -37,7 +38,6 @@ export default function InstrumentDetails() {
     undefined
   );
   const [pressed, setPressed] = useState(false);
-  const [sessionTime, setSessionTime] = useState(0);
 
   const playingRef = useRef(false);
 
@@ -60,46 +60,51 @@ export default function InstrumentDetails() {
     }, [fetchData])
   );
 
-  const differenceInMs = new Date().getTime() - replacementDate?.getTime();
+  useEffect(() => {
+    const subscription = AppState.addEventListener(
+      'change',
+      async (nextAppState) => {
+        if (nextAppState === 'active' && playingRef.current === true) {
+          const startTime = await AsyncStorage.getItem('playStartTime');
+
+          if (startTime) {
+            const elapsed = Math.floor((Date.now() - Number(startTime)) / 1000);
+            setProgress((prev) => (prev + elapsed) / targetTime);
+          }
+        }
+      }
+    );
+
+    return () => subscription.remove();
+  }, [playingRef.current]);
+
+  const differenceInMs = new Date().getTime() - replacementDate!.getTime();
   const daysSince = Math.floor(differenceInMs / (1000 * 60 * 60 * 24));
 
-  const startPlay = () => {
-    console.log('startPlay');
-
+  const startPlay = async () => {
     playingRef.current = true;
     const startTime = Date.now();
 
-    const interval = setInterval(() => {
-      if (playingRef.current) {
-        setSessionTime(Math.floor((Date.now() - startTime) / 1000));
-      } else {
-        clearInterval(interval);
-      }
-    }, 1000);
+    await AsyncStorage.setItem('playStartTime', String(startTime));
   };
 
   const stopPlay = async () => {
-    console.log('stopPlay');
-
     playingRef.current = false;
+    const startTime = await AsyncStorage.getItem('playStartTime');
 
-    const totalProgress = progress ? progress : 0;
+    if (startTime) {
+      const elapsed = Math.floor((Date.now() - Number(startTime)) / 1000);
+      setProgress((prev) => (prev + elapsed) / targetTime);
 
-    const updatedProgress = totalProgress + sessionTime;
-    const newProgress = Math.min(updatedProgress / targetTime, 1);
+      await db.runAsync(
+        'UPDATE stringLife SET progress=? WHERE id=?',
+        (progress + elapsed) / targetTime,
+        String(id)
+      );
+    }
 
-    console.log(newProgress);
-
-    await db.runAsync(
-      'UPDATE stringLife SET progress=? WHERE id=?',
-      newProgress,
-      String(id)
-    );
-
-    setSessionTime(0);
+    await AsyncStorage.removeItem('playStartTime');
   };
-
-  console.log('progress - ', progress);
 
   return (
     <SafeAreaView
@@ -158,12 +163,8 @@ export default function InstrumentDetails() {
           onPress={() => {
             setPressed(() => (pressed ? false : true));
             if (pressed) {
-              console.log('11');
-
               stopPlay();
             } else {
-              console.log('22');
-
               startPlay();
             }
           }}
