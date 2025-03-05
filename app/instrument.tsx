@@ -23,7 +23,7 @@ function typeToIcon(type: keyof typeof typesToIcons): ImageSource {
   return typesToIcons[type];
 }
 
-const targetTime = 360_000; // 100 hours
+const TARGET_TIME_SECONDS = 360_000; // 100 hours
 
 export default function InstrumentDetails() {
   const db = useSQLiteContext();
@@ -69,17 +69,20 @@ export default function InstrumentDetails() {
 
           if (startTime) {
             const elapsed = Math.floor((Date.now() - Number(startTime)) / 1000);
-            setProgress((prev) => (prev + elapsed) / targetTime);
+            setProgress((prev) => (prev + elapsed) / TARGET_TIME_SECONDS);
           }
         }
       }
     );
 
     return () => subscription.remove();
-  }, [playingRef.current]);
+  }, [pressed]);
 
-  const differenceInMs = new Date().getTime() - replacementDate!.getTime();
-  const daysSince = Math.floor(differenceInMs / (1000 * 60 * 60 * 24));
+  const daysSince = replacementDate
+    ? Math.floor(
+        (Date.now() - replacementDate.getTime()) / (1000 * 60 * 60 * 24)
+      )
+    : 0;
 
   const startPlay = async () => {
     playingRef.current = true;
@@ -94,11 +97,11 @@ export default function InstrumentDetails() {
 
     if (startTime) {
       const elapsed = Math.floor((Date.now() - Number(startTime)) / 1000);
-      setProgress((prev) => (prev + elapsed) / targetTime);
+      setProgress((prev) => (prev + elapsed) / TARGET_TIME_SECONDS);
 
       await db.runAsync(
-        'UPDATE stringLife SET progress=? WHERE id=?',
-        (progress + elapsed) / targetTime,
+        'UPDATE stringLife SET progress= progress + ? WHERE id=?',
+        elapsed / TARGET_TIME_SECONDS,
         String(id)
       );
     }
@@ -137,6 +140,7 @@ export default function InstrumentDetails() {
         <Image
           source={typeToIcon(type)}
           contentFit="contain"
+          cachePolicy="memory"
           style={{ width: '100%', height: '70%' }}
         />
         <View style={{ marginTop: 50 }}>
@@ -161,12 +165,10 @@ export default function InstrumentDetails() {
           style={{ alignSelf: 'center' }}
           animated={true}
           onPress={() => {
-            setPressed(() => (pressed ? false : true));
-            if (pressed) {
-              stopPlay();
-            } else {
-              startPlay();
-            }
+            setPressed((prev) => {
+              prev ? stopPlay() : startPlay();
+              return !prev;
+            });
           }}
         />
       </View>
