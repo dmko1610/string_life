@@ -12,7 +12,7 @@ import { typeToIcon } from '@/helpers/iconizator';
 
 import { Instrument } from '.';
 
-const TARGET_TIME_SECONDS = 360_000_000; // 100 hours
+const TARGET_TIME_SECONDS = 360_000_000;
 
 export default function InstrumentDetails() {
   const db = useSQLiteContext();
@@ -21,12 +21,12 @@ export default function InstrumentDetails() {
 
   const { id } = useLocalSearchParams();
 
+  const [pressed, setPressed] = useState(false);
   const [type, setType] = useState<string>('');
   const [progress, setProgress] = useState<number>(0);
   const [replacementDate, setReplacementDate] = useState<Date | undefined>(
     undefined
   );
-  const [pressed, setPressed] = useState(false);
 
   const playingRef = useRef(false);
   const playStartTimeRef = useRef<number | null>(null);
@@ -94,13 +94,7 @@ export default function InstrumentDetails() {
       edges={['left', 'right', 'top', 'bottom']}
       style={[styles.instrument, { backgroundColor: colors.background }]}
     >
-      <View
-        style={{
-          flexDirection: 'row',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-        }}
-      >
+      <View style={styles.headerContainer}>
         <Text style={[styles.header, { color: colors.onBackground }]}>
           {type.toUpperCase()}
         </Text>
@@ -116,14 +110,14 @@ export default function InstrumentDetails() {
         />
       </View>
 
-      <View style={{ flex: 1, justifyContent: 'flex-start' }}>
+      <View style={styles.imageContainer}>
         <Image
           source={typeToIcon(type)}
           contentFit="contain"
           cachePolicy="memory"
-          style={{ width: '100%', height: '70%' }}
+          style={styles.image}
         />
-        <View style={{ marginTop: 50 }}>
+        <View style={styles.datePicker}>
           <DatePickerInput
             inputMode="start"
             value={replacementDate}
@@ -135,14 +129,14 @@ export default function InstrumentDetails() {
         </View>
       </View>
 
-      <View style={{ marginBottom: 50 }}>
+      <View style={styles.playButtonContainer}>
         <IconButton
           icon={pressed ? 'stop' : 'play'}
           mode="contained-tonal"
           size={140}
           containerColor={pressed ? colors.tertiary : colors.primary}
           iconColor={pressed ? colors.onTertiary : colors.onPrimary}
-          style={{ alignSelf: 'center' }}
+          style={styles.playButton}
           animated={true}
           onPress={() => {
             setPressed((prev) => {
@@ -152,8 +146,15 @@ export default function InstrumentDetails() {
           }}
         />
       </View>
-      <Text>{`Days from replacement: ${daysSince}`}</Text>
-      <View style={{ marginBottom: 70 }}>
+
+      <Text
+        style={styles.daysSinceText}
+      >{`Days from replacement: ${daysSince}`}</Text>
+      <View style={styles.playtimeContainer}>
+        <Text style={styles.playtimeText}>Play Time</Text>
+        <Text style={styles.playtimeText}>100 h</Text>
+      </View>
+      <View style={styles.progressBar}>
         <ProgressBar
           progress={parseFloat((progress / TARGET_TIME_SECONDS).toFixed(2))}
           color={colors.primary}
@@ -164,13 +165,22 @@ export default function InstrumentDetails() {
 }
 
 const styles = StyleSheet.create({
+  playtimeContainer: { flexDirection: 'row', justifyContent: 'space-between' },
+  playtimeText: { fontSize: 16, marginBottom: 4 },
+  daysSinceText: { fontSize: 24, marginBottom: 32 },
   header: { fontSize: 20, fontWeight: '400' },
-  datePicker: {
-    borderWidth: 1,
-    paddingVertical: 15,
-    borderRadius: 10,
+  headerContainer: {
     flexDirection: 'row',
+    justifyContent: 'space-between',
     alignItems: 'center',
+  },
+  playButtonContainer: { marginBottom: 50 },
+  playButton: { alignSelf: 'center' },
+  progressBar: { marginBottom: 70 },
+  imageContainer: { flex: 1, justifyContent: 'flex-start' },
+  image: { width: '100%', height: '70%' },
+  datePicker: {
+    marginTop: 50,
   },
   instrument: {
     flex: 1,
