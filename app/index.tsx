@@ -101,6 +101,7 @@ export default function Index() {
           <View style={styles.instrumentListWrapper}>
             {rows.map((row) => (
               <Card
+                key={row.id}
                 mode="contained"
                 contentStyle={[
                   styles.card,
