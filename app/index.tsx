@@ -164,7 +164,7 @@ const styles = StyleSheet.create({
   addButton: {
     position: 'absolute',
     borderRadius: 50,
-    marginBottom: 60,
+    marginBottom: 42,
     alignSelf: 'center',
     justifyContent: 'center',
     alignItems: 'center',
@@ -172,11 +172,11 @@ const styles = StyleSheet.create({
   },
   card: {
     paddingHorizontal: 6,
-    paddingTop: 8,
-    borderRadius: 16,
+    paddingTop: 6,
+    borderRadius: 12,
   },
   cardCover: {
-    borderRadius: 10,
+    borderRadius: 6,
     padding: 8,
   },
   cardTitle: {
