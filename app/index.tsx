@@ -1,5 +1,5 @@
 import { useDrizzleStudio } from 'expo-drizzle-studio-plugin';
-import { Image, ImageBackground, ImageSource } from 'expo-image';
+import { Image, ImageBackground } from 'expo-image';
 import {
   Link,
   RelativePathString,
@@ -16,7 +16,7 @@ import {
   View,
   useWindowDimensions,
 } from 'react-native';
-import { Card, IconButton, useTheme } from 'react-native-paper';
+import { Card, FAB, useTheme } from 'react-native-paper';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { typeToIcon } from '@/helpers/iconizator';
@@ -94,7 +94,10 @@ export default function Index() {
       </Text>
 
       {rows.length ? (
-        <ScrollView contentContainerStyle={styles.instrumentList}>
+        <ScrollView
+          contentContainerStyle={styles.instrumentList}
+          showsVerticalScrollIndicator={false}
+        >
           <View style={styles.instrumentListWrapper}>
             {rows.map((row) => (
               <Card
@@ -145,12 +148,11 @@ export default function Index() {
         </View>
       )}
       <Link href={'/add-instrument' as RelativePathString} asChild>
-        <IconButton
-          containerColor={colors.primary}
-          iconColor={colors.onPrimary}
-          mode="contained"
+        <FAB
+          color={colors.primary}
           icon={'plus'}
-          size={40}
+          size={'large'}
+          variant="primary"
           style={styles.addButton}
         />
       </Link>
@@ -160,11 +162,13 @@ export default function Index() {
 
 const styles = StyleSheet.create({
   addButton: {
-    width: 60,
-    height: 60,
-    borderRadius: 30,
+    position: 'absolute',
+    borderRadius: 50,
     marginBottom: 60,
     alignSelf: 'center',
+    justifyContent: 'center',
+    alignItems: 'center',
+    bottom: 0,
   },
   card: {
     paddingHorizontal: 6,
@@ -194,12 +198,12 @@ const styles = StyleSheet.create({
     marginBottom: 15,
   },
   instrumentList: {
-    marginTop: 60,
+    paddingTop: 30,
+    paddingBottom: 80,
   },
   instrumentListWrapper: {
     flexWrap: 'wrap',
     rowGap: 24,
-    flex: 1,
     flexDirection: 'row',
     justifyContent: 'space-between',
     width: '100%',
