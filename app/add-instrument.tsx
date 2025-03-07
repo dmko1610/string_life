@@ -1,11 +1,12 @@
 import { router } from 'expo-router';
 import { useSQLiteContext } from 'expo-sqlite';
 import React, { useState } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import {
   Button,
   IconButton,
   SegmentedButtons,
+  Text,
   TextInput,
   useTheme,
 } from 'react-native-paper';
@@ -55,19 +56,25 @@ export default function AddInstrument() {
       edges={['left', 'right', 'bottom', 'top']}
       style={[styles.instrument, { backgroundColor: colors.background }]}
     >
-      <IconButton
-        icon={'arrow-left'}
-        style={{ left: -16 }}
-        onPress={() => router.back()}
-      />
-      <Text style={[styles.title, { color: colors.onBackground }]}>
-        {TITLE_TEXT}
-      </Text>
+      <View style={{ justifyContent: 'space-between' }}>
+        <IconButton
+          icon={'arrow-left'}
+          style={{ left: -16 }}
+          onPress={() => router.back()}
+        />
+        <Text style={styles.title}>{TITLE_TEXT}</Text>
+      </View>
       <View style={styles.inputs}>
         <SegmentedButtons
           value={type ?? ''}
           onValueChange={setType}
           buttons={data}
+          theme={{
+            colors: {
+              secondaryContainer: colors.primary,
+              onSecondaryContainer: colors.onPrimary,
+            },
+          }}
         />
         <TextInput
           mode="outlined"

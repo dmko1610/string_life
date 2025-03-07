@@ -12,11 +12,10 @@ import {
   Dimensions,
   ScrollView,
   StyleSheet,
-  Text,
   View,
   useWindowDimensions,
 } from 'react-native';
-import { Card, FAB, useTheme } from 'react-native-paper';
+import { Card, FAB, Text, useTheme } from 'react-native-paper';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { typeToIcon } from '@/helpers/iconizator';
@@ -89,9 +88,7 @@ export default function Index() {
       edges={['left', 'right', 'bottom', 'top']}
       style={[styles.dashboard, { backgroundColor: colors.background }]}
     >
-      <Text style={[styles.title, { color: colors.onBackground }]}>
-        {TITLE_TEXT}
-      </Text>
+      <Text style={styles.title}>{TITLE_TEXT}</Text>
 
       {rows.length ? (
         <ScrollView
@@ -229,6 +226,7 @@ const styles = StyleSheet.create({
     fontWeight: '400',
     alignSelf: 'flex-start',
     marginTop: 60,
+    marginBottom: 10,
     marginLeft: 16,
   },
 });

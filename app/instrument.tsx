@@ -3,8 +3,8 @@ import { Image } from 'expo-image';
 import { useFocusEffect, useLocalSearchParams, useRouter } from 'expo-router';
 import { useSQLiteContext } from 'expo-sqlite';
 import { useCallback, useRef, useState } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
-import { IconButton, ProgressBar, useTheme } from 'react-native-paper';
+import { StyleSheet, View } from 'react-native';
+import { IconButton, ProgressBar, Text, useTheme } from 'react-native-paper';
 import { DatePickerInput } from 'react-native-paper-dates';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
@@ -93,21 +93,17 @@ export default function InstrumentDetails() {
       edges={['left', 'right', 'top', 'bottom']}
       style={[styles.instrument, { backgroundColor: colors.background }]}
     >
-      <View style={styles.headerContainer}>
-        <Text style={[styles.header, { color: colors.onBackground }]}>
-          {type.toUpperCase()}
-        </Text>
-
-        <IconButton
-          icon={'arrow-u-right-bottom'}
-          mode="contained-tonal"
-          size={30}
-          iconColor={colors.onPrimary}
-          containerColor={colors.primary}
-          animated={true}
-          onPress={() => router.back()}
-        />
-      </View>
+      <IconButton
+        icon={'arrow-u-right-bottom'}
+        mode="contained-tonal"
+        size={30}
+        iconColor={colors.onPrimary}
+        containerColor={colors.primary}
+        animated={true}
+        style={{ alignSelf: 'flex-end' }}
+        onPress={() => router.back()}
+      />
+      <Text style={styles.header}>{type.toUpperCase()}</Text>
 
       <View style={styles.imageContainer}>
         <Image
@@ -167,11 +163,12 @@ const styles = StyleSheet.create({
   playtimeContainer: { flexDirection: 'row', justifyContent: 'space-between' },
   playtimeText: { fontSize: 16, marginBottom: 4 },
   daysSinceText: { fontSize: 24, marginBottom: 32 },
-  header: { fontSize: 20, fontWeight: '400' },
-  headerContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+  header: {
+    fontSize: 20,
+    fontWeight: '400',
+    marginTop: 2,
+    marginLeft: 16,
+    marginBottom: 30,
   },
   playButtonContainer: { marginBottom: 50 },
   playButton: { alignSelf: 'center' },
