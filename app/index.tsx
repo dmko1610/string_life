@@ -6,6 +6,7 @@ import {
   useFocusEffect,
   useRouter,
 } from 'expo-router';
+import * as SplashScreen from 'expo-splash-screen';
 import * as SQLite from 'expo-sqlite';
 import React, { useCallback, useEffect, useState } from 'react';
 import {
@@ -54,12 +55,20 @@ const createTable = async () => {
   await db.execAsync(CREATE_TABLE_QUERY);
 };
 
+SplashScreen.preventAutoHideAsync();
+
+SplashScreen.setOptions({
+  duration: 1000,
+  fade: true,
+});
+
 export default function Index() {
   useDrizzleStudio(db);
 
   const { colors } = useTheme();
   const router = useRouter();
 
+  const [appIsReady, setAppIsReady] = useState(false);
   const [rows, setRows] = useState<Instrument[]>([]);
 
   const width = useWindowDimensions().width;
@@ -80,13 +89,25 @@ export default function Index() {
   useFocusEffect(
     useCallback(() => {
       fetchData();
+      setAppIsReady(true);
     }, [fetchData])
   );
+
+  const onLayoutRootView = useCallback(() => {
+    if (appIsReady) {
+      SplashScreen.hide();
+    }
+  }, [appIsReady]);
+
+  if (!appIsReady) {
+    return null;
+  }
 
   return (
     <SafeAreaView
       edges={['left', 'right', 'bottom', 'top']}
       style={[styles.dashboard, { backgroundColor: colors.background }]}
+      onLayout={onLayoutRootView}
     >
       <Text style={styles.title}>{TITLE_TEXT}</Text>
 

@@ -1,17 +1,22 @@
 {
   "expo": {
-    "name": "string-life",
+    "name": "String Life",
     "slug": "string-life",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/images/icon.png",
+    "icon": "./assets/images/favicon.png",
     "scheme": "myapp",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
+    "assetBundlePatterns": ["**/*"],
     "splash": {
       "image": "./assets/images/splash.png",
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#FFFBFF",
+      "dark": {
+        "image": "./assets/images/splash_dark.png",
+        "backgroundColor": "#1D1B1E"
+      }
     },
     "ios": {
       "supportsTablet": true,
@@ -19,6 +24,9 @@
     },
     "android": {
       "adaptiveIcon": {
+        "foregroundImage": "./assets/images/favicon.png",
+        "backgroundColor": "#1D1B1E",
+        "monochromeImage": "./assets/images/favicon_monochrome.png"
       },
       "package": "com.dmitrykovalev.stringlife"
     },
