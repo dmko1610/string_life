@@ -4,7 +4,7 @@ import * as SplashScreen from 'expo-splash-screen';
 import * as SQLite from 'expo-sqlite';
 import React, { useCallback, useEffect, useState } from 'react';
 import { ScrollView, StyleSheet, View } from 'react-native';
-import { FAB, Text, useTheme } from 'react-native-paper';
+import { Button, Dialog, FAB, Text, useTheme } from 'react-native-paper';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import EmptyState from './components/EmptyState';
@@ -19,6 +19,7 @@ export type Instrument = {
 };
 
 const TITLE_TEXT = 'MY GUITARS';
+const DELETE_QUESTION = 'Are you sure?';
 
 const GET_DATA_QUERY = 'SELECT * FROM stringLife';
 const CREATE_TABLE_QUERY = `
@@ -30,6 +31,7 @@ const CREATE_TABLE_QUERY = `
       replacement_date INTEGER, 
       progress INTEGER);
   `;
+const DELETE_INSTRUMENT_QUERY = 'DELETE FROM stringLife WHERE id = ?';
 
 const db = SQLite.openDatabaseSync('stringLife');
 
@@ -51,12 +53,30 @@ export default function Index() {
 
   const [appIsReady, setAppIsReady] = useState(false);
   const [rows, setRows] = useState<Instrument[]>([]);
+  const [visible, setVisible] = useState(false);
+  const [deleteId, setDeleteId] = useState(0);
+
+  const showDialog = (id: number) => {
+    setVisible(true);
+    setDeleteId(id);
+  };
+  const hideDialog = () => setVisible(false);
+
+
 
   const fetchData = useCallback(async () => {
     const allRows: Instrument[] = await db.getAllAsync(GET_DATA_QUERY);
 
     setRows(allRows);
   }, []);
+
+  const deleteRowById = useCallback(
+    async (id: number) => {
+      await db.runAsync(DELETE_INSTRUMENT_QUERY, id);
+      fetchData();
+    },
+    [fetchData]
+  );
 
   useEffect(() => {
     createTable();
@@ -99,6 +119,7 @@ export default function Index() {
                 id={row.id}
                 type={row.type}
                 name={row.name}
+                onLongPress={showDialog}
               />
             ))}
           </View>
@@ -116,6 +137,33 @@ export default function Index() {
           style={styles.addButton}
         />
       </Link>
+
+      <Dialog visible={visible}>
+        <Dialog.Icon icon="alert" />
+        <Dialog.Title style={{ textAlign: 'center' }}>
+          Are you sure?
+        </Dialog.Title>
+        <Dialog.Content>
+          <Text variant="bodyLarge">
+            Your instrument will have been deleted. But you may add it again
+            from the dashboard.
+          </Text>
+          <Dialog.Actions>
+            <Button
+              onPress={() => {
+                deleteRowById(deleteId);
+                hideDialog();
+              }}
+              textColor={colors.error}
+            >
+              Delete
+            </Button>
+            <Button onPress={hideDialog} textColor={colors.primary}>
+              Cancel
+            </Button>
+          </Dialog.Actions>
+        </Dialog.Content>
+      </Dialog>
     </SafeAreaView>
   );
 }

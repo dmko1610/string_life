@@ -16,9 +16,15 @@ interface IGuitarCardProps {
   id: number;
   type: string;
   name: string;
+  onLongPress?: (id: number) => void;
 }
 
-export default function GuitarCard({ id, type, name }: IGuitarCardProps) {
+export default function GuitarCard({
+  id,
+  type,
+  name,
+  onLongPress,
+}: IGuitarCardProps) {
   const { colors } = useTheme();
   const router = useRouter();
 
@@ -32,6 +38,7 @@ export default function GuitarCard({ id, type, name }: IGuitarCardProps) {
           params: { id },
         })
       }
+      onLongPress={() => onLongPress(id)}
       testID="card"
     >
       <Card.Cover

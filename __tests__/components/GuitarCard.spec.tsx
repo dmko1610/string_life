@@ -1,4 +1,10 @@
-import { fireEvent, render, screen } from '@testing-library/react-native';
+import {
+  fireEvent,
+  render,
+  screen,
+  userEvent,
+  waitFor,
+} from '@testing-library/react-native';
 import { useRouter } from 'expo-router';
 
 import GuitarCard from '@/app/components/GuitarCard';
@@ -37,6 +43,26 @@ describe('GuitarCard', () => {
         pathname: '/instrument',
         params: { id: 1 },
       });
+    });
+  });
+
+  describe('when card is long pressed', () => {
+    it('calls the given handler', async () => {
+      const longPressFn = jest.fn();
+      const user = userEvent.setup();
+      render(
+        <GuitarCard
+          id={1}
+          type="electro"
+          name="Good Guitar"
+          onLongPress={longPressFn}
+        />
+      );
+
+      const card = screen.getByTestId('card');
+      user.longPress(card);
+
+      await waitFor(() => expect(longPressFn).toHaveBeenCalledWith(1));
     });
   });
 });
