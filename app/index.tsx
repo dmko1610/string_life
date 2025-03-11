@@ -1,26 +1,14 @@
 import { useDrizzleStudio } from 'expo-drizzle-studio-plugin';
-import { Image, ImageBackground } from 'expo-image';
-import {
-  Link,
-  RelativePathString,
-  useFocusEffect,
-  useRouter,
-} from 'expo-router';
+import { Link, RelativePathString, useFocusEffect } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 import * as SQLite from 'expo-sqlite';
 import React, { useCallback, useEffect, useState } from 'react';
-import {
-  Dimensions,
-  ScrollView,
-  StyleSheet,
-  View,
-  useWindowDimensions,
-} from 'react-native';
-import { Card, FAB, Text, useTheme } from 'react-native-paper';
+import { ScrollView, StyleSheet, View } from 'react-native';
+import { FAB, Text, useTheme } from 'react-native-paper';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-import { typeToIcon } from '@/helpers/iconizator';
-import images from '@/helpers/images';
+import EmptyState from './components/EmptyState';
+import GuitarCard from './components/GuitarCard';
 
 export type Instrument = {
   id: number;
@@ -30,13 +18,7 @@ export type Instrument = {
   progress?: number | null;
 };
 
-const emptyStateWidth = Dimensions.get('window').width;
-
 const TITLE_TEXT = 'MY GUITARS';
-
-const HORIZONTAL_MARGIN = 32;
-const HALF_SIZE = 2;
-const PADDING = 4;
 
 const GET_DATA_QUERY = 'SELECT * FROM stringLife';
 const CREATE_TABLE_QUERY = `
@@ -66,15 +48,9 @@ export default function Index() {
   useDrizzleStudio(db);
 
   const { colors } = useTheme();
-  const router = useRouter();
 
   const [appIsReady, setAppIsReady] = useState(false);
   const [rows, setRows] = useState<Instrument[]>([]);
-
-  const width = useWindowDimensions().width;
-
-  const calculatedElementWidth: number =
-    width / HALF_SIZE - HORIZONTAL_MARGIN - PADDING;
 
   const fetchData = useCallback(async () => {
     const allRows: Instrument[] = await db.getAllAsync(GET_DATA_QUERY);
@@ -118,54 +94,19 @@ export default function Index() {
         >
           <View style={styles.instrumentListWrapper}>
             {rows.map((row) => (
-              <Card
+              <GuitarCard
                 key={row.id}
-                mode="contained"
-                contentStyle={[
-                  styles.card,
-                  { backgroundColor: colors.primary },
-                ]}
-                onPress={() =>
-                  router.push({
-                    pathname: '/instrument',
-                    params: { id: row.id },
-                  })
-                }
-              >
-                <Card.Cover
-                  resizeMode="contain"
-                  resizeMethod="resize"
-                  source={typeToIcon(row.type)}
-                  style={[
-                    styles.cardCover,
-                    {
-                      width: calculatedElementWidth,
-                      backgroundColor: colors.background,
-                    },
-                  ]}
-                />
-                <Card.Title
-                  title={row.name}
-                  titleStyle={[styles.cardTitle, { color: colors.onPrimary }]}
-                />
-              </Card>
+                id={row.id}
+                type={row.type}
+                name={row.name}
+              />
             ))}
           </View>
         </ScrollView>
       ) : (
-        <View style={styles.imageBackgroundCentered}>
-          <ImageBackground
-            source={images.emptyStateBackground}
-            contentFit="contain"
-          >
-            <Image
-              source={images.emptyState}
-              style={styles.image}
-              contentFit="contain"
-            />
-          </ImageBackground>
-        </View>
+        <EmptyState />
       )}
+
       <Link href={'/add-instrument' as RelativePathString} asChild>
         <FAB
           color={colors.primary}
@@ -188,18 +129,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     bottom: 0,
-  },
-  card: {
-    paddingHorizontal: 6,
-    paddingTop: 6,
-    borderRadius: 12,
-  },
-  cardCover: {
-    borderRadius: 6,
-    padding: 8,
-  },
-  cardTitle: {
-    alignSelf: 'center',
   },
   instrument: {
     borderRadius: 16,
@@ -231,16 +160,6 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'flex-start',
     paddingHorizontal: 16,
-  },
-  image: {
-    width: emptyStateWidth,
-    height: emptyStateWidth,
-  },
-  imageBackgroundCentered: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    width: '100%',
   },
   title: {
     fontSize: 20,
