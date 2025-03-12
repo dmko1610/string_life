@@ -38,7 +38,7 @@ export default function GuitarCard({
           params: { id },
         })
       }
-      onLongPress={() => onLongPress(id)}
+      onLongPress={() => onLongPress && onLongPress(id)}
       testID="card"
     >
       <Card.Cover

@@ -1,4 +1,5 @@
 import {
+  act,
   fireEvent,
   render,
   screen,
@@ -60,7 +61,7 @@ describe('GuitarCard', () => {
       );
 
       const card = screen.getByTestId('card');
-      user.longPress(card);
+      fireEvent(card, 'longPress')
 
       await waitFor(() => expect(longPressFn).toHaveBeenCalledWith(1));
     });
