@@ -1,3 +1,4 @@
+import * as Haptics from 'expo-haptics';
 import { useRouter } from 'expo-router';
 import { useState } from 'react';
 import { Dimensions, Pressable, StyleSheet } from 'react-native';
@@ -33,6 +34,7 @@ export default function GuitarCard({
 
   const handleLongPress = () => {
     setLongPressed(true);
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
 
     onLongPress?.(id);
 

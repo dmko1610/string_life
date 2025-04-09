@@ -136,7 +136,7 @@ export default function Index() {
         />
       </Link>
 
-      <Dialog visible={visible}>
+      <Dialog visible={visible} dismissable={false}>
         <Dialog.Icon icon="alert" />
         <Dialog.Title style={{ textAlign: 'center' }}>
           Are you sure?
