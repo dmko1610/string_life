@@ -50,7 +50,6 @@ describe('GuitarCard', () => {
   describe('when card is long pressed', () => {
     it('calls the given handler', async () => {
       const longPressFn = jest.fn();
-      const user = userEvent.setup();
       render(
         <GuitarCard
           id={1}

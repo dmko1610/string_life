@@ -62,8 +62,6 @@ export default function Index() {
   };
   const hideDialog = () => setVisible(false);
 
-
-
   const fetchData = useCallback(async () => {
     const allRows: Instrument[] = await db.getAllAsync(GET_DATA_QUERY);
 

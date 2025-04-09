@@ -1,5 +1,6 @@
 import { useRouter } from 'expo-router';
-import { Dimensions, StyleSheet } from 'react-native';
+import { useState } from 'react';
+import { Dimensions, Pressable, StyleSheet } from 'react-native';
 import { Card, useTheme } from 'react-native-paper';
 
 import { typeToIcon } from '@/helpers/iconizator';
@@ -28,41 +29,64 @@ export default function GuitarCard({
   const { colors } = useTheme();
   const router = useRouter();
 
+  const [longPressed, setLongPressed] = useState(false);
+
+  const handleLongPress = () => {
+    setLongPressed(true);
+
+    onLongPress?.(id);
+
+    setTimeout(() => {
+      setLongPressed(false);
+    }, 1000);
+  };
+
   return (
-    <Card
-      mode="contained"
-      contentStyle={[styles.card, { backgroundColor: colors.primary }]}
+    <Pressable
+      onLongPress={handleLongPress}
       onPress={() =>
         router.push({
           pathname: '/instrument',
           params: { id },
         })
       }
-      onLongPress={() => onLongPress && onLongPress(id)}
-      testID="card"
     >
-      <Card.Cover
-        resizeMode="contain"
-        resizeMethod="resize"
-        source={typeToIcon(type)}
-        style={[
-          styles.cardCover,
-          {
-            width: calculatedElementWidth,
-            backgroundColor: colors.background,
-          },
+      <Card
+        mode="contained"
+        contentStyle={[
+          styles.card,
+          { backgroundColor: longPressed ? colors.tertiary : colors.primary },
         ]}
-        testID="cardCover"
-      />
-      <Card.Title
-        title={name}
-        titleStyle={[styles.cardTitle, { color: colors.onPrimary }]}
-      />
-    </Card>
+        testID="card"
+      >
+        <Card.Cover
+          resizeMode="contain"
+          resizeMethod="resize"
+          source={typeToIcon(type)}
+          style={[
+            styles.cardCover,
+            {
+              width: calculatedElementWidth,
+              backgroundColor: colors.background,
+            },
+          ]}
+          testID="cardCover"
+        />
+        <Card.Title
+          title={name}
+          titleStyle={[styles.cardTitle, { color: colors.onPrimary }]}
+        />
+      </Card>
+    </Pressable>
   );
 }
 
 const styles = StyleSheet.create({
+  animatedContainer: {
+    borderRadius: 12,
+    marginBottom: 12,
+    overflow: 'hidden',
+  },
   card: {
     paddingHorizontal: 6,
     paddingTop: 6,
