@@ -1,0 +1,13 @@
+{
+  "Dashboard": {
+    "title": "Мои гитары",
+    "delete": {
+      "question": "Вы уверены?",
+      "confirm": "Ваш инструмент будет удалён, однако вы можете добавить другой с главной страницы.",
+      "delete_button": "Удалить",
+      "cancel_button": "Отмена"
+    }
+  },
+  "AddInstrument": {},
+  "Instrument": {}
+}
