@@ -7,6 +7,8 @@ import { ScrollView, StyleSheet, View } from 'react-native';
 import { Button, Dialog, FAB, Text, useTheme } from 'react-native-paper';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
+import i18n from '@/lib/i18n';
+
 import EmptyState from './components/EmptyState';
 import GuitarCard from './components/GuitarCard';
 
@@ -103,7 +105,7 @@ export default function Index() {
       style={[styles.dashboard, { backgroundColor: colors.background }]}
       onLayout={onLayoutRootView}
     >
-      <Text style={styles.title}>{TITLE_TEXT}</Text>
+      <Text style={styles.title}>{i18n.t('Dashboard.title')}</Text>
 
       {rows.length ? (
         <ScrollView
@@ -139,13 +141,10 @@ export default function Index() {
       <Dialog visible={visible} dismissable={false}>
         <Dialog.Icon icon="alert" />
         <Dialog.Title style={{ textAlign: 'center' }}>
-          Are you sure?
+          {i18n.t('Dashboard.delete.question')}
         </Dialog.Title>
         <Dialog.Content>
-          <Text variant="bodyLarge">
-            Your instrument will have been deleted. But you may add it again
-            from the dashboard.
-          </Text>
+          <Text variant="bodyLarge">{i18n.t('Dashboard.delete.confirm')}</Text>
           <Dialog.Actions>
             <Button
               onPress={() => {
@@ -154,10 +153,10 @@ export default function Index() {
               }}
               textColor={colors.error}
             >
-              Delete
+              {i18n.t('Dashboard.delete.delete_button')}
             </Button>
             <Button onPress={hideDialog} textColor={colors.primary}>
-              Cancel
+              {i18n.t('Dashboard.delete.cancel_button')}
             </Button>
           </Dialog.Actions>
         </Dialog.Content>

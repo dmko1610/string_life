@@ -1,0 +1,13 @@
+{
+  "Dashboard": {
+    "title": "MY GUITARS",
+    "delete": {
+      "question": "Are you sure?",
+      "confirm": "Your instrument will have been deleted. But you may add it again from the dashboard.",
+      "delete_button": "Delete",
+      "cancel_button": "Cancel"
+    }
+  },
+  "AddInstrument": {},
+  "Instrument": {}
+}
