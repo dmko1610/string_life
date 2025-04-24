@@ -4,11 +4,12 @@ import * as SplashScreen from 'expo-splash-screen';
 import * as SQLite from 'expo-sqlite';
 import React, { useCallback, useEffect, useState } from 'react';
 import { ScrollView, StyleSheet, View } from 'react-native';
-import { Button, Dialog, FAB, Text, useTheme } from 'react-native-paper';
+import { FAB, Text, useTheme } from 'react-native-paper';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import i18n from '@/lib/i18n';
 
+import DeleteDialog from './components/DeleteDialog';
 import EmptyState from './components/EmptyState';
 import GuitarCard from './components/GuitarCard';
 
@@ -135,29 +136,12 @@ export default function Index() {
         />
       </Link>
 
-      <Dialog visible={visible} dismissable={false}>
-        <Dialog.Icon icon="alert" />
-        <Dialog.Title style={{ textAlign: 'center' }}>
-          {i18n.t('Dashboard.delete.question')}
-        </Dialog.Title>
-        <Dialog.Content>
-          <Text variant="bodyLarge">{i18n.t('Dashboard.delete.confirm')}</Text>
-          <Dialog.Actions>
-            <Button
-              onPress={() => {
-                deleteRowById(deleteId);
-                hideDialog();
-              }}
-              textColor={colors.error}
-            >
-              {i18n.t('Dashboard.delete.delete_button')}
-            </Button>
-            <Button onPress={hideDialog} textColor={colors.primary}>
-              {i18n.t('Dashboard.delete.cancel_button')}
-            </Button>
-          </Dialog.Actions>
-        </Dialog.Content>
-      </Dialog>
+      <DeleteDialog
+        visible={visible}
+        deleteFn={deleteRowById}
+        deleteId={deleteId}
+        hideDialog={hideDialog}
+      />
     </SafeAreaView>
   );
 }
