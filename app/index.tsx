@@ -20,9 +20,6 @@ export type Instrument = {
   progress?: number | null;
 };
 
-const TITLE_TEXT = 'MY GUITARS';
-const DELETE_QUESTION = 'Are you sure?';
-
 const GET_DATA_QUERY = 'SELECT * FROM stringLife';
 const CREATE_TABLE_QUERY = `
     PRAGMA journal_mode = WAL;

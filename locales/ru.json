@@ -8,6 +8,17 @@
       "cancel_button": "Отмена"
     }
   },
-  "AddInstrument": {},
-  "Instrument": {}
+  "AddInstrument": {
+    "title": "ДОБАВИТЬ ИНСТРУМЕНТ",
+    "placeholder": "Название инструмента",
+    "repl_label": "Дата замены",
+    "save_button": "Сохранить"
+  },
+  "Instrument": {},
+  "Labels": {
+    "electro": "Электро",
+    "bass": "Бас",
+    "ukulele": "Укулеле",
+    "acoustic": "Акустика"
+  }
 }
