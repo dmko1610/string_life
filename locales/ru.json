@@ -14,7 +14,12 @@
     "repl_label": "Дата замены",
     "save_button": "Сохранить"
   },
-  "Instrument": {},
+  "Instrument": {
+    "repl_label": "Дата замены",
+    "days_since_label": "Дней с замены: ",
+    "play_time_label": "Время игры",
+    "end_time_label": "100 ч"
+  },
   "Labels": {
     "electro": "Электро",
     "bass": "Бас",

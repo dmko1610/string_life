@@ -14,7 +14,12 @@
     "repl_label": "Date of replacement",
     "save_button": "Save"
   },
-  "Instrument": {},
+  "Instrument": {
+    "repl_label": "Replacement Date",
+    "days_since_label": "Days from replacement: ",
+    "play_time_label": "Play time",
+    "end_time_label": "100 h"
+  },
   "Labels": {
     "electro": "Electro",
     "bass": "Bass",
