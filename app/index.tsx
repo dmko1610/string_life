@@ -1,13 +1,17 @@
 import { useDrizzleStudio } from 'expo-drizzle-studio-plugin';
 import { Link, RelativePathString, useFocusEffect } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
-import * as SQLite from 'expo-sqlite';
 import React, { useCallback, useEffect, useState } from 'react';
 import { ScrollView, StyleSheet, View } from 'react-native';
 import { FAB, Text, useTheme } from 'react-native-paper';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import i18n from '@/lib/i18n';
+import db, {
+  createTable,
+  deleteInstrumentById,
+  getAllInstruments,
+} from '@/services/db';
 
 import DeleteDialog from './components/DeleteDialog';
 import EmptyState from './components/EmptyState';
@@ -19,24 +23,6 @@ export type Instrument = {
   type: string;
   replacement_date?: number | null;
   progress?: number | null;
-};
-
-const GET_DATA_QUERY = 'SELECT * FROM stringLife';
-const CREATE_TABLE_QUERY = `
-    PRAGMA journal_mode = WAL;
-    CREATE TABLE IF NOT EXISTS stringLife (
-      id INTEGER PRIMARY KEY NOT NULL, 
-      name TEXT NOT NULL, 
-      type TEXT NOT NULL, 
-      replacement_date INTEGER, 
-      progress INTEGER);
-  `;
-const DELETE_INSTRUMENT_QUERY = 'DELETE FROM stringLife WHERE id = ?';
-
-const db = SQLite.openDatabaseSync('stringLife');
-
-const createTable = async () => {
-  await db.execAsync(CREATE_TABLE_QUERY);
 };
 
 SplashScreen.preventAutoHideAsync();
@@ -63,14 +49,14 @@ export default function Index() {
   const hideDialog = () => setVisible(false);
 
   const fetchData = useCallback(async () => {
-    const allRows: Instrument[] = await db.getAllAsync(GET_DATA_QUERY);
+    const allRows = await getAllInstruments();
 
     setRows(allRows);
   }, []);
 
   const deleteRowById = useCallback(
     async (id: number) => {
-      await db.runAsync(DELETE_INSTRUMENT_QUERY, id);
+      await deleteInstrumentById(id);
       fetchData();
     },
     [fetchData]
