@@ -8,6 +8,17 @@
       "cancel_button": "Cancel"
     }
   },
-  "AddInstrument": {},
-  "Instrument": {}
+  "AddInstrument": {
+    "title": "ADD INSTRUMENT",
+    "placeholder": "Instrument name",
+    "repl_label": "Date of replacement",
+    "save_button": "Save"
+  },
+  "Instrument": {},
+  "Labels": {
+    "electro": "Electro",
+    "bass": "Bass",
+    "ukulele": "Ukulele",
+    "acoustic": "Acoustic"
+  }
 }

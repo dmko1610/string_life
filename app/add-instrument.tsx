@@ -13,15 +13,13 @@ import {
 import { DatePickerInput } from 'react-native-paper-dates';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-const TITLE_TEXT = 'ADD INSTRUMENT';
-const SAVE_BUTTON_TEXT = 'Save';
-const NAME_PLACEHOLDER = 'Guitar name';
+import i18n from '@/lib/i18n';
 
 const data: { value: string; label: string }[] = [
-  { value: 'electro', label: 'Electro' },
-  { value: 'bass', label: 'Bass' },
-  { value: 'acoustic', label: 'Acoustic' },
-  { value: 'ukulele', label: 'Ukulele' },
+  { value: 'electro', label: i18n.t('Labels.electro') },
+  { value: 'bass', label: i18n.t('Labels.bass') },
+  { value: 'acoustic', label: i18n.t('Labels.acoustic') },
+  { value: 'ukulele', label: i18n.t('Labels.ukulele') },
 ];
 
 const ADD_INSTRUMENT_QUERY =
@@ -62,7 +60,7 @@ export default function AddInstrument() {
           style={{ left: -16 }}
           onPress={() => router.back()}
         />
-        <Text style={styles.title}>{TITLE_TEXT}</Text>
+        <Text style={styles.title}>{i18n.t('AddInstrument.title')}</Text>
       </View>
       <View style={styles.inputs}>
         <SegmentedButtons
@@ -78,14 +76,14 @@ export default function AddInstrument() {
         />
         <TextInput
           mode="outlined"
-          label={NAME_PLACEHOLDER}
+          label={i18n.t('AddInstrument.placeholder')}
           value={name}
           onChangeText={setName}
         />
         <View style={styles.datePicker}>
           <DatePickerInput
             locale="ru"
-            label="Date of replacement"
+            label={i18n.t('AddInstrument.repl_label')}
             value={replacementDate}
             onChange={(date) => setReplacementDate(date)}
             inputMode="start"
@@ -108,7 +106,7 @@ export default function AddInstrument() {
         disabled={!type || !name || !replacementDate}
         onPress={saveInstrument}
       >
-        {SAVE_BUTTON_TEXT}
+        {i18n.t('AddInstrument.save_button')}
       </Button>
     </SafeAreaView>
   );
