@@ -142,21 +142,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     bottom: 0,
   },
-  instrument: {
-    borderRadius: 16,
-    paddingHorizontal: 6,
-    paddingTop: 8,
-  },
-  instrumentImage: {
-    borderRadius: 15,
-    marginBottom: 15,
-    paddingVertical: 10,
-  },
-  instrumentTitle: {
-    fontSize: 12,
-    alignSelf: 'center',
-    marginBottom: 15,
-  },
   instrumentList: {
     paddingTop: 30,
     paddingBottom: 80,
