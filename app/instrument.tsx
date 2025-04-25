@@ -10,8 +10,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { typeToIcon } from '@/helpers/iconizator';
 import i18n from '@/lib/i18n';
-
-import { Instrument } from '.';
+import { Instrument } from '@/model/types';
 
 const TARGET_TIME_SECONDS = 360_000_000;
 

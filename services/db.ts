@@ -1,7 +1,7 @@
 import * as SQLite from 'expo-sqlite';
 
 import { CREATE_TABLE_QUERY, DELETE_INSTRUMENT_QUERY, GET_DATA_QUERY } from './queries';
-import { Instrument } from '@/app';
+import { Instrument } from '@/model/types';
 
 const db = SQLite.openDatabaseSync('stringLife');
 
