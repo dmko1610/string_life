@@ -13,13 +13,13 @@ import {
 import { DatePickerInput } from 'react-native-paper-dates';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-import i18n from '@/lib/i18n';
+import i18n, { KEYS } from '@/lib/i18n';
 
 const data: { value: string; label: string }[] = [
-  { value: 'electro', label: i18n.t('Labels.electro') },
-  { value: 'bass', label: i18n.t('Labels.bass') },
-  { value: 'acoustic', label: i18n.t('Labels.acoustic') },
-  { value: 'ukulele', label: i18n.t('Labels.ukulele') },
+  { value: 'electro', label: i18n.t(KEYS.LABELS.electro) },
+  { value: 'bass', label: i18n.t(KEYS.LABELS.bass) },
+  { value: 'acoustic', label: i18n.t(KEYS.LABELS.acoustic) },
+  { value: 'ukulele', label: i18n.t(KEYS.LABELS.ukulele) },
 ];
 
 const ADD_INSTRUMENT_QUERY =
@@ -60,7 +60,7 @@ export default function AddInstrument() {
           style={{ left: -16 }}
           onPress={() => router.back()}
         />
-        <Text style={styles.title}>{i18n.t('AddInstrument.title')}</Text>
+        <Text style={styles.title}>{i18n.t(KEYS.ADD_INSTRUMENT.TITLE)}</Text>
       </View>
       <View style={styles.inputs}>
         <SegmentedButtons
@@ -76,14 +76,14 @@ export default function AddInstrument() {
         />
         <TextInput
           mode="outlined"
-          label={i18n.t('AddInstrument.placeholder')}
+          label={i18n.t(KEYS.ADD_INSTRUMENT.PLACEHOLDER)}
           value={name}
           onChangeText={setName}
         />
         <View style={styles.datePicker}>
           <DatePickerInput
             locale="ru"
-            label={i18n.t('AddInstrument.repl_label')}
+            label={i18n.t(KEYS.ADD_INSTRUMENT.REPL_LABEL)}
             value={replacementDate}
             onChange={(date) => setReplacementDate(date)}
             inputMode="start"
@@ -106,7 +106,7 @@ export default function AddInstrument() {
         disabled={!type || !name || !replacementDate}
         onPress={saveInstrument}
       >
-        {i18n.t('AddInstrument.save_button')}
+        {i18n.t(KEYS.ADD_INSTRUMENT.SAVE_BUTTON)}
       </Button>
     </SafeAreaView>
   );

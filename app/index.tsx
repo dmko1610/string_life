@@ -7,7 +7,7 @@ import { FAB, Text, useTheme } from 'react-native-paper';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import useInstruments from '@/hooks/useInstruments';
-import i18n from '@/lib/i18n';
+import i18n, { KEYS } from '@/lib/i18n';
 import db, { createTable } from '@/services/db';
 
 import DeleteDialog from './components/DeleteDialog';
@@ -63,7 +63,7 @@ export default function Index() {
       style={[styles.dashboard, { backgroundColor: colors.background }]}
       onLayout={onLayoutRootView}
     >
-      <Text style={styles.title}>{i18n.t('Dashboard.title')}</Text>
+      <Text style={styles.title}>{i18n.t(KEYS.DASHBOARD.TITLE)}</Text>
 
       {rows.length ? (
         <ScrollView
