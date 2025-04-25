@@ -6,24 +6,13 @@ import { ScrollView, StyleSheet, View } from 'react-native';
 import { FAB, Text, useTheme } from 'react-native-paper';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
+import useInstruments from '@/hooks/useInstruments';
 import i18n from '@/lib/i18n';
-import db, {
-  createTable,
-  deleteInstrumentById,
-  getAllInstruments,
-} from '@/services/db';
+import db, { createTable } from '@/services/db';
 
 import DeleteDialog from './components/DeleteDialog';
 import EmptyState from './components/EmptyState';
 import GuitarCard from './components/GuitarCard';
-
-export type Instrument = {
-  id: number;
-  name: string;
-  type: string;
-  replacement_date?: number | null;
-  progress?: number | null;
-};
 
 SplashScreen.preventAutoHideAsync();
 
@@ -38,9 +27,9 @@ export default function Index() {
   const { colors } = useTheme();
 
   const [appIsReady, setAppIsReady] = useState(false);
-  const [rows, setRows] = useState<Instrument[]>([]);
   const [visible, setVisible] = useState(false);
   const [deleteId, setDeleteId] = useState(0);
+  const { rows, loading, deleteInstrument } = useInstruments();
 
   const showDialog = (id: number) => {
     setVisible(true);
@@ -48,29 +37,14 @@ export default function Index() {
   };
   const hideDialog = () => setVisible(false);
 
-  const fetchData = useCallback(async () => {
-    const allRows = await getAllInstruments();
-
-    setRows(allRows);
-  }, []);
-
-  const deleteRowById = useCallback(
-    async (id: number) => {
-      await deleteInstrumentById(id);
-      fetchData();
-    },
-    [fetchData]
-  );
-
   useEffect(() => {
     createTable();
   }, []);
 
   useFocusEffect(
     useCallback(() => {
-      fetchData();
       setAppIsReady(true);
-    }, [fetchData])
+    }, [])
   );
 
   const onLayoutRootView = useCallback(() => {
@@ -124,7 +98,7 @@ export default function Index() {
 
       <DeleteDialog
         visible={visible}
-        deleteFn={deleteRowById}
+        deleteFn={deleteInstrument}
         deleteId={deleteId}
         hideDialog={hideDialog}
       />
