@@ -35,7 +35,6 @@ export default function Index() {
     setVisible(true);
     setDeleteId(id);
   };
-  const hideDialog = () => setVisible(false);
 
   useEffect(() => {
     createTable();
@@ -100,7 +99,7 @@ export default function Index() {
         visible={visible}
         deleteFn={deleteInstrument}
         deleteId={deleteId}
-        hideDialog={hideDialog}
+        hideDialog={() => setVisible(false)}
       />
     </SafeAreaView>
   );
