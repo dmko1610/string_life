@@ -1,5 +1,5 @@
 import { router } from 'expo-router';
-import React, { useMemo, useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import {
   Button,
@@ -33,7 +33,7 @@ export default function AddInstrument() {
 
   const isDisabled = !name || !type || !replacementDate;
 
-  const saveInstrument = async () => {
+  const saveInstrument = useCallback(async () => {
     try {
       const timestamp = replacementDate ? replacementDate.getTime() : null;
 
@@ -43,7 +43,7 @@ export default function AddInstrument() {
     } catch (error) {
       console.error(error);
     }
-  };
+  }, [name, type, replacementDate]);
 
   const buttonTheme = useMemo(
     () => ({
