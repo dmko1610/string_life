@@ -1,6 +1,5 @@
 import { router } from 'expo-router';
-import { useSQLiteContext } from 'expo-sqlite';
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import {
   Button,
@@ -14,6 +13,7 @@ import { DatePickerInput } from 'react-native-paper-dates';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import i18n, { KEYS } from '@/lib/i18n';
+import { addInstrument } from '@/services/db';
 
 const data: { value: string; label: string }[] = [
   { value: 'electro', label: i18n.t(KEYS.LABELS.electro) },
@@ -22,11 +22,7 @@ const data: { value: string; label: string }[] = [
   { value: 'ukulele', label: i18n.t(KEYS.LABELS.ukulele) },
 ];
 
-const ADD_INSTRUMENT_QUERY =
-  'INSERT INTO stringLife (name, type, replacement_date, progress) VALUES (?, ?, ?, ?)';
-
 export default function AddInstrument() {
-  const db = useSQLiteContext();
   const { colors } = useTheme();
 
   const [type, setType] = useState<string | null>(null);
@@ -41,13 +37,23 @@ export default function AddInstrument() {
     try {
       const timestamp = replacementDate ? replacementDate.getTime() : null;
 
-      await db.runAsync(ADD_INSTRUMENT_QUERY, name, type, timestamp, 0);
+      await addInstrument(name, type, timestamp, 0);
 
       router.back();
     } catch (error) {
       console.error(error);
     }
   };
+
+  const buttonTheme = useMemo(
+    () => ({
+      colors: {
+        secondaryContainer: colors.primary,
+        onSecondaryContainer: colors.onPrimary,
+      },
+    }),
+    [colors]
+  );
 
   return (
     <SafeAreaView
@@ -67,12 +73,7 @@ export default function AddInstrument() {
           value={type ?? ''}
           onValueChange={setType}
           buttons={data}
-          theme={{
-            colors: {
-              secondaryContainer: colors.primary,
-              onSecondaryContainer: colors.onPrimary,
-            },
-          }}
+          theme={buttonTheme}
         />
         <TextInput
           mode="outlined"
@@ -103,7 +104,7 @@ export default function AddInstrument() {
           fontSize: 20,
           color: colors.onPrimary,
         }}
-        disabled={!type || !name || !replacementDate}
+        disabled={isDisabled}
         onPress={saveInstrument}
       >
         {i18n.t(KEYS.ADD_INSTRUMENT.SAVE_BUTTON)}
