@@ -60,7 +60,7 @@ describe('GuitarCard', () => {
       );
 
       const card = screen.getByTestId('card');
-      fireEvent(card, 'longPress')
+      fireEvent(card, 'longPress');
 
       await waitFor(() => expect(longPressFn).toHaveBeenCalledWith(1));
     });
