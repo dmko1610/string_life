@@ -7,6 +7,8 @@ import {
   CREATE_TABLE_QUERY,
   DELETE_INSTRUMENT_QUERY,
   GET_DATA_QUERY,
+  GET_INSTRUMENT_QUERY,
+  UPDATE_INSTRUMENT_QUERY,
 } from './queries';
 
 const db = SQLite.openDatabaseSync('stringLife');
@@ -17,6 +19,10 @@ export const createTable = async () => {
 
 export const getAllInstruments = async (): Promise<Instrument[]> => {
   return await db.getAllAsync(GET_DATA_QUERY);
+};
+
+export const getInstrument = async (id: string): Promise<Instrument | null> => {
+  return await db.getFirstAsync(GET_INSTRUMENT_QUERY, [id]);
 };
 
 export const deleteInstrumentById = async (id: number) => {
@@ -36,6 +42,10 @@ export const addInstrument = async (
     timestamp,
     progress
   );
+};
+
+export const updateInstrument = async (newProgress: number, id: string) => {
+  return await db.runAsync(UPDATE_INSTRUMENT_QUERY, newProgress, id);
 };
 
 export default db;
