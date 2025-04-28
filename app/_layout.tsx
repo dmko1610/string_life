@@ -4,9 +4,10 @@ import { StatusBar } from 'expo-status-bar';
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
 import { PaperProvider, useTheme } from 'react-native-paper';
-import { enGB, registerTranslation } from 'react-native-paper-dates';
+import { enGB, registerTranslation, ru } from 'react-native-paper-dates';
 
 registerTranslation('en-GB', enGB);
+registerTranslation('ru', ru);
 
 export default function RootLayout() {
   const { colors } = useTheme();
