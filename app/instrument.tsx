@@ -1,7 +1,6 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Image } from 'expo-image';
 import { useFocusEffect, useLocalSearchParams, useRouter } from 'expo-router';
-import { useSQLiteContext } from 'expo-sqlite';
 import { useCallback, useRef, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { IconButton, ProgressBar, Text, useTheme } from 'react-native-paper';
@@ -10,19 +9,15 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { typeToIcon } from '@/helpers/iconizator';
 import i18n, { KEYS } from '@/lib/i18n';
-import { Instrument } from '@/model/types';
+import { getInstrument, updateInstrument } from '@/services/db';
 
 const TARGET_TIME_SECONDS = 360_000_000;
 
-const GET_INSTRUMENT_QUERY = 'SELECT * FROM stringLife WHERE id=?';
-const UPDATE_INSTRUMENT_QUERY = 'UPDATE stringLife SET progress= ? WHERE id=?';
-
 export default function InstrumentDetails() {
-  const db = useSQLiteContext();
   const { colors } = useTheme();
   const router = useRouter();
 
-  const { id } = useLocalSearchParams();
+  const { id } = useLocalSearchParams<{ id: string }>();
 
   const [pressed, setPressed] = useState(false);
   const [type, setType] = useState<string>('');
@@ -35,17 +30,18 @@ export default function InstrumentDetails() {
   const playStartTimeRef = useRef<number | null>(null);
 
   const fetchData = useCallback(async () => {
-    const data: Instrument | null = await db.getFirstAsync(
-      GET_INSTRUMENT_QUERY,
-      [String(id)]
-    );
+    try {
+      const data = await getInstrument(id);
 
-    if (data) {
-      setType(data.type);
-      setProgress(data.progress || 0);
-      setReplacementDate(new Date(data.replacement_date as number));
+      if (data) {
+        setType(data.type);
+        setProgress(data.progress || 0);
+        setReplacementDate(new Date(data.replacement_date as number));
+      }
+    } catch (error) {
+      console.error('Failed to fetch instrument', error);
     }
-  }, []);
+  }, [id]);
 
   useFocusEffect(
     useCallback(() => {
@@ -81,7 +77,7 @@ export default function InstrumentDetails() {
 
       setProgress(newProgress);
 
-      await db.runAsync(UPDATE_INSTRUMENT_QUERY, newProgress, String(id));
+      await updateInstrument(newProgress, id);
     }
 
     playStartTimeRef.current = null;
@@ -118,7 +114,7 @@ export default function InstrumentDetails() {
             value={replacementDate}
             onChange={(date) => setReplacementDate(date)}
             label={i18n.t(KEYS.INSTRUMENT.REPL_LABEL)}
-            locale="ru"
+            locale={i18n.locale}
             mode="outlined"
           />
         </View>
