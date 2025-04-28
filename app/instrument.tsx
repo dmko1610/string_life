@@ -45,7 +45,17 @@ export default function InstrumentDetails() {
 
   useFocusEffect(
     useCallback(() => {
+      const checkOngoingPlay = async () => {
+        const startTime = await AsyncStorage.getItem('playStartTime');
+        if (startTime) {
+          playingRef.current = true;
+          playStartTimeRef.current = Number(startTime);
+          setPressed(true);
+        }
+      };
+
       fetchData();
+      checkOngoingPlay();
     }, [fetchData])
   );
 
