@@ -17,7 +17,7 @@ interface DashboardProps {
 
 export default function Dashboard({ onLayout }: DashboardProps) {
   const { colors } = useTheme();
-  const { rows, loading, deleteInstrument } = useInstruments();
+  const { rows, deleteInstrument } = useInstruments();
 
   const [visible, setVisible] = useState(false);
   const [deleteId, setDeleteId] = useState(0);
