@@ -19,6 +19,7 @@ interface IGuitarCardProps {
   type: string;
   name: string;
   onLongPress?: (id: number) => void;
+  testID?: string;
 }
 
 export default function GuitarCard({
@@ -26,6 +27,7 @@ export default function GuitarCard({
   type,
   name,
   onLongPress,
+  testID = 'guitarCard',
 }: IGuitarCardProps) {
   const { colors } = useTheme();
   const router = useRouter();
@@ -52,6 +54,7 @@ export default function GuitarCard({
           params: { id },
         })
       }
+      testID={testID}
     >
       <Card
         mode="contained"

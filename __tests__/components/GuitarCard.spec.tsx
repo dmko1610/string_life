@@ -1,9 +1,7 @@
 import {
-  act,
   fireEvent,
   render,
   screen,
-  userEvent,
   waitFor,
 } from '@testing-library/react-native';
 import { useRouter } from 'expo-router';

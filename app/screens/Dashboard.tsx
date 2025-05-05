@@ -1,6 +1,6 @@
 import { Link, RelativePathString } from 'expo-router';
 import { useState } from 'react';
-import { ScrollView, StyleSheet, View } from 'react-native';
+import { StyleSheet } from 'react-native';
 import { FAB, Text, useTheme } from 'react-native-paper';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
@@ -9,7 +9,7 @@ import i18n, { KEYS } from '@/lib/i18n';
 
 import DeleteDialog from '../components/DeleteDialog';
 import EmptyState from '../components/EmptyState';
-import GuitarCard from '../components/GuitarCard';
+import GuitarCardList from '../components/GuitarCardList';
 
 interface DashboardProps {
   onLayout: () => void;
@@ -36,22 +36,7 @@ export default function Dashboard({ onLayout }: DashboardProps) {
       <Text style={styles.title}>{i18n.t(KEYS.DASHBOARD.TITLE)}</Text>
 
       {rows.length ? (
-        <ScrollView
-          contentContainerStyle={styles.instrumentList}
-          showsVerticalScrollIndicator={false}
-        >
-          <View style={styles.instrumentListWrapper}>
-            {rows.map((row) => (
-              <GuitarCard
-                key={row.id}
-                id={row.id}
-                type={row.type}
-                name={row.name}
-                onLongPress={showDialog}
-              />
-            ))}
-          </View>
-        </ScrollView>
+        <GuitarCardList instruments={rows} showDeleteDialog={showDialog} />
       ) : (
         <EmptyState />
       )}
