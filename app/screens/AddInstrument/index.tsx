@@ -13,7 +13,7 @@ import { DatePickerInput } from 'react-native-paper-dates';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { useTranslation } from '@/hooks/useTranslation';
-import i18n, { KEYS } from '@/lib/i18n';
+import { KEYS } from '@/lib/i18n';
 import { addInstrument } from '@/services/db';
 
 export default function AddInstrument() {
