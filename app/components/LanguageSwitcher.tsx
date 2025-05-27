@@ -1,4 +1,4 @@
-import { Button, Text } from 'react-native-paper';
+import { Button } from 'react-native-paper';
 
 import { useI18n } from '@/context/I18nContext';
 
