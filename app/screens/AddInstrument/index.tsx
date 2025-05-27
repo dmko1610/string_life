@@ -16,13 +16,6 @@ import { useTranslation } from '@/hooks/useTranslation';
 import i18n, { KEYS } from '@/lib/i18n';
 import { addInstrument } from '@/services/db';
 
-const data: { value: string; label: string }[] = [
-  { value: 'electro', label: i18n.t(KEYS.LABELS.electro) },
-  { value: 'bass', label: i18n.t(KEYS.LABELS.bass) },
-  { value: 'acoustic', label: i18n.t(KEYS.LABELS.acoustic) },
-  { value: 'ukulele', label: i18n.t(KEYS.LABELS.ukulele) },
-];
-
 export default function AddInstrument() {
   const { t, locale } = useTranslation();
   const { colors } = useTheme();
@@ -32,6 +25,13 @@ export default function AddInstrument() {
   const [replacementDate, setReplacementDate] = useState<Date | undefined>(
     undefined
   );
+
+  const data: { value: string; label: string }[] = [
+    { value: 'electro', label: t(KEYS.LABELS.electro) },
+    { value: 'bass', label: t(KEYS.LABELS.bass) },
+    { value: 'acoustic', label: t(KEYS.LABELS.acoustic) },
+    { value: 'ukulele', label: t(KEYS.LABELS.ukulele) },
+  ];
 
   const isDisabled = !name || !type || !replacementDate;
 
@@ -109,7 +109,7 @@ export default function AddInstrument() {
         disabled={isDisabled}
         onPress={saveInstrument}
       >
-        {i18n.t(KEYS.ADD_INSTRUMENT.SAVE_BUTTON)}
+        {t(KEYS.ADD_INSTRUMENT.SAVE_BUTTON)}
       </Button>
     </SafeAreaView>
   );
