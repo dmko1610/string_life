@@ -7,8 +7,8 @@ import ru from '@/locales/ru.json';
 const translations = { en, ru };
 
 const i18n = new I18n(translations);
-
-i18n.locale = getLocales()[0].languageCode ?? 'en';
+i18n.enableFallback = true;
+i18n.defaultLocale = getLocales()[0].languageCode || 'en';
 
 export const KEYS = {
   DASHBOARD: {

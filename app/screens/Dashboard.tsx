@@ -1,21 +1,24 @@
 import { Link, RelativePathString } from 'expo-router';
 import { useState } from 'react';
-import { StyleSheet } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import { FAB, Text, useTheme } from 'react-native-paper';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import useInstruments from '@/hooks/useInstruments';
-import i18n, { KEYS } from '@/lib/i18n';
+import { useTranslation } from '@/hooks/useTranslation';
+import { KEYS } from '@/lib/i18n';
 
 import DeleteDialog from '../components/DeleteDialog';
 import EmptyState from '../components/EmptyState';
 import GuitarCardList from '../components/GuitarCardList';
+import LanguageSwitcher from '../components/LanguageSwitcher';
 
 interface DashboardProps {
   onLayout: () => void;
 }
 
 export default function Dashboard({ onLayout }: DashboardProps) {
+  const { t } = useTranslation();
   const { colors } = useTheme();
   const { rows, deleteInstrument } = useInstruments();
 
@@ -33,7 +36,10 @@ export default function Dashboard({ onLayout }: DashboardProps) {
       style={[styles.dashboard, { backgroundColor: colors.background }]}
       onLayout={onLayout}
     >
-      <Text style={styles.title}>{i18n.t(KEYS.DASHBOARD.TITLE)}</Text>
+      <View style={styles.titleContainer}>
+        <Text style={styles.title}>{t(KEYS.DASHBOARD.TITLE)}</Text>
+        <LanguageSwitcher />
+      </View>
 
       {rows.length ? (
         <GuitarCardList instruments={rows} showDeleteDialog={showDialog} />
@@ -90,9 +96,14 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 20,
     fontWeight: '400',
-    alignSelf: 'flex-start',
+    marginLeft: 16,
+    flex: 1,
+  },
+  titleContainer: {
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+    alignItems: 'center',
     marginTop: 60,
     marginBottom: 10,
-    marginLeft: 16,
   },
 });

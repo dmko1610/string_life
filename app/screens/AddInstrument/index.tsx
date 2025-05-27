@@ -12,6 +12,7 @@ import {
 import { DatePickerInput } from 'react-native-paper-dates';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
+import { useTranslation } from '@/hooks/useTranslation';
 import i18n, { KEYS } from '@/lib/i18n';
 import { addInstrument } from '@/services/db';
 
@@ -23,6 +24,7 @@ const data: { value: string; label: string }[] = [
 ];
 
 export default function AddInstrument() {
+  const { t, locale } = useTranslation();
   const { colors } = useTheme();
 
   const [type, setType] = useState<string | null>(null);
@@ -66,7 +68,7 @@ export default function AddInstrument() {
           style={{ left: -16 }}
           onPress={() => router.back()}
         />
-        <Text style={styles.title}>{i18n.t(KEYS.ADD_INSTRUMENT.TITLE)}</Text>
+        <Text style={styles.title}>{t(KEYS.ADD_INSTRUMENT.TITLE)}</Text>
       </View>
       <View style={styles.inputs}>
         <SegmentedButtons
@@ -77,14 +79,14 @@ export default function AddInstrument() {
         />
         <TextInput
           mode="outlined"
-          label={i18n.t(KEYS.ADD_INSTRUMENT.PLACEHOLDER)}
+          label={t(KEYS.ADD_INSTRUMENT.PLACEHOLDER)}
           value={name}
           onChangeText={setName}
         />
         <View style={styles.datePicker}>
           <DatePickerInput
-            locale="ru"
-            label={i18n.t(KEYS.ADD_INSTRUMENT.REPL_LABEL)}
+            locale={locale}
+            label={t(KEYS.ADD_INSTRUMENT.REPL_LABEL)}
             value={replacementDate}
             onChange={(date) => setReplacementDate(date)}
             inputMode="start"

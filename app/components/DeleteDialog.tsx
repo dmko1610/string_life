@@ -1,6 +1,7 @@
 import { Button, Dialog, Text, useTheme } from 'react-native-paper';
 
-import i18n, { KEYS } from '@/lib/i18n';
+import { useTranslation } from '@/hooks/useTranslation';
+import { KEYS } from '@/lib/i18n';
 
 export default function DeleteDialog({
   visible,
@@ -13,17 +14,18 @@ export default function DeleteDialog({
   deleteId: number;
   hideDialog: () => void;
 }) {
+  const { t } = useTranslation();
   const { colors } = useTheme();
 
   return (
     <Dialog visible={visible} dismissable={false} testID="dialog">
       <Dialog.Icon icon="alert" />
       <Dialog.Title style={{ textAlign: 'center' }}>
-        {i18n.t(KEYS.DASHBOARD.DELETE_QUESTION)}
+        {t(KEYS.DASHBOARD.DELETE_QUESTION)}
       </Dialog.Title>
 
       <Dialog.Content>
-        <Text variant="bodyLarge">{i18n.t(KEYS.DASHBOARD.DELETE_CONFIRM)}</Text>
+        <Text variant="bodyLarge">{t(KEYS.DASHBOARD.DELETE_CONFIRM)}</Text>
         <Dialog.Actions>
           <Button
             onPress={() => {
@@ -33,14 +35,14 @@ export default function DeleteDialog({
             textColor={colors.error}
             testID="deleteButton"
           >
-            {i18n.t(KEYS.DASHBOARD.DELETE_BUTTON)}
+            {t(KEYS.DASHBOARD.DELETE_BUTTON)}
           </Button>
           <Button
             onPress={hideDialog}
             textColor={colors.primary}
             testID="cancelButton"
           >
-            {i18n.t(KEYS.DASHBOARD.CANCEL_BUTTON)}
+            {t(KEYS.DASHBOARD.CANCEL_BUTTON)}
           </Button>
         </Dialog.Actions>
       </Dialog.Content>
