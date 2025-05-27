@@ -7,6 +7,7 @@ import {
 import mockSafeAreaContext from 'react-native-safe-area-context/jest/mock';
 
 import DeleteDialog from '@/app/components/DeleteDialog';
+import { I18nProvider } from '@/context/I18nContext';
 import i18n, { KEYS } from '@/lib/i18n';
 
 jest.mock('expo-font');
@@ -23,12 +24,14 @@ function renderDeleteDialog({
   hideDialog = mockHideDialog,
 }) {
   render(
-    <DeleteDialog
-      visible={visible}
-      deleteFn={deleteFn}
-      deleteId={deleteId}
-      hideDialog={hideDialog}
-    />
+    <I18nProvider>
+      <DeleteDialog
+        visible={visible}
+        deleteFn={deleteFn}
+        deleteId={deleteId}
+        hideDialog={hideDialog}
+      />
+    </I18nProvider>
   );
 }
 
