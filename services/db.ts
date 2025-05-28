@@ -11,7 +11,9 @@ import {
   UPDATE_INSTRUMENT_QUERY,
 } from './queries';
 
-const db = SQLite.openDatabaseSync('stringLife');
+const db = SQLite.openDatabaseSync('stringLife', {
+  useNewConnection: true,
+});
 
 export const createTable = async () => {
   await db.execAsync(CREATE_TABLE_QUERY);
