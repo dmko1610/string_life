@@ -17,12 +17,12 @@ import { useTranslation } from '@/hooks/useTranslation';
 import { KEYS } from '@/lib/i18n';
 import { addInstrument } from '@/services/db';
 
- const instrumentTypes = (t: any) => [
-    { value: 'electro', label: t(KEYS.LABELS.electro) },
-    { value: 'bass', label: t(KEYS.LABELS.bass) },
-    { value: 'acoustic', label: t(KEYS.LABELS.acoustic) },
-    { value: 'ukulele', label: t(KEYS.LABELS.ukulele) },
-  ];
+const instrumentTypes = (t: any) => [
+  { value: 'electro', label: t(KEYS.LABELS.electro) },
+  { value: 'bass', label: t(KEYS.LABELS.bass) },
+  { value: 'acoustic', label: t(KEYS.LABELS.acoustic) },
+  { value: 'ukulele', label: t(KEYS.LABELS.ukulele) },
+];
 
 export default function AddInstrument() {
   const { t, locale } = useTranslation();
@@ -33,11 +33,13 @@ export default function AddInstrument() {
   const [replacementDate, setReplacementDate] = useState<Date | undefined>(
     undefined
   );
-  const [error, setError] = useState(''); 
+  const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
 
   const isDisabled = !name || !type || !replacementDate;
 
   const saveInstrument = useCallback(async () => {
+    setLoading(true);
     try {
       const timestamp = replacementDate ? replacementDate.getTime() : null;
 
@@ -47,6 +49,8 @@ export default function AddInstrument() {
     } catch (error) {
       console.error(error);
       setError(t(KEYS.ERRORS.saveInstrumentFailed));
+    } finally {
+      setLoading(false);
     }
   }, [name, type, replacementDate]);
 
@@ -101,6 +105,7 @@ export default function AddInstrument() {
             backgroundColor: isDisabled ? colors.secondary : colors.primary,
           },
         ]}
+        loading={loading}
         labelStyle={{
           fontSize: 20,
           color: colors.onPrimary,
