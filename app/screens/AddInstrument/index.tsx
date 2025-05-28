@@ -2,12 +2,11 @@ import { router } from 'expo-router';
 import React, { useCallback, useMemo, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import {
+  Appbar,
   Button,
-  IconButton,
   Portal,
   SegmentedButtons,
   Snackbar,
-  Text,
   TextInput,
   useTheme,
 } from 'react-native-paper';
@@ -63,17 +62,13 @@ export default function AddInstrument() {
 
   return (
     <SafeAreaView
-      edges={['bottom', 'top']}
+      edges={['bottom']}
       style={[styles.instrument, { backgroundColor: colors.background }]}
     >
-      <View style={{ justifyContent: 'space-between' }}>
-        <IconButton
-          icon={'arrow-left'}
-          style={{ left: -16 }}
-          onPress={() => router.back()}
-        />
-        <Text style={styles.title}>{t(KEYS.ADD_INSTRUMENT.TITLE)}</Text>
-      </View>
+      <Appbar.Header>
+        <Appbar.BackAction onPress={() => router.back()} />
+        <Appbar.Content title={t(KEYS.ADD_INSTRUMENT.TITLE)} />
+      </Appbar.Header>
       <View style={styles.inputs}>
         <SegmentedButtons
           value={type ?? ''}
@@ -140,19 +135,13 @@ const styles = StyleSheet.create({
   inputs: {
     flex: 1,
     gap: 20,
-    marginTop: 75,
+    marginTop: 40,
     justifyContent: 'flex-start',
   },
   instrument: {
     flex: 1,
     justifyContent: 'flex-start',
     paddingHorizontal: 16,
-  },
-  title: {
-    fontSize: 20,
-    fontWeight: '400',
-    marginTop: 10,
-    marginLeft: 16,
   },
   snackbar: {
     marginBottom: 60,
