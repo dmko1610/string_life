@@ -4,7 +4,9 @@ import { StyleSheet, View } from 'react-native';
 import {
   Button,
   IconButton,
+  Portal,
   SegmentedButtons,
+  Snackbar,
   Text,
   TextInput,
   useTheme,
@@ -25,6 +27,7 @@ export default function AddInstrument() {
   const [replacementDate, setReplacementDate] = useState<Date | undefined>(
     undefined
   );
+  const [error, setError] = useState('');
 
   const data: { value: string; label: string }[] = [
     { value: 'electro', label: t(KEYS.LABELS.electro) },
@@ -44,6 +47,7 @@ export default function AddInstrument() {
       router.back();
     } catch (error) {
       console.error(error);
+      setError(t(KEYS.ERRORS.saveInstrumentFailed));
     }
   }, [name, type, replacementDate]);
 
@@ -59,7 +63,7 @@ export default function AddInstrument() {
 
   return (
     <SafeAreaView
-      edges={['left', 'right', 'bottom', 'top']}
+      edges={['bottom', 'top']}
       style={[styles.instrument, { backgroundColor: colors.background }]}
     >
       <View style={{ justifyContent: 'space-between' }}>
@@ -111,6 +115,15 @@ export default function AddInstrument() {
       >
         {t(KEYS.ADD_INSTRUMENT.SAVE_BUTTON)}
       </Button>
+      <Portal>
+        <Snackbar
+          visible={!!error}
+          onDismiss={() => setError('')}
+          style={styles.snackbar}
+        >
+          {error}
+        </Snackbar>
+      </Portal>
     </SafeAreaView>
   );
 }
@@ -140,5 +153,8 @@ const styles = StyleSheet.create({
     fontWeight: '400',
     marginTop: 10,
     marginLeft: 16,
+  },
+  snackbar: {
+    marginBottom: 60,
   },
 });

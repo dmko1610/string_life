@@ -36,6 +36,9 @@ export const KEYS = {
     ukulele: 'Labels.ukulele',
     acoustic: 'Labels.acoustic',
   },
+  ERRORS: {
+    saveInstrumentFailed: 'Errors.saveInstrument',
+  }
 };
 
 export default i18n;

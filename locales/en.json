@@ -25,5 +25,8 @@
     "bass": "Bass",
     "ukulele": "Ukulele",
     "acoustic": "Acoustic"
+  },
+  "Errors": {
+    "saveInstrument": "Some error occured while adding instrument"
   }
 }
