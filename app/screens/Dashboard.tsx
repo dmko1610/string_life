@@ -4,6 +4,7 @@ import { StyleSheet } from 'react-native';
 import { Appbar, FAB, useTheme } from 'react-native-paper';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
+import useDeleteDialog from '@/hooks/useDeleteDialog';
 import useInstruments from '@/hooks/useInstruments';
 import { useTranslation } from '@/hooks/useTranslation';
 import { KEYS } from '@/lib/i18n';
@@ -22,13 +23,7 @@ export default function Dashboard({ onLayout }: DashboardProps) {
   const { colors } = useTheme();
   const { rows, deleteInstrument } = useInstruments();
 
-  const [visible, setVisible] = useState(false);
-  const [deleteId, setDeleteId] = useState(0);
-
-  const showDialog = (id: number) => {
-    setVisible(true);
-    setDeleteId(id);
-  };
+  const { visible, deleteId, showDialog, hideDialog } = useDeleteDialog();
 
   const navigate = () => router.push('/add-instrument');
 
@@ -62,7 +57,7 @@ export default function Dashboard({ onLayout }: DashboardProps) {
         visible={visible}
         deleteFn={deleteInstrument}
         deleteId={deleteId}
-        hideDialog={() => setVisible(false)}
+        hideDialog={hideDialog}
       />
     </SafeAreaView>
   );
