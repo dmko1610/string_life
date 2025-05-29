@@ -1,7 +1,7 @@
 import { Link, RelativePathString } from 'expo-router';
 import { useState } from 'react';
 import { StyleSheet, View } from 'react-native';
-import { FAB, Text, useTheme } from 'react-native-paper';
+import { Appbar, FAB, Text, useTheme } from 'react-native-paper';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import useInstruments from '@/hooks/useInstruments';
@@ -32,14 +32,14 @@ export default function Dashboard({ onLayout }: DashboardProps) {
 
   return (
     <SafeAreaView
-      edges={['left', 'right', 'bottom', 'top']}
+      edges={['bottom']}
       style={[styles.dashboard, { backgroundColor: colors.background }]}
       onLayout={onLayout}
     >
-      <View style={styles.titleContainer}>
-        <Text style={styles.title}>{t(KEYS.DASHBOARD.TITLE)}</Text>
+      <Appbar.Header>
+        <Appbar.Content title={t(KEYS.DASHBOARD.TITLE)} />
         <LanguageSwitcher />
-      </View>
+      </Appbar.Header>
 
       {rows.length ? (
         <GuitarCardList instruments={rows} showDeleteDialog={showDialog} />
@@ -71,7 +71,7 @@ const styles = StyleSheet.create({
   addButton: {
     position: 'absolute',
     borderRadius: 50,
-    marginBottom: 42,
+    marginBottom: 64,
     alignSelf: 'center',
     justifyContent: 'center',
     alignItems: 'center',
@@ -90,20 +90,6 @@ const styles = StyleSheet.create({
   },
   dashboard: {
     flex: 1,
-    alignItems: 'flex-start',
     paddingHorizontal: 16,
-  },
-  title: {
-    fontSize: 20,
-    fontWeight: '400',
-    marginLeft: 16,
-    flex: 1,
-  },
-  titleContainer: {
-    flexDirection: 'row',
-    justifyContent: 'flex-end',
-    alignItems: 'center',
-    marginTop: 60,
-    marginBottom: 10,
   },
 });
