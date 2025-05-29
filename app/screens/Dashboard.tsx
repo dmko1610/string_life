@@ -1,7 +1,7 @@
-import { Link, RelativePathString } from 'expo-router';
+import { router } from 'expo-router';
 import { useState } from 'react';
-import { StyleSheet, View } from 'react-native';
-import { Appbar, FAB, Text, useTheme } from 'react-native-paper';
+import { StyleSheet } from 'react-native';
+import { Appbar, FAB, useTheme } from 'react-native-paper';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import useInstruments from '@/hooks/useInstruments';
@@ -30,6 +30,8 @@ export default function Dashboard({ onLayout }: DashboardProps) {
     setDeleteId(id);
   };
 
+  const navigate = () => router.push('/add-instrument');
+
   return (
     <SafeAreaView
       edges={['bottom']}
@@ -47,15 +49,14 @@ export default function Dashboard({ onLayout }: DashboardProps) {
         <EmptyState />
       )}
 
-      <Link href={'/add-instrument' as RelativePathString} asChild>
-        <FAB
-          color={colors.primary}
-          icon={'plus'}
-          size={'large'}
-          variant="primary"
-          style={styles.addButton}
-        />
-      </Link>
+      <FAB
+        onPress={navigate}
+        color={colors.primary}
+        icon={'plus'}
+        size={'large'}
+        variant="primary"
+        style={styles.addButton}
+      />
 
       <DeleteDialog
         visible={visible}
