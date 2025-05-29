@@ -43,7 +43,7 @@ export default function Dashboard({ onLayout }: DashboardProps) {
         <LanguageSwitcher />
       </Appbar.Header>
 
-      {rows.length ? (
+      {Array.isArray(rows) && rows.length > 0 ? (
         <GuitarCardList instruments={rows} showDeleteDialog={showDialog} />
       ) : (
         <EmptyState />
