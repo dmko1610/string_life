@@ -28,11 +28,12 @@ const styles = StyleSheet.create({
   image: {
     width: emptyStateWidth,
     height: emptyStateWidth,
+    aspectRatio: 1,
   },
   imageBackgroundCentered: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    width: '100%',
+    marginBottom: 88
   },
 });

@@ -1,5 +1,4 @@
 import { router } from 'expo-router';
-import { useState } from 'react';
 import { StyleSheet } from 'react-native';
 import { Appbar, FAB, useTheme } from 'react-native-paper';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -69,8 +68,6 @@ const styles = StyleSheet.create({
     borderRadius: 50,
     marginBottom: 64,
     alignSelf: 'center',
-    justifyContent: 'center',
-    alignItems: 'center',
     bottom: 0,
   },
   instrumentList: {
