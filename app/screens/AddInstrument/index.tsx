@@ -98,7 +98,7 @@ export default function AddInstrument() {
         </View>
       </View>
       <Button
-        mode="contained"
+        mode="elevated"
         style={[
           styles.buttonContainer,
           {
@@ -112,6 +112,7 @@ export default function AddInstrument() {
         }}
         disabled={isDisabled}
         onPress={saveInstrument}
+        hitSlop={{ bottom: 20, top: 100, left: 200, right: 200 }}
       >
         {t(KEYS.ADD_INSTRUMENT.SAVE_BUTTON)}
       </Button>
