@@ -12,7 +12,7 @@ import { useTranslation } from '@/hooks/useTranslation';
 import { KEYS } from '@/lib/i18n';
 import { getInstrument, updateInstrument } from '@/services/db';
 
-const TARGET_TIME_SECONDS = 360_000_000;
+const TARGET_TIME_SECONDS = 100 * 60 * 60 * 1000;
 
 export default function InstrumentDetails() {
   const { t, locale } = useTranslation();
