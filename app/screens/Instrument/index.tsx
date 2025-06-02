@@ -154,6 +154,7 @@ export default function InstrumentDetails() {
       <Text
         style={styles.daysSinceText}
       >{`${t(KEYS.INSTRUMENT.DAYS_SINCE_LABEL)} ${daysSince}`}</Text>
+      <Text>{`${Math.floor(progress / 60_000)} min / ${TARGET_TIME_SECONDS / 60_000} min`}</Text>
       <View style={styles.playtimeContainer}>
         <Text style={styles.playtimeText}>
           {t(KEYS.INSTRUMENT.PLAY_TIME_LABEL)}
