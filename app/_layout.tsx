@@ -4,11 +4,11 @@ import { StatusBar } from 'expo-status-bar';
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
 import { PaperProvider, useTheme } from 'react-native-paper';
-import { enGB, registerTranslation, ru } from 'react-native-paper-dates';
+import {  en, registerTranslation, ru } from 'react-native-paper-dates';
 
 import { I18nProvider } from '@/context/I18nContext';
 
-registerTranslation('en-GB', enGB);
+registerTranslation('en', en);
 registerTranslation('ru', ru);
 
 export default function RootLayout() {
