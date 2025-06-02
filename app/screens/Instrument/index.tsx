@@ -96,6 +96,12 @@ export default function InstrumentDetails() {
     await AsyncStorage.removeItem('playStartTime');
   };
 
+  const handlePress = () => {
+    if (pressed) stopPlay();
+    else startPlay();
+    setPressed(!pressed);
+  };
+
   return (
     <SafeAreaView
       edges={['left', 'right', 'top', 'bottom']}
@@ -141,12 +147,7 @@ export default function InstrumentDetails() {
           iconColor={pressed ? colors.onTertiary : colors.onPrimary}
           style={styles.playButton}
           animated={true}
-          onPress={() => {
-            setPressed((prev) => {
-              prev ? stopPlay() : startPlay();
-              return !prev;
-            });
-          }}
+          onPress={handlePress}
         />
       </View>
 
