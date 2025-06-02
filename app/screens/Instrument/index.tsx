@@ -3,7 +3,13 @@ import { Image } from 'expo-image';
 import { useFocusEffect, useLocalSearchParams, useRouter } from 'expo-router';
 import { useCallback, useRef, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
-import { IconButton, ProgressBar, Text, useTheme } from 'react-native-paper';
+import {
+  ActivityIndicator,
+  IconButton,
+  ProgressBar,
+  Text,
+  useTheme,
+} from 'react-native-paper';
 import { DatePickerInput } from 'react-native-paper-dates';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
@@ -21,6 +27,7 @@ export default function InstrumentDetails() {
 
   const { id } = useLocalSearchParams<{ id: string }>();
 
+  const [loading, setLoading] = useState(false);
   const [pressed, setPressed] = useState(false);
   const [type, setType] = useState<string>('');
   const [progress, setProgress] = useState<number>(0);
@@ -33,6 +40,7 @@ export default function InstrumentDetails() {
 
   const fetchData = useCallback(async () => {
     try {
+      setLoading(true);
       const data = await getInstrument(id);
 
       if (data) {
@@ -42,6 +50,8 @@ export default function InstrumentDetails() {
       }
     } catch (error) {
       console.error('Failed to fetch instrument', error);
+    } finally {
+      setLoading(false);
     }
   }, [id]);
 
@@ -101,6 +111,21 @@ export default function InstrumentDetails() {
     else startPlay();
     setPressed(!pressed);
   };
+
+  if (loading) {
+    return (
+      <SafeAreaView
+        edges={['left', 'right', 'bottom', 'top']}
+        style={[
+          styles.instrument,
+          styles.instrumenLoading,
+          { backgroundColor: colors.background },
+        ]}
+      >
+        <ActivityIndicator animating={true} size="large" />
+      </SafeAreaView>
+    );
+  }
 
   return (
     <SafeAreaView
@@ -195,6 +220,10 @@ const styles = StyleSheet.create({
   instrument: {
     flex: 1,
     paddingHorizontal: 16,
+  },
+  instrumenLoading: {
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   button: {
     borderRadius: 6,
