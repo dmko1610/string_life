@@ -1,7 +1,5 @@
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Image } from 'expo-image';
-import { useFocusEffect, useLocalSearchParams, useRouter } from 'expo-router';
-import { useCallback, useRef, useState } from 'react';
+import { useLocalSearchParams, useRouter } from 'expo-router';
 import { StyleSheet, View } from 'react-native';
 import {
   ActivityIndicator,
@@ -14,62 +12,24 @@ import { DatePickerInput } from 'react-native-paper-dates';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { typeToIcon } from '@/helpers/iconizator';
+import useInstrument from '@/hooks/useInstrument';
+import usePlayTimer from '@/hooks/usePlayTimer';
 import { useTranslation } from '@/hooks/useTranslation';
 import { KEYS } from '@/lib/i18n';
-import { getInstrument, updateInstrument } from '@/services/db';
 
 const TARGET_TIME_SECONDS = 100 * 60 * 60 * 1000;
 
 export default function InstrumentDetails() {
+  const { id } = useLocalSearchParams<{ id: string }>();
+
   const { t, locale } = useTranslation();
   const { colors } = useTheme();
   const router = useRouter();
 
-  const { id } = useLocalSearchParams<{ id: string }>();
+  const { loading, type, progress, replacementDate, saveProgress } =
+    useInstrument(id);
 
-  const [loading, setLoading] = useState(false);
-  const [pressed, setPressed] = useState(false);
-  const [type, setType] = useState<string>('');
-  const [progress, setProgress] = useState<number>(0);
-  const [replacementDate, setReplacementDate] = useState<Date | undefined>(
-    undefined
-  );
-
-  const playingRef = useRef(false);
-  const playStartTimeRef = useRef<number | null>(null);
-
-  const fetchData = useCallback(async () => {
-    try {
-      setLoading(true);
-      const data = await getInstrument(id);
-
-      if (data) {
-        setType(data.type);
-        setProgress(data.progress || 0);
-        setReplacementDate(new Date(data.replacement_date as number));
-      }
-    } catch (error) {
-      console.error('Failed to fetch instrument', error);
-    } finally {
-      setLoading(false);
-    }
-  }, [id]);
-
-  useFocusEffect(
-    useCallback(() => {
-      const checkOngoingPlay = async () => {
-        const startTime = await AsyncStorage.getItem('playStartTime');
-        if (startTime) {
-          playingRef.current = true;
-          playStartTimeRef.current = Number(startTime);
-          setPressed(true);
-        }
-      };
-
-      fetchData();
-      checkOngoingPlay();
-    }, [fetchData])
-  );
+  const { isPlaying, start, stop } = usePlayTimer();
 
   const daysSince = replacementDate
     ? Math.floor(
@@ -77,39 +37,14 @@ export default function InstrumentDetails() {
       )
     : 0;
 
-  const startPlay = async () => {
-    playingRef.current = true;
-    const startTime = Date.now();
-    playStartTimeRef.current = startTime;
-
-    await AsyncStorage.setItem('playStartTime', String(startTime));
-  };
-
-  const stopPlay = async () => {
-    if (!playingRef.current) return;
-
-    playingRef.current = false;
-
-    const startTime =
-      playStartTimeRef.current || (await AsyncStorage.getItem('playStartTime'));
-
-    if (startTime) {
-      const elapsed = Math.floor(Date.now() - Number(startTime));
+  const handlePress = async () => {
+    if (isPlaying) {
+      const elapsed = await stop();
       const newProgress = progress + elapsed;
-
-      setProgress(newProgress);
-
-      await updateInstrument(newProgress, id);
+      saveProgress(newProgress);
+    } else {
+      start();
     }
-
-    playStartTimeRef.current = null;
-    await AsyncStorage.removeItem('playStartTime');
-  };
-
-  const handlePress = () => {
-    if (pressed) stopPlay();
-    else startPlay();
-    setPressed(!pressed);
   };
 
   if (loading) {
@@ -155,7 +90,7 @@ export default function InstrumentDetails() {
           <DatePickerInput
             inputMode="start"
             value={replacementDate}
-            onChange={(date) => setReplacementDate(date)}
+            onChange={() => {}}
             label={t(KEYS.INSTRUMENT.REPL_LABEL)}
             locale={locale}
             mode="outlined"
@@ -165,11 +100,11 @@ export default function InstrumentDetails() {
 
       <View style={styles.playButtonContainer}>
         <IconButton
-          icon={pressed ? 'stop' : 'play'}
+          icon={isPlaying ? 'stop' : 'play'}
           mode="contained-tonal"
           size={140}
-          containerColor={pressed ? colors.tertiary : colors.primary}
-          iconColor={pressed ? colors.onTertiary : colors.onPrimary}
+          containerColor={isPlaying ? colors.tertiary : colors.primary}
+          iconColor={isPlaying ? colors.onTertiary : colors.onPrimary}
           style={styles.playButton}
           animated={true}
           onPress={handlePress}
