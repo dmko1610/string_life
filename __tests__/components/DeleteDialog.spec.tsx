@@ -37,10 +37,10 @@ function renderDeleteDialog({
 
 describe('DeleteDialog', () => {
   describe('visible', () => {
-    it('displays dialog with texts', () => {
+    it('displays dialog with texts', async () => {
       renderDeleteDialog({});
 
-      expect(screen.getByTestId('dialog')).toBeTruthy();
+      expect(await screen.findByTestId('dialog')).toBeTruthy();
       expect(
         screen.getByText(i18n.t(KEYS.DASHBOARD.DELETE_QUESTION))
       ).toBeTruthy();
