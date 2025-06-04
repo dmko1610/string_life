@@ -8,7 +8,9 @@
     "scheme": "myapp",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
-    "assetBundlePatterns": ["**/*"],
+    "assetBundlePatterns": [
+      "**/*"
+    ],
     "splash": {
       "image": "./assets/images/splash.png",
       "resizeMode": "contain",
@@ -20,7 +22,10 @@
     },
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.dmitrykovalev.stringlife"
+      "bundleIdentifier": "com.dmitrykovalev.stringlife",
+      "infoPlist": {
+        "ITSAppUsesNonExemptEncryption": false
+      }
     },
     "android": {
       "adaptiveIcon": {
