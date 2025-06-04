@@ -38,7 +38,7 @@ export const KEYS = {
   },
   ERRORS: {
     saveInstrumentFailed: 'Errors.saveInstrument',
-  }
+  },
 };
 
 export default i18n;

@@ -4,7 +4,7 @@ import { StatusBar } from 'expo-status-bar';
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
 import { PaperProvider, useTheme } from 'react-native-paper';
-import {  en, registerTranslation, ru } from 'react-native-paper-dates';
+import { en, registerTranslation, ru } from 'react-native-paper-dates';
 
 import { I18nProvider } from '@/context/I18nContext';
 

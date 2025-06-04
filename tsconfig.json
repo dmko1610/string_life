@@ -5,8 +5,14 @@
     "baseUrl": ".",
     "jsx": "react-native",
     "paths": {
-      "@/*": ["./*"]
+      "@/*": ["src/*"]
     }
   },
-  "include": ["**/*.ts", "**/*.tsx", ".expo/types/**/*.ts", "expo-env.d.ts", "__mocks__/@react-native-async-storage/async-storage.js"]
+  "include": [
+    "**/*.ts",
+    "**/*.tsx",
+    ".expo/types/**/*.ts",
+    "expo-env.d.ts",
+    "__mocks__/@react-native-async-storage/async-storage.js"
+  ]
 }
