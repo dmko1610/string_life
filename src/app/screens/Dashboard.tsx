@@ -32,7 +32,7 @@ export default function Dashboard({ onLayout }: DashboardProps) {
       style={[styles.dashboard, { backgroundColor: colors.background }]}
       onLayout={onLayout}
     >
-      <Appbar.Header>
+      <Appbar.Header mode="center-aligned">
         <Appbar.Content title={t(KEYS.DASHBOARD.TITLE)} />
         <LanguageSwitcher />
       </Appbar.Header>
@@ -46,8 +46,8 @@ export default function Dashboard({ onLayout }: DashboardProps) {
       <FAB
         onPress={navigate}
         color={colors.primary}
-        icon={'plus'}
-        size={'large'}
+        icon="plus"
+        size="large"
         variant="primary"
         style={styles.addButton}
       />
