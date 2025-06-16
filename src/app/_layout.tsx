@@ -26,26 +26,12 @@ export default function RootLayout() {
             <Stack
               screenOptions={{
                 headerStyle: { backgroundColor: colors.background },
+                headerShown: false,
               }}
             >
-              <Stack.Screen
-                name="index"
-                options={{
-                  headerShown: false,
-                }}
-              />
-              <Stack.Screen
-                name="add-instrument"
-                options={{
-                  headerShown: false,
-                }}
-              />
-              <Stack.Screen
-                name="instrument"
-                options={{
-                  headerShown: false,
-                }}
-              />
+              <Stack.Screen name="index" />
+              <Stack.Screen name="add-instrument" />
+              <Stack.Screen name="instrument" />
             </Stack>
           </View>
         </I18nProvider>

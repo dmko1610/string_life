@@ -73,6 +73,7 @@ export default function AddInstrument() {
         <Appbar.BackAction onPress={() => router.back()} />
         <Appbar.Content title={t(KEYS.ADD_INSTRUMENT.TITLE)} />
       </Appbar.Header>
+
       <View style={styles.inputs}>
         <SegmentedButtons
           value={type ?? ''}

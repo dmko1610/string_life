@@ -3,6 +3,7 @@ import { useLocalSearchParams, useRouter } from 'expo-router';
 import { StyleSheet, View } from 'react-native';
 import {
   ActivityIndicator,
+  Appbar,
   IconButton,
   ProgressBar,
   Text,
@@ -64,20 +65,13 @@ export default function InstrumentDetails() {
 
   return (
     <SafeAreaView
-      edges={['left', 'right', 'top', 'bottom']}
+      edges={['bottom']}
       style={[styles.instrument, { backgroundColor: colors.background }]}
     >
-      <IconButton
-        icon={'arrow-u-right-bottom'}
-        mode="contained-tonal"
-        size={30}
-        iconColor={colors.onPrimary}
-        containerColor={colors.primary}
-        animated={true}
-        style={{ alignSelf: 'flex-end' }}
-        onPress={() => router.back()}
-      />
-      <Text style={styles.header}>{type.toUpperCase()}</Text>
+      <Appbar.Header>
+        <Appbar.BackAction onPress={() => router.back()} />
+        <Appbar.Content title={type.toUpperCase()} />
+      </Appbar.Header>
 
       <View style={styles.imageContainer}>
         <Image
@@ -137,13 +131,6 @@ const styles = StyleSheet.create({
   playtimeContainer: { flexDirection: 'row', justifyContent: 'space-between' },
   playtimeText: { fontSize: 16, marginBottom: 4 },
   daysSinceText: { fontSize: 24, marginBottom: 32 },
-  header: {
-    fontSize: 20,
-    fontWeight: '400',
-    marginTop: 2,
-    marginLeft: 16,
-    marginBottom: 30,
-  },
   playButtonContainer: { marginBottom: 50 },
   playButton: { alignSelf: 'center' },
   progressBar: { marginBottom: 70 },
