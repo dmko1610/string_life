@@ -6,10 +6,10 @@ import {
   Appbar,
   IconButton,
   ProgressBar,
+  Surface,
   Text,
   useTheme,
 } from 'react-native-paper';
-import { DatePickerInput } from 'react-native-paper-dates';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { typeToIcon } from '@/helpers/iconizator';
@@ -80,16 +80,11 @@ export default function InstrumentDetails() {
           cachePolicy="memory"
           style={styles.image}
         />
-        <View style={styles.datePicker}>
-          <DatePickerInput
-            inputMode="start"
-            value={replacementDate}
-            onChange={() => {}}
-            label={t(KEYS.INSTRUMENT.REPL_LABEL)}
-            locale={locale}
-            mode="outlined"
-          />
-        </View>
+
+        <Surface mode="flat" style={styles.replacementDate}>
+          <Text variant="titleLarge">{`${t(KEYS.INSTRUMENT.REPL_LABEL)} : ${replacementDate.toLocaleDateString([locale], { dateStyle: 'long' })}`}</Text>
+          <Text variant="titleLarge">{`${t(KEYS.INSTRUMENT.DAYS_SINCE_LABEL)} ${daysSince}`}</Text>
+        </Surface>
       </View>
 
       <View style={styles.playButtonContainer}>
@@ -105,9 +100,6 @@ export default function InstrumentDetails() {
         />
       </View>
 
-      <Text
-        style={styles.daysSinceText}
-      >{`${t(KEYS.INSTRUMENT.DAYS_SINCE_LABEL)} ${daysSince}`}</Text>
       <Text>{`${Math.floor(progress / 60_000)} min / ${TARGET_TIME_SECONDS / 60_000} min`}</Text>
       <View style={styles.playtimeContainer}>
         <Text style={styles.playtimeText}>
@@ -128,17 +120,14 @@ export default function InstrumentDetails() {
 }
 
 const styles = StyleSheet.create({
+  replacementDate: { padding: 16, borderRadius: 10, marginTop: 24 },
   playtimeContainer: { flexDirection: 'row', justifyContent: 'space-between' },
   playtimeText: { fontSize: 16, marginBottom: 4 },
-  daysSinceText: { fontSize: 24, marginBottom: 32 },
   playButtonContainer: { marginBottom: 50 },
   playButton: { alignSelf: 'center' },
   progressBar: { marginBottom: 70 },
   imageContainer: { flex: 1, justifyContent: 'flex-start' },
   image: { width: '100%', height: '70%' },
-  datePicker: {
-    marginTop: 50,
-  },
   instrument: {
     flex: 1,
     paddingHorizontal: 16,
