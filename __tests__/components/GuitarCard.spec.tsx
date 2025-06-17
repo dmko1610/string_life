@@ -31,17 +31,14 @@ describe('GuitarCard', () => {
 
   describe('when card is pressed', () => {
     it('navigates to the instrument page', () => {
-      const mockPush = jest.fn();
-      (useRouter as jest.Mock).mockReturnValue({ push: mockPush });
+      const mockNavigate = jest.fn();
+      (useRouter as jest.Mock).mockReturnValue({ navigate: mockNavigate });
       render(<GuitarCard id={1} type="electro" name="Good guitar" />);
 
       const card = screen.getByTestId('card');
       fireEvent.press(card);
 
-      expect(mockPush).toHaveBeenCalledWith({
-        pathname: '/instrument',
-        params: { id: 1 },
-      });
+      expect(mockNavigate).toHaveBeenCalledWith('/screens/instrument/1');
     });
   });
 
