@@ -7,11 +7,11 @@ import useDeleteDialog from '@/hooks/useDeleteDialog';
 import useInstruments from '@/hooks/useInstruments';
 import { useTranslation } from '@/hooks/useTranslation';
 import { KEYS } from '@/lib/i18n';
+import LanguageSwitcher from '@/app/components/LanguageSwitcher';
+import GuitarCardList from '@/app/components/GuitarCardList';
+import EmptyState from '@/app/components/EmptyState';
+import DeleteDialog from '@/app/components/DeleteDialog';
 
-import DeleteDialog from '../components/DeleteDialog';
-import EmptyState from '../components/EmptyState';
-import GuitarCardList from '../components/GuitarCardList';
-import LanguageSwitcher from '../components/LanguageSwitcher';
 
 interface DashboardProps {
   onLayout: () => void;
@@ -24,7 +24,7 @@ export default function Dashboard({ onLayout }: DashboardProps) {
 
   const { visible, deleteId, showDialog, hideDialog } = useDeleteDialog();
 
-  const navigate = () => router.push('/add-instrument');
+  const navigate = () => router.navigate('/screens/add-instrument');
 
   return (
     <SafeAreaView

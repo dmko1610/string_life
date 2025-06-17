@@ -5,7 +5,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 
 import db, { createTable } from '@/services/db';
 
-import Dashboard from './screens/Dashboard';
+import Dashboard from './screens/dashboard';
 
 SplashScreen.preventAutoHideAsync();
 

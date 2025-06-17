@@ -45,17 +45,10 @@ export default function GuitarCard({
     }, 1000);
   };
 
+  const navigate = () => router.navigate(`/screens/instrument/${id}`);
+
   return (
-    <Pressable
-      onLongPress={handleLongPress}
-      onPress={() =>
-        router.push({
-          pathname: '/instrument',
-          params: { id },
-        })
-      }
-      testID={testID}
-    >
+    <Pressable onLongPress={handleLongPress} onPress={navigate} testID={testID}>
       <Card
         mode="contained"
         contentStyle={[

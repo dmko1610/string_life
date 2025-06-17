@@ -48,6 +48,8 @@ export default function InstrumentDetails() {
     }
   };
 
+  const navigate = () => router.navigate(`/screens/instrument/${id}/edit`);
+
   if (loading) {
     return (
       <SafeAreaView
@@ -71,6 +73,7 @@ export default function InstrumentDetails() {
       <Appbar.Header>
         <Appbar.BackAction onPress={() => router.back()} />
         <Appbar.Content title={type.toUpperCase()} />
+        <Appbar.Action icon={'pencil'} size={30} onPress={navigate} />
       </Appbar.Header>
 
       <View style={styles.imageContainer}>
