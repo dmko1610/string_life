@@ -20,6 +20,13 @@
     "play_time_label": "Play time",
     "end_time_label": "100 h"
   },
+  "EditInstrument": {
+    "title": "EDIT INSTRUMENT",
+    "repl_label": "Replacement Date",
+    "progress_label": "Progress (minutes)",
+    "progress_max_helper_text": "Value must be 0-6000",
+    "save_button": "Save"
+  },
   "Labels": {
     "electro": "Electro",
     "bass": "Bass",

@@ -46,8 +46,12 @@ export const addInstrument = async (
   );
 };
 
-export const updateInstrument = async (newProgress: number, id: string) => {
-  return await db.runAsync(UPDATE_INSTRUMENT_QUERY, newProgress, id);
+export const updateInstrument = async (
+  id: string,
+  newProgress: number,
+  newDate: number
+) => {
+  return await db.runAsync(UPDATE_INSTRUMENT_QUERY, newProgress, newDate, id);
 };
 
 export default db;

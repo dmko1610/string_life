@@ -1,5 +1,6 @@
 import { Image } from 'expo-image';
-import { useLocalSearchParams, useRouter } from 'expo-router';
+import { useFocusEffect, useLocalSearchParams, useRouter } from 'expo-router';
+import { useCallback } from 'react';
 import { StyleSheet, View } from 'react-native';
 import {
   ActivityIndicator,
@@ -27,7 +28,7 @@ export default function InstrumentDetails() {
   const { colors } = useTheme();
   const router = useRouter();
 
-  const { loading, type, progress, replacementDate, saveProgress } =
+  const { loading, type, progress, replacementDate, saveProgress, refetch } =
     useInstrument(id);
 
   const { isPlaying, start, stop } = usePlayTimer();
@@ -49,6 +50,12 @@ export default function InstrumentDetails() {
   };
 
   const navigate = () => router.navigate(`/screens/instrument/${id}/edit`);
+
+  useFocusEffect(
+    useCallback(() => {
+      refetch();
+    }, [id])
+  );
 
   if (loading) {
     return (

@@ -3,15 +3,14 @@ import { StyleSheet } from 'react-native';
 import { Appbar, FAB, useTheme } from 'react-native-paper';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
+import DeleteDialog from '@/app/components/DeleteDialog';
+import EmptyState from '@/app/components/EmptyState';
+import GuitarCardList from '@/app/components/GuitarCardList';
+import LanguageSwitcher from '@/app/components/LanguageSwitcher';
 import useDeleteDialog from '@/hooks/useDeleteDialog';
 import useInstruments from '@/hooks/useInstruments';
 import { useTranslation } from '@/hooks/useTranslation';
 import { KEYS } from '@/lib/i18n';
-import LanguageSwitcher from '@/app/components/LanguageSwitcher';
-import GuitarCardList from '@/app/components/GuitarCardList';
-import EmptyState from '@/app/components/EmptyState';
-import DeleteDialog from '@/app/components/DeleteDialog';
-
 
 interface DashboardProps {
   onLayout: () => void;

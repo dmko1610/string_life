@@ -2,10 +2,10 @@ import { useCallback, useEffect, useState } from 'react';
 
 import { getInstrument, updateInstrument } from '@/services/db';
 
-export default function useInstrument(id?: string) {
+export default function useInstrument(id: string) {
   const [type, setType] = useState('');
   const [progress, setProgress] = useState(0);
-  const [replacementDate, setReplacementDate] = useState<Date>();
+  const [replacementDate, setReplacementDate] = useState<Date>(null);
   const [loading, setLoading] = useState(true);
 
   const fetchInstrument = useCallback(async () => {
@@ -13,6 +13,7 @@ export default function useInstrument(id?: string) {
     setLoading(true);
 
     try {
+      setLoading(true);
       const data = await getInstrument(id);
       if (data) {
         setType(data.type);
@@ -28,24 +29,29 @@ export default function useInstrument(id?: string) {
 
   const saveProgress = useCallback(
     async (newProgress: number) => {
-      if (!id) return;
-
       setProgress(newProgress);
-      await updateInstrument(newProgress, id);
+
+      await updateInstrument(id, newProgress, replacementDate.getTime());
     },
     [id]
   );
 
-  /* TODO: Extend API for saving replacement date
-  const saveReplacementDate = useCallback(
-    async (date: Date) => {
-      if (!id) return;
+  const editInstrument = useCallback(
+    async (newProgress: number, date: Date) => {
+      try {
+        setLoading(true);
+        setProgress(newProgress);
+        setReplacementDate(date);
 
-      setReplacementDate(date);
-      await updateInstrument(progress, id, date.getTime());
+        await updateInstrument(id, newProgress, date.getTime());
+      } catch (err) {
+        console.error('Failed to update instrument', err);
+      } finally {
+        setLoading(false);
+      }
     },
-    [id, progress]
-  ); */
+    [id]
+  );
 
   useEffect(() => {
     fetchInstrument();
@@ -57,5 +63,7 @@ export default function useInstrument(id?: string) {
     replacementDate,
     loading,
     saveProgress,
+    editInstrument,
+    refetch: fetchInstrument,
   };
 }

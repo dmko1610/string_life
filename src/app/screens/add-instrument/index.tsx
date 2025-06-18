@@ -52,7 +52,7 @@ export default function AddInstrument() {
     } finally {
       setLoading(false);
     }
-  }, [name, type, replacementDate]);
+  }, [t, name, type, replacementDate]);
 
   const buttonTheme = useMemo(
     () => ({

@@ -30,6 +30,13 @@ export const KEYS = {
     PLAY_TIME_LABEL: 'Instrument.play_time_label',
     END_TIME_LABEL: 'Instrument.end_time_label',
   },
+  EDIT_INSTRUMENT: {
+    TITLE: 'EditInstrument.title',
+    REPL_LABEL: 'EditInstrument.repl_label',
+    PROGRESS_LABEL: 'EditInstrument.progress_label',
+    PROGRESS_MAX_HELPER_TEXT: 'EditInstrument.progress_max_helper_text',
+    SAVE_BUTTON: 'EditInstrument.save_button',
+  },
   LABELS: {
     electro: 'Labels.electro',
     bass: 'Labels.bass',

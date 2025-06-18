@@ -20,6 +20,13 @@
     "play_time_label": "Время игры",
     "end_time_label": "100 ч"
   },
+  "EditInstrument": {
+    "title": "РЕДАКТИРОВАТЬ ИНСТРУМЕНТ",
+    "repl_label": "Дата замены",
+    "progress_label": "Прогресс (минуты)",
+    "progress_max_helper_text": "Значение должно быть в пределах 0-6000",
+    "save_button": "Сохранить"
+  },
   "Labels": {
     "electro": "Электро",
     "bass": "Бас",
