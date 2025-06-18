@@ -54,7 +54,7 @@ export default function InstrumentDetails() {
   useFocusEffect(
     useCallback(() => {
       refetch();
-    }, [id])
+    }, [refetch])
   );
 
   if (loading) {

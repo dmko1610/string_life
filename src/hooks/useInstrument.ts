@@ -33,7 +33,7 @@ export default function useInstrument(id: string) {
 
       await updateInstrument(id, newProgress, replacementDate.getTime());
     },
-    [id]
+    [id, replacementDate]
   );
 
   const editInstrument = useCallback(
