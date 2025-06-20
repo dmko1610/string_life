@@ -1,3 +1,4 @@
+import * as Haptics from 'expo-haptics';
 import { Image } from 'expo-image';
 import { useFocusEffect, useLocalSearchParams, useRouter } from 'expo-router';
 import { useCallback, useState } from 'react';
@@ -66,13 +67,14 @@ export default function InstrumentDetails() {
     router.navigate(`/screens/instrument/${id}/edit`);
     setShowMenu(false);
   };
-  const handleDeleteInstrument = () => {
+  const handleOpenDeleteDialog = () => {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
     setShowMenu(false);
     showDialog();
   };
-  const handleDeleteCallback = () => {
+  const handleDeleteCallback = async () => {
     router.back();
-    deleteInstrument();
+    await deleteInstrument();
   };
   const handleOpenMenu = () => setShowMenu(true);
   const handleCloseMenu = () => setShowMenu(false);
@@ -121,7 +123,7 @@ export default function InstrumentDetails() {
           <Menu.Item
             leadingIcon={'delete'}
             title={t(KEYS.INSTRUMENT.DELETE_MENU_LABEL)}
-            onPress={handleDeleteInstrument}
+            onPress={handleOpenDeleteDialog}
           />
         </Menu>
       </Appbar.Header>
