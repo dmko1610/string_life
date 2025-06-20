@@ -29,6 +29,8 @@ export const KEYS = {
     DAYS_SINCE_LABEL: 'Instrument.days_since_label',
     PLAY_TIME_LABEL: 'Instrument.play_time_label',
     END_TIME_LABEL: 'Instrument.end_time_label',
+    DELETE_MENU_LABEL: 'Instrument.delete_menu_label',
+    EDIT_MENU_LABEL: 'Instrument.edit_menu_label',
   },
   EDIT_INSTRUMENT: {
     TITLE: 'EditInstrument.title',

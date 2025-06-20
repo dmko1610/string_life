@@ -1,6 +1,10 @@
 import { useCallback, useEffect, useState } from 'react';
 
-import { getInstrument, updateInstrument } from '@/services/db';
+import {
+  deleteInstrumentById,
+  getInstrument,
+  updateInstrument,
+} from '@/services/db';
 
 export default function useInstrument(id: string) {
   const [type, setType] = useState('');
@@ -53,6 +57,10 @@ export default function useInstrument(id: string) {
     [id]
   );
 
+  const deleteInstrument = useCallback(async () => {
+    await deleteInstrumentById(id);
+  }, [id]);
+
   useEffect(() => {
     fetchInstrument();
   }, [fetchInstrument]);
@@ -64,6 +72,7 @@ export default function useInstrument(id: string) {
     loading,
     saveProgress,
     editInstrument,
+    deleteInstrument,
     refetch: fetchInstrument,
   };
 }

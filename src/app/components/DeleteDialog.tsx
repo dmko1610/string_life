@@ -10,8 +10,8 @@ export default function DeleteDialog({
   hideDialog,
 }: {
   visible: boolean;
-  deleteFn: (id: number) => Promise<void>;
-  deleteId: number;
+  deleteFn: (id?: string) => Promise<void>;
+  deleteId: string;
   hideDialog: () => void;
 }) {
   const { t } = useTranslation();

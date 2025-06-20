@@ -1,5 +1,5 @@
 export type Instrument = {
-  id: number;
+  id: string;
   name: string;
   type: string;
   replacement_date?: number | null;

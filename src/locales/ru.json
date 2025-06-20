@@ -18,7 +18,9 @@
     "repl_label": "Дата замены",
     "days_since_label": "Дней с замены: ",
     "play_time_label": "Время игры",
-    "end_time_label": "100 ч"
+    "end_time_label": "100 ч",
+    "delete_menu_label": "Удалить",
+    "edit_menu_label": "Редактировать"
   },
   "EditInstrument": {
     "title": "РЕДАКТИРОВАТЬ ИНСТРУМЕНТ",

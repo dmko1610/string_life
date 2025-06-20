@@ -2,16 +2,20 @@ import { useCallback, useState } from 'react';
 
 export default function useDeleteDialog() {
   const [visible, setVisible] = useState(false);
-  const [deleteId, setDeleteId] = useState<number>(0);
+  const [deleteId, setDeleteId] = useState<string>('');
 
-  const showDialog = useCallback((id: number) => {
-    setVisible(true);
-    setDeleteId(id);
+  const showDialog = useCallback((id?: string) => {
+    if (!id) {
+      setVisible(true);
+    } else {
+      setVisible(true);
+      setDeleteId(id);
+    }
   }, []);
 
   const hideDialog = useCallback(() => {
     setVisible(false);
-    setDeleteId(0);
+    setDeleteId('');
   }, []);
 
   return {

@@ -6,7 +6,7 @@ import GuitarCard from './GuitarCard';
 
 interface GuitarCardListProps {
   instruments: Instrument[];
-  showDeleteDialog: (id: number) => void;
+  showDeleteDialog: (id: string) => void;
 }
 
 export default function GuitarCardList({

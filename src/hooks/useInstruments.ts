@@ -15,7 +15,7 @@ export default function useInstruments() {
   }, []);
 
   const deleteInstrument = useCallback(
-    async (id: number) => {
+    async (id: string) => {
       await deleteInstrumentById(id);
       fetchData();
     },

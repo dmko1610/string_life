@@ -15,10 +15,10 @@ const calculatedElementWidth: number =
   width / HALF_SIZE - HORIZONTAL_MARGIN - PADDING;
 
 interface IGuitarCardProps {
-  id: number;
+  id: string;
   type: string;
   name: string;
-  onLongPress?: (id: number) => void;
+  onLongPress?: (id: string) => void;
   testID?: string;
 }
 

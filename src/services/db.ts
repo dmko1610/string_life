@@ -27,7 +27,7 @@ export const getInstrument = async (id: string): Promise<Instrument | null> => {
   return await db.getFirstAsync(GET_INSTRUMENT_QUERY, [id]);
 };
 
-export const deleteInstrumentById = async (id: number) => {
+export const deleteInstrumentById = async (id: string) => {
   return await db.runAsync(DELETE_INSTRUMENT_QUERY, id);
 };
 

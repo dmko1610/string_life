@@ -1,11 +1,12 @@
 import { Image } from 'expo-image';
 import { useFocusEffect, useLocalSearchParams, useRouter } from 'expo-router';
-import { useCallback } from 'react';
+import { useCallback, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import {
   ActivityIndicator,
   Appbar,
   IconButton,
+  Menu,
   ProgressBar,
   Surface,
   Text,
@@ -13,7 +14,9 @@ import {
 } from 'react-native-paper';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
+import DeleteDialog from '@/app/components/DeleteDialog';
 import { typeToIcon } from '@/helpers/iconizator';
+import useDeleteDialog from '@/hooks/useDeleteDialog';
 import useInstrument from '@/hooks/useInstrument';
 import usePlayTimer from '@/hooks/usePlayTimer';
 import { useTranslation } from '@/hooks/useTranslation';
@@ -28,10 +31,20 @@ export default function InstrumentDetails() {
   const { colors } = useTheme();
   const router = useRouter();
 
-  const { loading, type, progress, replacementDate, saveProgress, refetch } =
-    useInstrument(id);
+  const [showMenu, setShowMenu] = useState(false);
+
+  const {
+    loading,
+    type,
+    progress,
+    replacementDate,
+    saveProgress,
+    deleteInstrument,
+    refetch,
+  } = useInstrument(id);
 
   const { isPlaying, start, stop } = usePlayTimer();
+  const { hideDialog, showDialog, visible } = useDeleteDialog();
 
   const daysSince = replacementDate
     ? Math.floor(
@@ -49,7 +62,20 @@ export default function InstrumentDetails() {
     }
   };
 
-  const navigate = () => router.navigate(`/screens/instrument/${id}/edit`);
+  const handleNavigate = () => {
+    router.navigate(`/screens/instrument/${id}/edit`);
+    setShowMenu(false);
+  };
+  const handleDeleteInstrument = () => {
+    setShowMenu(false);
+    showDialog();
+  };
+  const handleDeleteCallback = () => {
+    router.back();
+    deleteInstrument();
+  };
+  const handleOpenMenu = () => setShowMenu(true);
+  const handleCloseMenu = () => setShowMenu(false);
 
   useFocusEffect(
     useCallback(() => {
@@ -80,7 +106,24 @@ export default function InstrumentDetails() {
       <Appbar.Header>
         <Appbar.BackAction onPress={() => router.back()} />
         <Appbar.Content title={type.toUpperCase()} />
-        <Appbar.Action icon={'pencil'} size={30} onPress={navigate} />
+        <Menu
+          visible={showMenu}
+          anchor={
+            <Appbar.Action icon={'cog'} size={30} onPress={handleOpenMenu} />
+          }
+          onDismiss={handleCloseMenu}
+        >
+          <Menu.Item
+            leadingIcon={'pencil'}
+            title={t(KEYS.INSTRUMENT.EDIT_MENU_LABEL)}
+            onPress={handleNavigate}
+          />
+          <Menu.Item
+            leadingIcon={'delete'}
+            title={t(KEYS.INSTRUMENT.DELETE_MENU_LABEL)}
+            onPress={handleDeleteInstrument}
+          />
+        </Menu>
       </Appbar.Header>
 
       <View style={styles.imageContainer}>
@@ -125,6 +168,13 @@ export default function InstrumentDetails() {
           color={colors.primary}
         />
       </View>
+
+      <DeleteDialog
+        deleteId={id}
+        visible={visible}
+        deleteFn={handleDeleteCallback as () => Promise<void>}
+        hideDialog={hideDialog}
+      />
     </SafeAreaView>
   );
 }
