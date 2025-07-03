@@ -1,3 +1,4 @@
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { useEffect, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
@@ -13,6 +14,7 @@ import { DatePickerInput } from 'react-native-paper-dates';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import useInstrument from '@/hooks/useInstrument';
+import { scheduleReplacementNotification } from '@/hooks/useNotifications';
 import { useTranslation } from '@/hooks/useTranslation';
 import { KEYS } from '@/lib/i18n';
 
@@ -46,9 +48,12 @@ export default function InstrumentEdit() {
     setShowHelper(num > 6000);
   };
 
-  const handleSaveInstrument = () => {
+  const handleSaveInstrument = async () => {
     editInstrument(Number(progressInput) * 60_000, date);
-    router.navigate(`/screens/instrument/${id}`);
+    await scheduleReplacementNotification(t, id, date);
+    await AsyncStorage.removeItem(`notified_100h_${id}`);
+
+    router.back();
   };
 
   if (loading) {

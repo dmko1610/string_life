@@ -13,6 +13,7 @@ import {
 import { DatePickerInput } from 'react-native-paper-dates';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
+import { scheduleReplacementNotification } from '@/hooks/useNotifications';
 import { useTranslation } from '@/hooks/useTranslation';
 import { KEYS } from '@/lib/i18n';
 import { addInstrument } from '@/services/db';
@@ -43,7 +44,13 @@ export default function AddInstrument() {
     try {
       const timestamp = replacementDate ? replacementDate.getTime() : null;
 
-      await addInstrument(name, type, timestamp, 0);
+      const { lastInsertRowId } = await addInstrument(name, type, timestamp, 0);
+
+      await scheduleReplacementNotification(
+        t,
+        lastInsertRowId.toString(),
+        replacementDate
+      );
 
       router.back();
     } catch (error) {
