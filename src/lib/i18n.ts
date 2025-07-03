@@ -48,6 +48,12 @@ export const KEYS = {
   ERRORS: {
     saveInstrumentFailed: 'Errors.saveInstrument',
   },
+  NOTIFICATIONS: {
+    LABEL_MONTHS: 'Notifications.label_months',
+    LABEL_HOURS: 'Notifications.label_hours',
+    SUB_LABEL_MONTHS: 'Notifications.sub_label_months',
+    SUB_LABEL_HOURS: 'Notifications.sub_label_hours',
+  },
 };
 
 export default i18n;

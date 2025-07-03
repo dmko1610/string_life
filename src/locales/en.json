@@ -37,5 +37,11 @@
   },
   "Errors": {
     "saveInstrument": "Some error occured while adding instrument"
+  },
+  "Notifications": {
+    "label_months": "Time to replace strings",
+    "sub_label_months": "It's been 3 months since you changed them.",
+    "label_hours": "100 hours reached",
+    "sub_label_hours": "Your strings have reached the 100-hour playtime limit."
   }
 }
