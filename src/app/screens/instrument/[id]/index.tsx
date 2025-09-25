@@ -8,7 +8,6 @@ import {
   Appbar,
   IconButton,
   Menu,
-  ProgressBar,
   Surface,
   Text,
   useTheme,
@@ -23,14 +22,20 @@ import { send100HoursNotificationOnce } from '@/hooks/useNotifications';
 import usePlayTimer from '@/hooks/usePlayTimer';
 import { useTranslation } from '@/hooks/useTranslation';
 import { KEYS } from '@/lib/i18n';
+import { MyTheme } from '@/theme';
 
-const TARGET_TIME_SECONDS = 100 * 60 * 60 * 1000;
+const GREEN_PLAYTIME = 20 * 60 * 60 * 1000;
+const YELLOW_PLAYTIME = 40 * 60 * 60 * 1000;
+const RED_PLAYTIME = 60 * 60 * 60 * 1000;
+
+const HOURS = 1 * 60 * 60 * 1000;
+const MINUTES = 1 * 60 * 1000;
 
 export default function InstrumentDetails() {
   const { id } = useLocalSearchParams<{ id: string }>();
 
   const { t, locale } = useTranslation();
-  const { colors } = useTheme();
+  const { colors } = useTheme<MyTheme>();
   const router = useRouter();
 
   const [showMenu, setShowMenu] = useState(false);
@@ -47,6 +52,12 @@ export default function InstrumentDetails() {
 
   const { isPlaying, start, stop } = usePlayTimer();
   const { hideDialog, showDialog, visible } = useDeleteDialog();
+
+  const getProgressColor = (progress: number) => {
+    if (progress <= GREEN_PLAYTIME) return colors.materialGreen;
+    if (progress <= YELLOW_PLAYTIME) return colors.materialYellow;
+    if (progress > RED_PLAYTIME) return colors.materialRed;
+  };
 
   const daysSince = replacementDate
     ? Math.floor(
@@ -83,6 +94,8 @@ export default function InstrumentDetails() {
   };
   const handleOpenMenu = () => setShowMenu(true);
   const handleCloseMenu = () => setShowMenu(false);
+
+  console.log(progress);
 
   useFocusEffect(
     useCallback(() => {
@@ -160,20 +173,17 @@ export default function InstrumentDetails() {
         />
       </View>
 
-      <Text>{`${Math.floor(progress / 60_000)} min / ${TARGET_TIME_SECONDS / 60_000} min`}</Text>
       <View style={styles.playtimeContainer}>
-        <Text style={styles.playtimeText}>
-          {t(KEYS.INSTRUMENT.PLAY_TIME_LABEL)}
+        <Text
+          variant="headlineMedium"
+          style={[styles.playtimeText, { color: getProgressColor(progress) }]}
+        >
+          {t(KEYS.INSTRUMENT.PLAYTIME_TEXT)}
+          {Math.floor(progress / HOURS)}
+          {t(KEYS.INSTRUMENT.HOURS_TEXT)}
+          {Math.floor((progress % HOURS) / MINUTES)}
+          {t(KEYS.INSTRUMENT.MINUTES_TEXT)}
         </Text>
-        <Text style={styles.playtimeText}>
-          {t(KEYS.INSTRUMENT.END_TIME_LABEL)}
-        </Text>
-      </View>
-      <View style={styles.progressBar}>
-        <ProgressBar
-          progress={parseFloat((progress / TARGET_TIME_SECONDS).toFixed(2))}
-          color={colors.primary}
-        />
       </View>
 
       <DeleteDialog
@@ -188,11 +198,16 @@ export default function InstrumentDetails() {
 
 const styles = StyleSheet.create({
   replacementDate: { padding: 16, borderRadius: 10, marginTop: 24 },
-  playtimeContainer: { flexDirection: 'row', justifyContent: 'space-between' },
-  playtimeText: { fontSize: 16, marginBottom: 4 },
+  playtimeContainer: {
+    marginBottom: 20,
+    padding: 20,
+    alignItems: 'center',
+  },
+  playtimeText: {
+    textAlign: 'center',
+  },
   playButtonContainer: { marginBottom: 50 },
   playButton: { alignSelf: 'center' },
-  progressBar: { marginBottom: 70 },
   imageContainer: { flex: 1, justifyContent: 'flex-start' },
   image: { width: '100%', height: '70%' },
   instrument: {

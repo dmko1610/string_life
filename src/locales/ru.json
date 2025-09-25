@@ -17,8 +17,9 @@
   "Instrument": {
     "repl_label": "Дата замены",
     "days_since_label": "Дней с замены: ",
-    "play_time_label": "Время игры",
-    "end_time_label": "100 ч",
+    "playtime_text": "Ты играешь уже ",
+    "hours": "ч ",
+    "minutes": "м ",
     "delete_menu_label": "Удалить",
     "edit_menu_label": "Редактировать"
   },
@@ -38,7 +39,7 @@
   "Errors": {
     "saveInstrument": "Непредвиденная ошибка во время добавления инструмента"
   },
-    "Notifications": {
+  "Notifications": {
     "label_months": "Настало время поменять струны",
     "sub_label_months": "Прошло 3 месяца с последней замены",
     "label_hours": "100 часов игры прошло",

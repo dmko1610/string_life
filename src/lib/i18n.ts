@@ -27,8 +27,9 @@ export const KEYS = {
   INSTRUMENT: {
     REPL_LABEL: 'Instrument.repl_label',
     DAYS_SINCE_LABEL: 'Instrument.days_since_label',
-    PLAY_TIME_LABEL: 'Instrument.play_time_label',
-    END_TIME_LABEL: 'Instrument.end_time_label',
+    PLAYTIME_TEXT: 'Instrument.playtime_text',
+    HOURS_TEXT: 'Instrument.hours',
+    MINUTES_TEXT: 'Instrument.minutes',
     DELETE_MENU_LABEL: 'Instrument.delete_menu_label',
     EDIT_MENU_LABEL: 'Instrument.edit_menu_label',
   },

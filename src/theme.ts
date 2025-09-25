@@ -1,6 +1,14 @@
 import { MD3DarkTheme, MD3LightTheme, MD3Theme } from 'react-native-paper';
 
-export const lightTheme: MD3Theme = {
+export interface MyTheme extends MD3Theme {
+  colors: MD3Theme['colors'] & {
+    materialRed: string;
+    materialYellow: string;
+    materialGreen: string;
+  };
+}
+
+export const lightTheme: MyTheme = {
   ...MD3LightTheme,
   colors: {
     ...MD3LightTheme.colors,
@@ -16,10 +24,13 @@ export const lightTheme: MD3Theme = {
     onTertiaryContainer: '#434a23',
     errorContainer: '#ffdad6',
     onErrorContainer: '#93000a',
+    materialRed: '#f44336',
+    materialYellow: '#ffeb3b',
+    materialGreen: '#4caf50',
   },
 };
 
-export const darkTheme: MD3Theme = {
+export const darkTheme: MyTheme = {
   ...MD3DarkTheme,
   colors: {
     ...MD3DarkTheme.colors,
@@ -39,5 +50,8 @@ export const darkTheme: MD3Theme = {
     onTertiaryContainer: '#dfe8b2',
     errorContainer: '#93000a',
     onErrorContainer: '#ffdad6',
+    materialRed: '#f44336',
+    materialYellow: '#ffeb3b',
+    materialGreen: '#4caf50',
   },
 };
