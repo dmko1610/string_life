@@ -3,7 +3,6 @@ import { useFocusEffect } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 import React, { useCallback, useEffect, useState } from 'react';
 
-import { requestNotificationPermissions } from '@/hooks/useNotifications';
 import db, { createTable } from '@/services/db';
 
 import Dashboard from './screens/dashboard';
@@ -17,7 +16,6 @@ SplashScreen.setOptions({
 
 export default function Index() {
   useDrizzleStudio(db);
-  requestNotificationPermissions();
 
   const [appIsReady, setAppIsReady] = useState(false);
 

@@ -18,7 +18,6 @@ import DeleteDialog from '@/app/components/DeleteDialog';
 import { typeToIcon } from '@/helpers/iconizator';
 import useDeleteDialog from '@/hooks/useDeleteDialog';
 import useInstrument from '@/hooks/useInstrument';
-import { send100HoursNotificationOnce } from '@/hooks/useNotifications';
 import usePlayTimer from '@/hooks/usePlayTimer';
 import { useTranslation } from '@/hooks/useTranslation';
 import { KEYS } from '@/lib/i18n';
@@ -70,10 +69,6 @@ export default function InstrumentDetails() {
       const elapsed = await stop();
       const newProgress = progress + elapsed;
       saveProgress(newProgress);
-
-      if (newProgress >= 100 * 60 * 60 * 1000) {
-        await send100HoursNotificationOnce(t, id);
-      }
     } else {
       start();
     }

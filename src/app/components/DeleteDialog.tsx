@@ -1,5 +1,3 @@
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import * as Notifications from 'expo-notifications';
 import { Button, Dialog, Text, useTheme } from 'react-native-paper';
 
 import { useTranslation } from '@/hooks/useTranslation';
@@ -20,15 +18,6 @@ export default function DeleteDialog({
   const { colors } = useTheme();
 
   const handleDeleteFn = async () => {
-    const notifKey = `notif_replacement_${deleteId}`;
-    const notifId = await AsyncStorage.getItem(notifKey);
-    if (notifId) {
-      await Notifications.cancelScheduledNotificationAsync(notifId);
-    }
-
-    await AsyncStorage.removeItem(notifKey);
-    await AsyncStorage.removeItem(`notified_100h_${deleteId}`);
-
     deleteFn(deleteId);
     hideDialog();
   };
