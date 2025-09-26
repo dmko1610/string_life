@@ -90,8 +90,6 @@ export default function InstrumentDetails() {
   const handleOpenMenu = () => setShowMenu(true);
   const handleCloseMenu = () => setShowMenu(false);
 
-  console.log(progress);
-
   useFocusEffect(
     useCallback(() => {
       refetch();
@@ -141,44 +139,49 @@ export default function InstrumentDetails() {
         </Menu>
       </Appbar.Header>
 
-      <View style={styles.imageContainer}>
-        <Image
-          source={typeToIcon(type)}
-          contentFit="contain"
-          cachePolicy="memory"
-          style={styles.image}
-        />
+      <View style={styles.content}>
+        <View style={styles.imageContainer}>
+          <Image
+            source={typeToIcon(type)}
+            contentFit="contain"
+            cachePolicy="memory"
+            style={styles.image}
+          />
 
-        <Surface mode="flat" style={styles.replacementDate}>
-          <Text variant="titleLarge">{`${t(KEYS.INSTRUMENT.REPL_LABEL)} : ${replacementDate.toLocaleDateString([locale], { dateStyle: 'long' })}`}</Text>
-          <Text variant="titleLarge">{`${t(KEYS.INSTRUMENT.DAYS_SINCE_LABEL)} ${daysSince}`}</Text>
-        </Surface>
-      </View>
+          <Surface mode="flat" style={styles.replacementDate}>
+            <Text variant="titleLarge">{`${t(KEYS.INSTRUMENT.REPL_LABEL)} : ${replacementDate.toLocaleDateString([locale], { dateStyle: 'medium' })}`}</Text>
+            <Text variant="titleLarge">{`${t(KEYS.INSTRUMENT.DAYS_SINCE_LABEL)} ${daysSince}`}</Text>
+          </Surface>
+        </View>
 
-      <View style={styles.playButtonContainer}>
-        <IconButton
-          icon={isPlaying ? 'stop' : 'play'}
-          mode="contained-tonal"
-          size={140}
-          containerColor={isPlaying ? colors.tertiary : colors.primary}
-          iconColor={isPlaying ? colors.onTertiary : colors.onPrimary}
-          style={styles.playButton}
-          animated={true}
-          onPress={handlePress}
-        />
-      </View>
+        <View style={styles.footer}>
+          <IconButton
+            icon={isPlaying ? 'stop' : 'play'}
+            mode="contained-tonal"
+            size={140}
+            containerColor={isPlaying ? colors.tertiary : colors.primary}
+            iconColor={isPlaying ? colors.onTertiary : colors.onPrimary}
+            style={styles.playButton}
+            animated={true}
+            onPress={handlePress}
+          />
 
-      <View style={styles.playtimeContainer}>
-        <Text
-          variant="headlineMedium"
-          style={[styles.playtimeText, { color: getProgressColor(progress) }]}
-        >
-          {t(KEYS.INSTRUMENT.PLAYTIME_TEXT)}
-          {Math.floor(progress / HOURS)}
-          {t(KEYS.INSTRUMENT.HOURS_TEXT)}
-          {Math.floor((progress % HOURS) / MINUTES)}
-          {t(KEYS.INSTRUMENT.MINUTES_TEXT)}
-        </Text>
+          <View style={styles.playtimeContainer}>
+            <Text
+              variant="headlineMedium"
+              style={[
+                styles.playtimeText,
+                { color: getProgressColor(progress) },
+              ]}
+            >
+              {t(KEYS.INSTRUMENT.PLAYTIME_TEXT)}
+              {Math.floor(progress / HOURS)}
+              {t(KEYS.INSTRUMENT.HOURS_TEXT)}
+              {Math.floor((progress % HOURS) / MINUTES)}
+              {t(KEYS.INSTRUMENT.MINUTES_TEXT)}
+            </Text>
+          </View>
+        </View>
       </View>
 
       <DeleteDialog
@@ -192,18 +195,26 @@ export default function InstrumentDetails() {
 }
 
 const styles = StyleSheet.create({
+  content: {
+    flex: 1,
+    justifyContent: 'space-between',
+    paddingVertical: 24,
+    backgroundColor: 'lightblue',
+  },
+  footer: {
+    alignItems: 'center',
+    paddingBottom: 20,
+  },
   replacementDate: { padding: 16, borderRadius: 10, marginTop: 24 },
   playtimeContainer: {
-    marginBottom: 20,
     padding: 20,
     alignItems: 'center',
   },
   playtimeText: {
     textAlign: 'center',
   },
-  playButtonContainer: { marginBottom: 50 },
   playButton: { alignSelf: 'center' },
-  imageContainer: { flex: 1, justifyContent: 'flex-start' },
+  imageContainer: { flex: 1 },
   image: { width: '100%', height: '70%' },
   instrument: {
     flex: 1,

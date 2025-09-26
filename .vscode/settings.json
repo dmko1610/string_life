@@ -7,5 +7,6 @@
   "editor.codeLensFontFamily": "",
   "editor.fontFamily": "Fira code",
   "editor.bracketPairColorization.enabled": true,
-  "git.inputValidation": true
+  "git.inputValidation": true,
+  "chatgpt.commentCodeLensEnabled": false
 }
