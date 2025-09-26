@@ -1,8 +1,8 @@
 import * as Haptics from 'expo-haptics';
 import { Image } from 'expo-image';
 import { useFocusEffect, useLocalSearchParams, useRouter } from 'expo-router';
-import { useCallback, useState } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { useCallback, useEffect, useRef, useState } from 'react';
+import { Animated, Easing, StyleSheet, View } from 'react-native';
 import {
   ActivityIndicator,
   Appbar,
@@ -51,6 +51,7 @@ export default function InstrumentDetails() {
 
   const { isPlaying, start, stop } = usePlayTimer();
   const { hideDialog, showDialog, visible } = useDeleteDialog();
+  const pulseAnim = useRef(new Animated.Value(0)).current;
 
   const getProgressColor = (progress: number) => {
     if (progress <= GREEN_PLAYTIME) return colors.materialGreen;
@@ -89,6 +90,48 @@ export default function InstrumentDetails() {
   };
   const handleOpenMenu = () => setShowMenu(true);
   const handleCloseMenu = () => setShowMenu(false);
+
+  useEffect(() => {
+    if (!isPlaying) {
+      pulseAnim.setValue(0);
+      return;
+    }
+
+    pulseAnim.setValue(0);
+
+    const animation = Animated.loop(
+      Animated.sequence([
+        Animated.timing(pulseAnim, {
+          toValue: 1,
+          duration: 700,
+          easing: Easing.out(Easing.ease),
+          useNativeDriver: true,
+        }),
+        Animated.timing(pulseAnim, {
+          toValue: 0,
+          duration: 700,
+          easing: Easing.in(Easing.ease),
+          useNativeDriver: true,
+        }),
+      ])
+    );
+
+    animation.start();
+
+    return () => {
+      animation.stop();
+    };
+  }, [isPlaying, pulseAnim]);
+
+  const pulseScale = pulseAnim.interpolate({
+    inputRange: [0, 1],
+    outputRange: [1, 1.4],
+  });
+
+  const pulseOpacity = pulseAnim.interpolate({
+    inputRange: [0, 1],
+    outputRange: [0, 0.35],
+  });
 
   useFocusEffect(
     useCallback(() => {
@@ -154,7 +197,18 @@ export default function InstrumentDetails() {
           </Surface>
         </View>
 
-        <View style={styles.footer}>
+        <View style={styles.playButtonContainer}>
+          <Animated.View
+            pointerEvents="none"
+            style={[
+              styles.playButtonPulse,
+              {
+                backgroundColor: colors.tertiary,
+                opacity: pulseOpacity,
+                transform: [{ scale: pulseScale }],
+              },
+            ]}
+          />
           <IconButton
             icon={isPlaying ? 'stop' : 'play'}
             mode="contained-tonal"
@@ -165,22 +219,19 @@ export default function InstrumentDetails() {
             animated={true}
             onPress={handlePress}
           />
+        </View>
 
-          <View style={styles.playtimeContainer}>
-            <Text
-              variant="headlineMedium"
-              style={[
-                styles.playtimeText,
-                { color: getProgressColor(progress) },
-              ]}
-            >
-              {t(KEYS.INSTRUMENT.PLAYTIME_TEXT)}
-              {Math.floor(progress / HOURS)}
-              {t(KEYS.INSTRUMENT.HOURS_TEXT)}
-              {Math.floor((progress % HOURS) / MINUTES)}
-              {t(KEYS.INSTRUMENT.MINUTES_TEXT)}
-            </Text>
-          </View>
+        <View style={styles.playtimeContainer}>
+          <Text
+            variant="headlineMedium"
+            style={[styles.playtimeText, { color: getProgressColor(progress) }]}
+          >
+            {t(KEYS.INSTRUMENT.PLAYTIME_TEXT)}
+            {Math.floor(progress / HOURS)}
+            {t(KEYS.INSTRUMENT.HOURS_TEXT)}
+            {Math.floor((progress % HOURS) / MINUTES)}
+            {t(KEYS.INSTRUMENT.MINUTES_TEXT)}
+          </Text>
         </View>
       </View>
 
@@ -195,15 +246,7 @@ export default function InstrumentDetails() {
 }
 
 const styles = StyleSheet.create({
-  content: {
-    flex: 1,
-    justifyContent: 'space-between',
-    paddingVertical: 24,
-  },
-  footer: {
-    alignItems: 'center',
-    paddingBottom: 20,
-  },
+  content: { flex: 1 },
   replacementDate: { padding: 16, borderRadius: 10, marginTop: 24 },
   playtimeContainer: {
     padding: 20,
@@ -211,6 +254,16 @@ const styles = StyleSheet.create({
   },
   playtimeText: {
     textAlign: 'center',
+  },
+  playButtonContainer: {
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  playButtonPulse: {
+    position: 'absolute',
+    width: 180,
+    height: 180,
+    borderRadius: 90,
   },
   playButton: { alignSelf: 'center' },
   imageContainer: { flex: 1 },
