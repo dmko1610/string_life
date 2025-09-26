@@ -6,6 +6,7 @@ import { Animated, Easing, StyleSheet, View } from 'react-native';
 import {
   ActivityIndicator,
   Appbar,
+  Button,
   IconButton,
   Menu,
   Surface,
@@ -90,6 +91,12 @@ export default function InstrumentDetails() {
   };
   const handleOpenMenu = () => setShowMenu(true);
   const handleCloseMenu = () => setShowMenu(false);
+  const handleOpenGraph = () => {
+    router.push({
+      pathname: '/screens/instrument/[id]/graph',
+      params: { id },
+    });
+  };
 
   useEffect(() => {
     if (!isPlaying) {
@@ -233,6 +240,15 @@ export default function InstrumentDetails() {
             {t(KEYS.INSTRUMENT.MINUTES_TEXT)}
           </Text>
         </View>
+
+        <Button
+          icon="chart-line"
+          mode="text"
+          onPress={handleOpenGraph}
+          style={styles.graphButton}
+        >
+          {t(KEYS.INSTRUMENT.GRAPH_BUTTON_LABEL)}
+        </Button>
       </View>
 
       <DeleteDialog
@@ -280,5 +296,9 @@ const styles = StyleSheet.create({
     borderRadius: 6,
     borderWidth: 1,
     padding: 6,
+  },
+  graphButton: {
+    marginTop: 12,
+    alignSelf: 'center',
   },
 });

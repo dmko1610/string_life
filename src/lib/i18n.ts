@@ -32,6 +32,13 @@ export const KEYS = {
     MINUTES_TEXT: 'Instrument.minutes',
     DELETE_MENU_LABEL: 'Instrument.delete_menu_label',
     EDIT_MENU_LABEL: 'Instrument.edit_menu_label',
+    GRAPH_BUTTON_LABEL: 'Instrument.graph_button_label',
+  },
+  INSTRUMENT_GRAPH: {
+    TITLE: 'InstrumentGraph.title',
+    DESCRIPTION: 'InstrumentGraph.description',
+    DAYS_AXIS: 'InstrumentGraph.days_axis',
+    HOURS_AXIS: 'InstrumentGraph.hours_axis',
   },
   EDIT_INSTRUMENT: {
     TITLE: 'EditInstrument.title',

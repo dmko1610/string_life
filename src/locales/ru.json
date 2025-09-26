@@ -21,7 +21,14 @@
     "hours": "ч ",
     "minutes": "м ",
     "delete_menu_label": "Удалить",
-    "edit_menu_label": "Редактировать"
+    "edit_menu_label": "Редактировать",
+    "graph_button_label": "Посмотреть график"
+  },
+  "InstrumentGraph": {
+    "title": "ГРАФИК ИГРЫ",
+    "description": "Оценка накопленного времени игры со времени последней замены струн.",
+    "days_axis": "Дни",
+    "hours_axis": "Часы"
   },
   "EditInstrument": {
     "title": "РЕДАКТИРОВАТЬ ИНСТРУМЕНТ",
