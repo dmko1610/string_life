@@ -199,7 +199,6 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'space-between',
     paddingVertical: 24,
-    backgroundColor: 'lightblue',
   },
   footer: {
     alignItems: 'center',
