@@ -12,12 +12,15 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import Svg, { Circle, Line, Polyline, Text as SvgText } from 'react-native-svg';
 
 import useInstrument from '@/hooks/useInstrument';
+import {
+  HOURS_IN_MS,
+  MINUTES_IN_MS,
+  useInstrumentGraph,
+} from '@/hooks/useInstrumentGraph';
 import { useTranslation } from '@/hooks/useTranslation';
 import { KEYS } from '@/lib/i18n';
 import { MyTheme } from '@/theme';
 
-const HOURS = 60 * 60 * 1000;
-const MINUTES = 60 * 1000;
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 const CONTENT_HORIZONTAL_PADDING = 16;
 const CHART_HEIGHT = 260;
@@ -34,53 +37,10 @@ export default function InstrumentGraph() {
 
   const { loading, progress, replacementDate } = useInstrument(id);
 
-  const daysSince = replacementDate
-    ? Math.max(
-        0,
-        Math.floor(
-          (Date.now() - replacementDate.getTime()) / (1000 * 60 * 60 * 24)
-        )
-      )
-    : 0;
-
-  const { points, maxDay, maxHours } = useMemo(() => {
-    const totalDays = Math.max(daysSince, 1);
-    const totalHours = progress / HOURS;
-
-    if (!Number.isFinite(totalHours) || totalHours < 0) {
-      return {
-        points: [
-          { day: 0, hours: 0 },
-          { day: totalDays, hours: 0 },
-        ],
-        maxDay: totalDays,
-        maxHours: 1,
-      };
-    }
-
-    if (daysSince === 0) {
-      return {
-        points: [
-          { day: 0, hours: 0 },
-          { day: 1, hours: totalHours },
-        ],
-        maxDay: 1,
-        maxHours: Math.max(totalHours, 1),
-      };
-    }
-
-    const dailyIncrement = totalHours / totalDays;
-    const generated = Array.from({ length: totalDays + 1 }, (_, idx) => ({
-      day: idx,
-      hours: dailyIncrement * idx,
-    }));
-
-    return {
-      points: generated,
-      maxDay: totalDays,
-      maxHours: Math.max(totalHours, 1),
-    };
-  }, [daysSince, progress]);
+  const { points, maxDay, maxHours } = useInstrumentGraph(
+    progress,
+    replacementDate
+  );
 
   const availableWidth = SCREEN_WIDTH - CONTENT_HORIZONTAL_PADDING * 2;
   const chartWidth = availableWidth - (LEFT_PADDING + RIGHT_PADDING);
@@ -239,9 +199,9 @@ export default function InstrumentGraph() {
           <View style={styles.summary}>
             <Text variant="titleMedium" style={styles.summaryText}>
               {t(KEYS.INSTRUMENT.PLAYTIME_TEXT)}
-              {Math.floor(progress / HOURS)}
+              {Math.floor(progress / HOURS_IN_MS)}
               {t(KEYS.INSTRUMENT.HOURS_TEXT)}
-              {Math.floor((progress % HOURS) / MINUTES)}
+              {Math.floor((progress % HOURS_IN_MS) / MINUTES_IN_MS)}
               {t(KEYS.INSTRUMENT.MINUTES_TEXT)}
             </Text>
             <Text variant="bodyMedium" style={styles.summaryText}>
