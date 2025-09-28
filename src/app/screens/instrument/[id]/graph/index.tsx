@@ -1,4 +1,5 @@
 import { useLocalSearchParams, useRouter } from 'expo-router';
+import { useMemo } from 'react';
 import { Dimensions, StyleSheet, View } from 'react-native';
 import {
   ActivityIndicator,
@@ -8,7 +9,7 @@ import {
   useTheme,
 } from 'react-native-paper';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import Svg, { Line } from 'react-native-svg';
+import Svg, { Circle, Line, Polyline, Text as SvgText } from 'react-native-svg';
 
 import useInstrument from '@/hooks/useInstrument';
 import { useTranslation } from '@/hooks/useTranslation';
@@ -33,8 +34,97 @@ export default function InstrumentGraph() {
 
   const { loading, progress, replacementDate } = useInstrument(id);
 
+  const daysSince = replacementDate
+    ? Math.max(
+        0,
+        Math.floor(
+          (Date.now() - replacementDate.getTime()) / (1000 * 60 * 60 * 24)
+        )
+      )
+    : 0;
+
+  const { points, maxDay, maxHours } = useMemo(() => {
+    const totalDays = Math.max(daysSince, 1);
+    const totalHours = progress / HOURS;
+
+    if (!Number.isFinite(totalHours) || totalHours < 0) {
+      return {
+        points: [
+          { day: 0, hours: 0 },
+          { day: totalDays, hours: 0 },
+        ],
+        maxDay: totalDays,
+        maxHours: 1,
+      };
+    }
+
+    if (daysSince === 0) {
+      return {
+        points: [
+          { day: 0, hours: 0 },
+          { day: 1, hours: totalHours },
+        ],
+        maxDay: 1,
+        maxHours: Math.max(totalHours, 1),
+      };
+    }
+
+    const dailyIncrement = totalHours / totalDays;
+    const generated = Array.from({ length: totalDays + 1 }, (_, idx) => ({
+      day: idx,
+      hours: dailyIncrement * idx,
+    }));
+
+    return {
+      points: generated,
+      maxDay: totalDays,
+      maxHours: Math.max(totalHours, 1),
+    };
+  }, [daysSince, progress]);
+
   const availableWidth = SCREEN_WIDTH - CONTENT_HORIZONTAL_PADDING * 2;
   const chartWidth = availableWidth - (LEFT_PADDING + RIGHT_PADDING);
+  const verticalSpace = CHART_HEIGHT - (TOP_PADDING + BOTTOM_PADDING);
+
+  const plottedPoints = useMemo(() => {
+    return points.map((point) => {
+      const x = LEFT_PADDING + (point.day / maxDay) * chartWidth;
+      const y =
+        CHART_HEIGHT -
+        BOTTOM_PADDING -
+        (point.hours / maxHours) * verticalSpace;
+
+      return { x, y };
+    });
+  }, [chartWidth, maxDay, maxHours, points, verticalSpace]);
+
+  const polylinePoints = plottedPoints
+    .map((point) => `${point.x},${point.y}`)
+    .join(' ');
+
+  const lastPoint = plottedPoints.at(plottedPoints.length - 1);
+
+  const dayTicks = useMemo(() => {
+    const mid = Math.round(maxDay / 2);
+    const unique = Array.from(new Set([0, mid, maxDay]));
+
+    return unique.map((day) => ({
+      label: `${day}`,
+      x: LEFT_PADDING + (day / maxDay) * chartWidth,
+    }));
+  }, [chartWidth, maxDay]);
+
+  const hourTicks = useMemo(() => {
+    const first = 0;
+    const mid = Number((maxHours / 2).toFixed(1));
+    const max = Number(maxHours.toFixed(1));
+    const unique = Array.from(new Set([first, mid, max]));
+
+    return unique.map((hours) => ({
+      label: `${hours}`,
+      y: CHART_HEIGHT - BOTTOM_PADDING - (hours / maxHours) * verticalSpace,
+    }));
+  }, [maxHours, verticalSpace]);
 
   if (loading) {
     return (
@@ -80,6 +170,70 @@ export default function InstrumentGraph() {
               stroke={colors.outlineVariant}
               strokeWidth={1}
             />
+
+            {dayTicks.map((tick) => (
+              <SvgText
+                key={`day-${tick.label}`}
+                x={tick.x}
+                y={CHART_HEIGHT - BOTTOM_PADDING + 18}
+                fontSize={12}
+                fill={colors.onSurfaceVariant}
+                textAnchor="middle"
+              >
+                {tick.label}
+              </SvgText>
+            ))}
+
+            {hourTicks.map((tick) => (
+              <SvgText
+                key={`hour-${tick.label}`}
+                x={LEFT_PADDING - 8}
+                y={tick.y + 4}
+                fontSize={12}
+                fill={colors.onSurfaceVariant}
+                textAnchor="end"
+              >
+                {tick.label}
+              </SvgText>
+            ))}
+
+            <SvgText
+              x={LEFT_PADDING + chartWidth / 2}
+              y={CHART_HEIGHT - 6}
+              fontSize={13}
+              fill={colors.onSurface}
+              textAnchor="middle"
+            >
+              {t(KEYS.INSTRUMENT_GRAPH.DAYS_AXIS)}
+            </SvgText>
+            <SvgText
+              x={14}
+              y={TOP_PADDING + verticalSpace / 2}
+              fontSize={13}
+              fill={colors.onSurface}
+              rotation={-90}
+              origin={`14,${TOP_PADDING + verticalSpace / 2}`}
+            >
+              {t(KEYS.INSTRUMENT_GRAPH.HOURS_AXIS)}
+            </SvgText>
+
+            <Polyline
+              points={polylinePoints}
+              fill="none"
+              stroke={colors.primary}
+              strokeWidth={1}
+              strokeLinejoin="round"
+              strokeLinecap="round"
+            />
+
+            {lastPoint ? (
+              <Circle
+                cx={lastPoint.x}
+                cy={lastPoint.y}
+                r={6}
+                fill={colors.primary}
+              />
+            ) : null}
           </Svg>
 
           <View style={styles.summary}>
