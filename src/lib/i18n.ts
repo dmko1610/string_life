@@ -34,11 +34,14 @@ export const KEYS = {
     DELETE_MENU_LABEL: 'Instrument.delete_menu_label',
     EDIT_MENU_LABEL: 'Instrument.edit_menu_label',
   },
-  INSTRUMENT_GRAPH: {
-    TITLE: 'InstrumentGraph.title',
-    DESCRIPTION: 'InstrumentGraph.description',
-    DAYS_AXIS: 'InstrumentGraph.days_axis',
-    HOURS_AXIS: 'InstrumentGraph.hours_axis',
+  INSTRUMENT_TABLE: {
+    TITLE: 'InstrumentTable.title',
+    DESCRIPTION: 'InstrumentTable.description',
+    METRIC: 'InstrumentTable.metric',
+    VALUE: 'InstrumentTable.value',
+    TOTAL_MINUTES: 'InstrumentTable.total_minutes',
+    HOURS_AND_MINUTES: 'InstrumentTable.hours_and_minutes',
+    DAYS_SINCE: 'InstrumentTable.days_since',
   },
   EDIT_INSTRUMENT: {
     TITLE: 'EditInstrument.title',

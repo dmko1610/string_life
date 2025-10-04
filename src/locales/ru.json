@@ -24,11 +24,14 @@
     "delete_menu_label": "Удалить",
     "edit_menu_label": "Редактировать"
   },
-  "InstrumentGraph": {
-    "title": "ГРАФИК ИГРЫ",
-    "description": "Оценка накопленного времени игры со времени последней замены струн.",
-    "days_axis": "Дни",
-    "hours_axis": "Часы"
+  "InstrumentTable": {
+    "title": "ТАБЛИЦА ИГРЫ",
+    "description": "Итоги со времени последней замены струн.",
+    "metric": "Показатель",
+    "value": "Значение",
+    "total_minutes": "Всего минут",
+    "hours_and_minutes": "Часы и минуты",
+    "days_since": "Дней с замены"
   },
   "EditInstrument": {
     "title": "РЕДАКТИРОВАТЬ ИНСТРУМЕНТ",

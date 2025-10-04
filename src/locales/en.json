@@ -24,11 +24,14 @@
     "delete_menu_label": "Delete",
     "edit_menu_label": "Edit"
   },
-  "InstrumentGraph": {
-    "title": "PLAYTIME GRAPH",
-    "description": "Estimated playtime accumulation since your last string replacement.",
-    "days_axis": "Days",
-    "hours_axis": "Hours"
+  "InstrumentTable": {
+    "title": "PLAYTIME TABLE",
+    "description": "Totals since last string replacement.",
+    "metric": "Metric",
+    "value": "Value",
+    "total_minutes": "Total minutes",
+    "hours_and_minutes": "Hours and minutes",
+    "days_since": "Days since replacement"
   },
   "EditInstrument": {
     "title": "EDIT INSTRUMENT",

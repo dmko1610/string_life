@@ -92,7 +92,7 @@ export default function InstrumentDetails() {
   const handleCloseMenu = () => setShowMenu(false);
   const handleOpenTable = () => {
     router.push({
-      pathname: '/screens/instrument/[id]/graph',
+      pathname: '/screens/instrument/[id]/table',
       params: { id },
     });
   };
