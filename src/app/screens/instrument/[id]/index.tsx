@@ -6,7 +6,6 @@ import { Animated, Easing, StyleSheet, View } from 'react-native';
 import {
   ActivityIndicator,
   Appbar,
-  Button,
   IconButton,
   Menu,
   Surface,
@@ -91,7 +90,7 @@ export default function InstrumentDetails() {
   };
   const handleOpenMenu = () => setShowMenu(true);
   const handleCloseMenu = () => setShowMenu(false);
-  const handleOpenGraph = () => {
+  const handleOpenTable = () => {
     router.push({
       pathname: '/screens/instrument/[id]/graph',
       params: { id },
@@ -169,6 +168,11 @@ export default function InstrumentDetails() {
       <Appbar.Header>
         <Appbar.BackAction onPress={() => router.back()} />
         <Appbar.Content title={type.toUpperCase()} />
+        <IconButton
+          icon={'information-outline'}
+          size={30}
+          onPress={handleOpenTable}
+        />
         <Menu
           visible={showMenu}
           anchor={
@@ -238,17 +242,12 @@ export default function InstrumentDetails() {
             {t(KEYS.INSTRUMENT.HOURS_TEXT)}
             {Math.floor((progress % HOURS) / MINUTES)}
             {t(KEYS.INSTRUMENT.MINUTES_TEXT)}
+            {'\n'}
+            {t(KEYS.INSTRUMENT.OR_TEXT)}
+            {Math.floor(progress / MINUTES)}
+            {t(KEYS.INSTRUMENT.MINUTES_TEXT)}
           </Text>
         </View>
-
-        <Button
-          icon="chart-line"
-          mode="text"
-          onPress={handleOpenGraph}
-          style={styles.graphButton}
-        >
-          {t(KEYS.INSTRUMENT.GRAPH_BUTTON_LABEL)}
-        </Button>
       </View>
 
       <DeleteDialog

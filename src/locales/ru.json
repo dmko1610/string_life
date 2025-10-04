@@ -17,12 +17,12 @@
   "Instrument": {
     "repl_label": "Дата замены",
     "days_since_label": "Дней с замены: ",
-    "playtime_text": "Ты играешь уже ",
+    "playtime_text": "Ты играешь ",
     "hours": "ч ",
     "minutes": "м ",
+    "or": "или ",
     "delete_menu_label": "Удалить",
-    "edit_menu_label": "Редактировать",
-    "graph_button_label": "Посмотреть график"
+    "edit_menu_label": "Редактировать"
   },
   "InstrumentGraph": {
     "title": "ГРАФИК ИГРЫ",

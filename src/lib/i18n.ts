@@ -30,9 +30,9 @@ export const KEYS = {
     PLAYTIME_TEXT: 'Instrument.playtime_text',
     HOURS_TEXT: 'Instrument.hours',
     MINUTES_TEXT: 'Instrument.minutes',
+    OR_TEXT: 'Instrument.or',
     DELETE_MENU_LABEL: 'Instrument.delete_menu_label',
     EDIT_MENU_LABEL: 'Instrument.edit_menu_label',
-    GRAPH_BUTTON_LABEL: 'Instrument.graph_button_label',
   },
   INSTRUMENT_GRAPH: {
     TITLE: 'InstrumentGraph.title',

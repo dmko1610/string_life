@@ -20,9 +20,9 @@
     "playtime_text": "You played for ",
     "hours": "h ",
     "minutes": "m ",
+    "or": "or ",
     "delete_menu_label": "Delete",
-    "edit_menu_label": "Edit",
-    "graph_button_label": "See playtime graph"
+    "edit_menu_label": "Edit"
   },
   "InstrumentGraph": {
     "title": "PLAYTIME GRAPH",
