@@ -203,7 +203,6 @@ export default function InstrumentDetails() {
           />
 
           <Surface mode="flat" style={styles.replacementDate}>
-            <Text variant="titleLarge">{`${t(KEYS.INSTRUMENT.REPL_LABEL)} : ${replacementDate.toLocaleDateString([locale], { dateStyle: 'medium' })}`}</Text>
             <Text variant="titleLarge">{`${t(KEYS.INSTRUMENT.DAYS_SINCE_LABEL)} ${daysSince}`}</Text>
           </Surface>
         </View>
@@ -234,7 +233,7 @@ export default function InstrumentDetails() {
 
         <View style={styles.playtimeContainer}>
           <Text
-            variant="headlineMedium"
+            variant="headlineLarge"
             style={[styles.playtimeText, { color: getProgressColor(progress) }]}
           >
             {t(KEYS.INSTRUMENT.PLAYTIME_TEXT)}

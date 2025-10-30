@@ -17,7 +17,7 @@
   "Instrument": {
     "repl_label": "Дата замены",
     "days_since_label": "Дней с замены: ",
-    "playtime_text": "Ты играешь ",
+    "playtime_text": "Ты играешь \n",
     "hours": "ч ",
     "minutes": "м ",
     "or": "или ",
