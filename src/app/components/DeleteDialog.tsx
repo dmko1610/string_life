@@ -18,7 +18,7 @@ export default function DeleteDialog({
   const { colors } = useTheme();
 
   const handleDeleteFn = async () => {
-    deleteFn(deleteId);
+    await deleteFn(deleteId);
     hideDialog();
   };
 

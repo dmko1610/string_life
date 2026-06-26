@@ -33,7 +33,7 @@ const MINUTES = 1 * 60 * 1000;
 export default function InstrumentDetails() {
   const { id } = useLocalSearchParams<{ id: string }>();
 
-  const { t, locale } = useTranslation();
+  const { t } = useTranslation();
   const { colors } = useTheme<MyTheme>();
   const router = useRouter();
 

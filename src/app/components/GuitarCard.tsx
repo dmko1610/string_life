@@ -40,7 +40,7 @@ export default function GuitarCard({
 
     onLongPress?.(id);
 
-    setTimeout(() => {
+    globalThis.setTimeout(() => {
       setLongPressed(false);
     }, 1000);
   };

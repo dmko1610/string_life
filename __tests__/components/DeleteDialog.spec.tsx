@@ -4,17 +4,48 @@ import {
   screen,
   waitFor,
 } from '@testing-library/react-native';
-import mockSafeAreaContext from 'react-native-safe-area-context/jest/mock';
 
 import DeleteDialog from '@/app/components/DeleteDialog';
-import { I18nProvider } from '@/context/I18nContext';
 import i18n, { KEYS } from '@/lib/i18n';
 
 jest.mock('expo-font');
-jest.mock('react-native-safe-area-context', () => mockSafeAreaContext);
+jest.mock('@/hooks/useTranslation', () => {
+  const i18nModule = require('@/lib/i18n');
+
+  return {
+    useTranslation: () => ({
+      t: i18nModule.default.t.bind(i18nModule.default),
+      locale: 'en',
+    }),
+  };
+});
+
+jest.mock('react-native-paper', () => {
+  const React = require('react');
+  const { Pressable, Text, View } = require('react-native');
+
+  const Dialog = ({ visible, children, testID }: any) =>
+    visible ? <View testID={testID}>{children}</View> : null;
+
+  Dialog.Icon = () => null;
+  Dialog.Title = ({ children }: any) => <Text>{children}</Text>;
+  Dialog.Content = ({ children }: any) => <View>{children}</View>;
+  Dialog.Actions = ({ children }: any) => <View>{children}</View>;
+
+  return {
+    Button: ({ children, onPress, testID }: any) => (
+      <Pressable onPress={onPress} testID={testID}>
+        <Text>{children}</Text>
+      </Pressable>
+    ),
+    Dialog,
+    Text: ({ children }: any) => <Text>{children}</Text>,
+    useTheme: () => ({ colors: { error: 'red', primary: 'blue' } }),
+  };
+});
 
 const mockDeleteFn = jest.fn();
-const mockDeleteId = 123123123;
+const mockDeleteId = '123123123';
 const mockHideDialog = jest.fn();
 
 function renderDeleteDialog({
@@ -24,14 +55,12 @@ function renderDeleteDialog({
   hideDialog = mockHideDialog,
 }) {
   render(
-    <I18nProvider>
-      <DeleteDialog
-        visible={visible}
-        deleteFn={deleteFn}
-        deleteId={deleteId}
-        hideDialog={hideDialog}
-      />
-    </I18nProvider>
+    <DeleteDialog
+      visible={visible}
+      deleteFn={deleteFn}
+      deleteId={deleteId}
+      hideDialog={hideDialog}
+    />
   );
 }
 
@@ -58,7 +87,7 @@ describe('DeleteDialog', () => {
 
   describe('deleteFn & deleteId', () => {
     it('calls given function with given deleteId on delete', async () => {
-      const mockDeleteId = 123123;
+      const mockDeleteId = '123123';
       const mockDeleteFn = jest.fn();
       renderDeleteDialog({ deleteFn: mockDeleteFn, deleteId: mockDeleteId });
 

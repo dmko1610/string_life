@@ -95,9 +95,11 @@ export default function InstrumentTable() {
             <Text variant="bodyMedium" style={styles.summaryText}>
               {t(KEYS.INSTRUMENT.REPL_LABEL)}
               {': '}
-              {replacementDate.toLocaleDateString([locale], {
-                dateStyle: 'long',
-              })}
+              {replacementDate
+                ? replacementDate.toLocaleDateString([locale], {
+                    dateStyle: 'long',
+                  })
+                : '-'}
             </Text>
           </View>
         </Surface>

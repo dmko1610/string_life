@@ -7,7 +7,7 @@ jest.mock('@/app/components/GuitarCard', () => 'GuitarCard');
 
 const mockedInstruments: Instrument[] = [
   {
-    id: 1,
+    id: '1',
     name: 'Shmort X5',
     type: 'electro',
     replacement_date: 0,
@@ -38,14 +38,14 @@ describe('GuitarCardList', () => {
     it('displays all the elements', () => {
       const mockInstruments: Instrument[] = [
         {
-          id: 1,
+          id: '1',
           name: 'Shmort X5',
           type: 'electro',
           replacement_date: 0,
           progress: 0,
         },
         {
-          id: 2,
+          id: '2',
           name: 'Bort X2',
           type: 'electro',
           replacement_date: 0,

@@ -9,7 +9,7 @@ import {
 export default function useInstrument(id: string) {
   const [type, setType] = useState('');
   const [progress, setProgress] = useState(0);
-  const [replacementDate, setReplacementDate] = useState<Date>(null);
+  const [replacementDate, setReplacementDate] = useState<Date | null>(null);
   const [loading, setLoading] = useState(true);
 
   const fetchInstrument = useCallback(async () => {
@@ -35,13 +35,17 @@ export default function useInstrument(id: string) {
     async (newProgress: number) => {
       setProgress(newProgress);
 
-      await updateInstrument(id, newProgress, replacementDate.getTime());
+      if (replacementDate) {
+        await updateInstrument(id, newProgress, replacementDate.getTime());
+      }
     },
     [id, replacementDate]
   );
 
   const editInstrument = useCallback(
-    async (newProgress: number, date: Date) => {
+    async (newProgress: number, date: Date | null) => {
+      if (!date) return;
+
       try {
         setLoading(true);
         setProgress(newProgress);

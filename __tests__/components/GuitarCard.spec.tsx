@@ -15,7 +15,7 @@ jest.mock('expo-router', () => ({
 
 describe('GuitarCard', () => {
   it('displays the card cover', () => {
-    render(<GuitarCard id={1} type="electro" name="Good guitar" />);
+    render(<GuitarCard id="1" type="electro" name="Good guitar" />);
 
     expect(screen.getByTestId('cardCover').props).toHaveProperty(
       'source',
@@ -24,7 +24,7 @@ describe('GuitarCard', () => {
   });
 
   it('displays the card title', () => {
-    render(<GuitarCard id={1} type="electro" name="Good guitar" />);
+    render(<GuitarCard id="1" type="electro" name="Good guitar" />);
 
     expect(screen.getByText('Good guitar')).toBeTruthy();
   });
@@ -33,7 +33,7 @@ describe('GuitarCard', () => {
     it('navigates to the instrument page', () => {
       const mockNavigate = jest.fn();
       (useRouter as jest.Mock).mockReturnValue({ navigate: mockNavigate });
-      render(<GuitarCard id={1} type="electro" name="Good guitar" />);
+      render(<GuitarCard id="1" type="electro" name="Good guitar" />);
 
       const card = screen.getByTestId('card');
       fireEvent.press(card);
@@ -47,7 +47,7 @@ describe('GuitarCard', () => {
       const longPressFn = jest.fn();
       render(
         <GuitarCard
-          id={1}
+          id="1"
           type="electro"
           name="Good Guitar"
           onLongPress={longPressFn}
@@ -57,7 +57,7 @@ describe('GuitarCard', () => {
       const card = screen.getByTestId('card');
       fireEvent(card, 'longPress');
 
-      await waitFor(() => expect(longPressFn).toHaveBeenCalledWith(1));
+      await waitFor(() => expect(longPressFn).toHaveBeenCalledWith('1'));
     });
   });
 });

@@ -25,7 +25,7 @@ export default function InstrumentEdit() {
   const { loading, replacementDate, progress, editInstrument } =
     useInstrument(id);
 
-  const [date, setDate] = useState<Date>(null);
+  const [date, setDate] = useState<Date | null>(null);
   const [progressInput, setProgressInput] = useState('');
   const [showHelper, setShowHelper] = useState(false);
 
@@ -47,7 +47,7 @@ export default function InstrumentEdit() {
   };
 
   const handleSaveInstrument = async () => {
-    editInstrument(Number(progressInput) * 60_000, date);
+    await editInstrument(Number(progressInput) * 60_000, date);
 
     router.back();
   };
@@ -102,6 +102,7 @@ export default function InstrumentEdit() {
 
           <Button
             onPress={handleSaveInstrument}
+            disabled={isDisabled}
             mode="elevated"
             labelStyle={[styles.label, { color: colors.onPrimary }]}
             style={[
