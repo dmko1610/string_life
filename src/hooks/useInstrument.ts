@@ -22,7 +22,9 @@ export default function useInstrument(id: string) {
       if (data) {
         setType(data.type);
         setProgress(data.progress ?? 0);
-        setReplacementDate(new Date(data.replacement_date as number));
+        setReplacementDate(
+          data.replacement_date ? new Date(data.replacement_date) : null
+        );
       }
     } catch (err) {
       console.error('Failed to fetch instrument', err);
