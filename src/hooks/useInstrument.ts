@@ -1,10 +1,7 @@
 import { useCallback, useEffect, useState } from 'react';
 
-import {
-  deleteInstrumentById,
-  getInstrument,
-  updateInstrument,
-} from '@/services/db';
+import { deleteInstrumentById, updateInstrument } from '@/services/db';
+import { getInstrument } from '@/services/instrumentService';
 
 export default function useInstrument(id: string) {
   const [type, setType] = useState('');
