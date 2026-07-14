@@ -85,8 +85,8 @@ export default function InstrumentDetails() {
     showDialog();
   };
   const handleDeleteCallback = async () => {
-    router.back();
     await deleteInstrument();
+    router.back();
   };
   const handleOpenMenu = () => setShowMenu(true);
   const handleCloseMenu = () => setShowMenu(false);

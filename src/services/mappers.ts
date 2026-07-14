@@ -29,3 +29,15 @@ export function getSessionsProgress(sessions: ApiSession[]) {
     );
   }, 0);
 }
+
+export function timestampToApiDate(timestamp: number | null) {
+  if (!timestamp) return null;
+
+  return new Date(timestamp).toISOString().slice(0, 10);
+}
+
+export function dateToApiDate(date: Date | null) {
+  if (!date) return null;
+
+  return date.toISOString().slice(0, 10);
+}

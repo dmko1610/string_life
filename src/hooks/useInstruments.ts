@@ -2,8 +2,10 @@ import { useFocusEffect } from 'expo-router';
 import { useCallback, useState } from 'react';
 
 import { Instrument } from '@/model/types';
-import { deleteInstrumentById } from '@/services/db';
-import { getAllInstruments } from '@/services/instrumentService';
+import {
+  deleteInstrumentById,
+  getAllInstruments,
+} from '@/services/instrumentService';
 
 export default function useInstruments() {
   const [rows, setRows] = useState<Instrument[]>([]);

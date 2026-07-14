@@ -15,7 +15,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { useTranslation } from '@/hooks/useTranslation';
 import { KEYS } from '@/lib/i18n';
-import { addInstrument } from '@/services/db';
+import { addInstrument } from '@/services/instrumentService';
 
 const instrumentTypes = (t: any) => [
   { value: 'electro', label: t(KEYS.LABELS.electro) },
@@ -43,7 +43,7 @@ export default function AddInstrument() {
     try {
       const timestamp = replacementDate ? replacementDate.getTime() : null;
 
-      await addInstrument(name, type, timestamp, 0);
+      await addInstrument(name, type, timestamp);
 
       router.back();
     } catch (error) {
