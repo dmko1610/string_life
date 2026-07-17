@@ -9,6 +9,7 @@ import {
   getSessionsProgress,
   mapApiInstrumentToInstrument,
   timestampToApiDate,
+  uiTypeToApiInstrumentType,
 } from './mappers';
 import { getApiSessions } from './sessionsApi';
 
@@ -40,7 +41,7 @@ export async function addInstrument(
 ) {
   await createApiInstrument({
     name,
-    type: type ?? 'acoustic',
+    type: uiTypeToApiInstrumentType(type ?? 'acoustic'),
     stringCount: 6,
     lastStringChangeDate: timestampToApiDate(timestamp),
     notes: null,

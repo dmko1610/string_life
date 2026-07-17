@@ -3,6 +3,37 @@ import { Instrument } from '@/model/types';
 import { ApiInstrument } from './instrumentsApi';
 import { ApiSession } from './sessionsApi';
 
+export function apiInstrumentTypeToUiType(type: string) {
+  switch (type.trim().toUpperCase()) {
+    case 'ELECTRIC':
+    case 'ELECTRO':
+      return 'electro';
+    case 'ACOUSTIC':
+      return 'acoustic';
+    case 'BASS':
+      return 'bass';
+    case 'UKULELE':
+      return 'ukulele';
+    default:
+      return 'acoustic';
+  }
+}
+
+export function uiTypeToApiInstrumentType(type: string) {
+  switch (type) {
+    case 'electro':
+      return 'ELECTRIC';
+    case 'acoustic':
+      return 'ACOUSTIC';
+    case 'bass':
+      return 'BASS';
+    case 'ukulele':
+      return 'UKULELE';
+    default:
+      return 'ACOUSTIC';
+  }
+}
+
 export function mapApiInstrumentToInstrument(
   apiInstrument: ApiInstrument,
   progress = 0
@@ -10,7 +41,7 @@ export function mapApiInstrumentToInstrument(
   return {
     id: apiInstrument.id,
     name: apiInstrument.name,
-    type: apiInstrument.type,
+    type: apiInstrumentTypeToUiType(apiInstrument.type),
     replacement_date: apiInstrument.lastStringChangeDate
       ? new Date(apiInstrument.lastStringChangeDate).getTime()
       : null,
