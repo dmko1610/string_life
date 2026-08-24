@@ -1,50 +1,73 @@
-# Welcome to your Expo app 👋
+# String Life
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+String Life helps guitar, bass, and ukulele players understand when their strings are getting old.
 
-## Get started
+Instead of guessing by feel or calendar memory, users can track every instrument, record when strings were last changed, and measure real playing time between replacements.
 
-1. Install dependencies
+## What users get
 
-   ```bash
-   npm install
-   ```
+- A clear list of their instruments in one place.
+- Support for electric guitar, acoustic guitar, bass, and ukulele.
+- A play timer that records actual practice and playing time.
+- Total playtime shown in hours and minutes.
+- Days since the last string replacement.
+- A summary table with total minutes, hours, minutes, and replacement date.
+- Color feedback as strings collect more playing time.
+- Helpful reminders when strings reach important age or playtime limits.
+- English and Russian interface support.
 
-2. Start the app
+## Why it is useful
 
-   ```bash
-    npx expo start
-   ```
+Fresh strings affect tone, tuning stability, comfort, and recording quality. String Life gives players a simple way to plan string changes based on both time and use:
 
-In the output, you'll find options to open the app in a
+- Casual players can avoid keeping dead strings for months.
+- Regular players can see how quickly each instrument wears through a string set.
+- Multi-instrument players can manage different guitars without mixing up dates.
+- Recording or gigging players can replace strings before tone becomes a problem.
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+## Current features
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+- Add, edit, and delete instruments.
+- Store the last string replacement date for each instrument.
+- Start and stop a play session timer.
+- Persist an active timer while the app is reopened.
+- View detailed playtime stats per instrument.
+- Localized UI strings for English and Russian.
 
-## Get a fresh project
+## Tech stack
 
-When you're ready, run:
+- Expo
+- React Native
+- Expo Router
+- React Native Paper
+- TypeScript
+
+## Getting started
+
+Install dependencies:
 
 ```bash
-npm run reset-project
+npm install
 ```
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+Start the app:
 
-## Learn more
+```bash
+npm start
+```
 
-To learn more about developing your project with Expo, look at the following resources:
+Run on a specific platform:
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+```bash
+npm run ios
+npm run android
+npm run web
+```
 
-## Join the community
+Run checks:
 
-Join our community of developers creating universal apps.
-
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+```bash
+npm test
+npm run lint
+npm run prettier:check
+```
